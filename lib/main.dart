@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'icons/custom_icons.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   // This widget is the root of your application.
   @override
@@ -108,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 30
               ),
             ),
+            const Icon(CustomIcons.wheelchair),
           ],
         ),
       ),
