@@ -1,46 +1,54 @@
 import 'package:flutter/material.dart';
 import 'icons/custom_icons.dart';
 import 'package:provider/provider.dart';
+import './colors/colors.dart';
+import './providers/orders.dart';
+import './providers/products.dart';
+import './screens/tabs_screen.dart';
+import './providers/tabs.dart';
+import './providers/auth.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: Tabs()),
+        // ChangeNotifierProxyProvider<, >(
+        //   create: (context) => ,
+        //   update: (, , ) => Tasks(
+        //   ),
+        // ),
+        // ChangeNotifierProvider.value(value: Tasks()),
+      ],
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          theme: ThemeData(
+            buttonTheme: const ButtonThemeData(
+              buttonColor: Colors.black,
+            ),
+            fontFamily: "Roboto",
+            primarySwatch: Palette.farmersGreen,
+            textTheme: ThemeData.light().textTheme.copyWith(
+              headline1: const TextStyle(
+                fontSize: 30,
+              ),
+              button: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          home: const TabsScreen(),// auth.isAuth ? TabsScreen() : LoginScreen(),
+          // home: TabsScreen(),
+          routes: {
+            // HomeScreen.routName: (ctx) => HomeScreen(),
+          },
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Text(""),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
