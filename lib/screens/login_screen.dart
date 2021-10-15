@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
+import 'package:maly_farmar/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,30 +12,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Map<String, String> _authData = {
-    "name": "",
-    "password": "",
-  };
 
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
 
-  bool isEmail(String string) {
-    if (string.isEmpty) {
-      return false;
-    }
-
-    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    final regExp = RegExp(pattern);
-
-    if (!regExp.hasMatch(string)) {
-      return false;
-    }
-    return true;
-  }
-
-  Widget inputField(String text, padding, String saveValue,
-      TextEditingController controller) {
+  Widget inputField(String text, padding,
+      TextEditingController controller, bool obstruct) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -45,31 +29,14 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextField(
         controller: controller,
         onSubmitted: (val) {
-          if (saveValue.isEmpty) {
-            // saveValue == "name" && !isEmail(val) ||
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
-                    title: const Text("Neplatné přihlašovací údaje!"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("OK"),
-                      )
-                    ],
-                  );
-                });
-            controller.clear();
-            return;
-          }
-          _authData[saveValue] = val;
-          // print("${_authData[saveValue]} $saveValue"); // TODO debug ...
-        },
-        obscureText: saveValue == "password" ? true : false,
+            if (Provider.of<Auth>(context, listen: false).isValid(val, context, controller) == false) {
+              return;
+            }
+            obstruct == false ? Provider.of<Auth>(context, listen: false).email = val :
+            Provider.of<Auth>(context, listen: false).password = val;
+          },
+
+        obscureText: obstruct,
         decoration: InputDecoration(
           labelText: text,
           labelStyle: const TextStyle(
@@ -103,19 +70,23 @@ class _LoginScreenState extends State<LoginScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 25,),
-        inputField("Váš email", 5, "name", _nameController),
-        inputField("Váše heslo", 5, "password", _passwordController),
+        const SizedBox(
+          height: 25,
+        ),
+        inputField("Váš email", 5, _nameController, false),
+        inputField("Váše heslo", 5, _passwordController, true),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: ElevatedButton(
-              onPressed: () {},
-              child: const Text(
-                "Přihlásit",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
+            onPressed: () => {
+              Provider.of<Auth>(context, listen: false).login()
+            },
+            child: const Text(
+              "Přihlásit",
+              style: TextStyle(
+                fontSize: 20,
               ),
+            ),
           ),
         ),
       ],

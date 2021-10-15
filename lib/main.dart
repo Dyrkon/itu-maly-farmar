@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           theme: ThemeData(
-            buttonTheme: ButtonThemeData(
+            buttonTheme: const ButtonThemeData(
               buttonColor: Colors.black,
             ),
             fontFamily: "Roboto",
@@ -32,15 +32,15 @@ class MyApp extends StatelessWidget {
             primarySwatch: Palette.farmersGreen,
             errorColor: Colors.red,
             textTheme: ThemeData.light().textTheme.copyWith(
-                  headline1: TextStyle(
+                  headline1: const TextStyle(
                     fontSize: 30,
                   ),
-                  button: TextStyle(
+                  button: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
           ),
-          home: TabsScreen(), // a
+          home: auth.isAuth ? TabsScreen() : LoginScreen(),
           // home: TabsScreen(),
           routes: {},
         ),
