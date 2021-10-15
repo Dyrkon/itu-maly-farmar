@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
-          home: LoginScreen(), // auth.isAuth ? TabsScreen() : LoginScreen(),
+          home: TabsScreen(), // a
           // home: TabsScreen(),
           routes: {},
         ),

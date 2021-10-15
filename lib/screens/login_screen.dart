@@ -51,8 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content:
-                        const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
+                    content: const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
                     title: const Text("Neplatné přihlašovací údaje!"),
                     actions: [
                       TextButton(
@@ -109,13 +108,12 @@ class _LoginScreenState extends State<LoginScreen> {
         inputField("Váše heslo", 5, "password", _passwordController),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          // margin: const EdgeInsets.symmetric(vertical: 10),
           child: ElevatedButton(
               onPressed: () {},
               child: const Text(
                 "Přihlásit",
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                 ),
               ),
           ),
