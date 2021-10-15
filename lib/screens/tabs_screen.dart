@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:maly_farmar/colors/colors.dart';
-import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:provider/provider.dart';
 
+import 'package:maly_farmar/colors/colors.dart';
+import 'package:maly_farmar/icons/custom_icons.dart';
 import 'settings_screen.dart';
 import 'farmers_products_screen.dart';
 import 'orders_screen.dart';
@@ -18,10 +18,10 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final List<Widget> _pages = [
-    const FarmersProductsScreen(),
-    const ProductsScreen(),
-    const SettingsScreen(),
-    const SettingsScreen(),
+    FarmersProductsScreen(),
+    ProductsScreen(),
+    SettingsScreen(),
+    OrdersScreen(),
   ];
 
   int _selectedPage = 0;
@@ -38,25 +38,26 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Malý farmář",
           style: TextStyle(
             color: Colors.black,
             fontSize: 25,
+            fontWeight: FontWeight.bold
           ),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             CustomIcons.cog,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(2),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(
+            onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(3),
+            icon: const Icon(
               CustomIcons.list,
               color: Colors.black,
             ),
@@ -69,7 +70,7 @@ class _TabsScreenState extends State<TabsScreen> {
         currentIndex: _selectedPage,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(
               CustomIcons.tractor,
