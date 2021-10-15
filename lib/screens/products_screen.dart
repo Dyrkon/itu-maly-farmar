@@ -7,7 +7,7 @@ class ProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(child: Text("Test"),),
+        body: Center(child: Text("Products"),),
       ),
     );
   }
