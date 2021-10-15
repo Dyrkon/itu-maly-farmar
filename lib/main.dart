@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maly_farmar/screens/login_screen.dart';
 import 'icons/custom_icons.dart';
 import 'package:provider/provider.dart';
 import './colors/colors.dart';
@@ -18,28 +19,31 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
+        ChangeNotifierProvider.value(value: Auth()),
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          buttonTheme: const ButtonThemeData(
-            buttonColor: Colors.black,
-          ),
-          fontFamily: "Roboto",
-          primarySwatch: Palette.farmersGreen,
-          textTheme: ThemeData.light().textTheme.copyWith(
-            headline1: const TextStyle(
-              fontSize: 30,
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          theme: ThemeData(
+            buttonTheme: ButtonThemeData(
+              buttonColor: Colors.black,
             ),
-            button: const TextStyle(
-              color: Colors.white,
-            ),
+            fontFamily: "Roboto",
+            canvasColor: Colors.white,
+            primarySwatch: Palette.farmersGreen,
+            errorColor: Colors.red,
+            textTheme: ThemeData.light().textTheme.copyWith(
+                  headline1: TextStyle(
+                    fontSize: 30,
+                  ),
+                  button: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
           ),
+          home: LoginScreen(), // auth.isAuth ? TabsScreen() : LoginScreen(),
+          // home: TabsScreen(),
+          routes: {},
         ),
-        home: const TabsScreen(),// auth.isAuth ? TabsScreen() : LoginScreen(),
-        // home: TabsScreen(),
-        routes: {
-          // HomeScreen.routName: (ctx) => HomeScreen(),
-        },
       ),
     );
   }
