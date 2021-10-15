@@ -18,36 +18,28 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
-        // ChangeNotifierProxyProvider<, >(
-        //   create: (context) => ,
-        //   update: (, , ) => Tasks(
-        //   ),
-        // ),
-        // ChangeNotifierProvider.value(value: Tasks()),
       ],
-      child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          theme: ThemeData(
-            buttonTheme: const ButtonThemeData(
-              buttonColor: Colors.black,
+      child: MaterialApp(
+        theme: ThemeData(
+          buttonTheme: const ButtonThemeData(
+            buttonColor: Colors.black,
+          ),
+          fontFamily: "Roboto",
+          primarySwatch: Palette.farmersGreen,
+          textTheme: ThemeData.light().textTheme.copyWith(
+            headline1: const TextStyle(
+              fontSize: 30,
             ),
-            fontFamily: "Roboto",
-            primarySwatch: Palette.farmersGreen,
-            textTheme: ThemeData.light().textTheme.copyWith(
-              headline1: const TextStyle(
-                fontSize: 30,
-              ),
-              button: const TextStyle(
-                color: Colors.white,
-              ),
+            button: const TextStyle(
+              color: Colors.white,
             ),
           ),
-          home: const TabsScreen(),// auth.isAuth ? TabsScreen() : LoginScreen(),
-          // home: TabsScreen(),
-          routes: {
-            // HomeScreen.routName: (ctx) => HomeScreen(),
-          },
         ),
+        home: const TabsScreen(),// auth.isAuth ? TabsScreen() : LoginScreen(),
+        // home: TabsScreen(),
+        routes: {
+          // HomeScreen.routName: (ctx) => HomeScreen(),
+        },
       ),
     );
   }
