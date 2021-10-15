@@ -15,29 +15,29 @@ class SettingsScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Nastavení",
                 style: TextStyle(fontSize: 30),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Přidejte svou fotku:",
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(width: 60,),
+                  const SizedBox(width: 60,),
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -57,6 +57,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 20,),
               inputField("Zadejte své jméno a příjmení:", 5, _nameController, false, context),
               inputField("Zadejte svou adresu:", 5, _addressController, false, context),
               inputField("Zadejte svůj telefon:", 5, _numberController, false, context),
