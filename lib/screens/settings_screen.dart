@@ -31,29 +31,35 @@ class SettingsScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Přidejte svou fotku:",
-                    style: TextStyle(
-                      fontSize: 20,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      "Přidejte svou fotku:",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 60,),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Palette.farmersGreen,
+                  TextButton(
+                    onPressed: () {  },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Palette.farmersGreen,
+                          ),
+                          height: 100,
+                          width: 80,
                         ),
-                        height: 100,
-                        width: 80,
-                      ),
-                      const Icon(
-                        CustomIcons.plus,
-                        color: Colors.white,
-                      ),
-                    ],
+                        const Icon(
+                          CustomIcons.plus,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
