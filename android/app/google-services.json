@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "693064427555",
+    "project_id": "maly-farmar",
+    "storage_bucket": "maly-farmar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693064427555:android:a055bf929a87ba1d57a996",
+        "android_client_info": {
+          "package_name": "cz.maly_farmar.maly_farmar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693064427555-r5ovnog4htjhdghe5gn4eql4r9dqqvm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBe6tM6MAvXRxI0ZL2q0EMyomzSCpaIjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693064427555-r5ovnog4htjhdghe5gn4eql4r9dqqvm8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

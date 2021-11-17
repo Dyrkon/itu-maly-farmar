@@ -20,3 +20,6 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+# Databse stuff
+android/app/google-services.json

@@ -4,14 +4,14 @@ import 'package:maly_farmar/models/order.dart';
 import '../colors/colors.dart';
 
 class OrderWidget extends StatefulWidget {
-  final String product;
-  final String name;
+  final String productName;
+  final String farmersName;
   bool isConfirmed;
   int quantity;
   DateTime date;
 
   OrderWidget(
-      this.product, this.name, this.quantity, this.date, this.isConfirmed,
+      this.productName, this.farmersName, this.quantity, this.date, this.isConfirmed,
       {Key? key})
       : super(key: key);
 
@@ -34,14 +34,14 @@ class _OrderWidgetState extends State<OrderWidget> {
               ),
           Column(
             children: [
-              Text(widget.product),
+              Text(widget.productName),
               const Text("Množství:"),
               Text(widget.quantity.toString()),
             ],
           ),
           Column(
             children: [
-              Text(widget.name),
+              Text(widget.farmersName),
               const Text("Datum"),
               Text(widget.date.day.toString() +
                   " " +
