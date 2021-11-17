@@ -1,72 +1,48 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Auth with ChangeNotifier {
-  String _token = "";
-  DateTime _expiryDate = DateTime.now();
-  String _userId = "";
-  String _userEmail = "";
-  String _userPassword = "";
+class Auth {
+  final FirebaseAuth _firebaseAuth;
+  String? errorMsg;
 
-  bool get isAuth {
-    return token != "";
-  }
+  Auth(
+      this._firebaseAuth,
+      );
 
-  String get token {
-    if (_expiryDate.isAfter(DateTime.now()) && _token != "") {
-      return _token;
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  Future<String> singIn({required String email, required String password}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      return "Signed in";
+    } on FirebaseAuthException catch (e) {
+      if (e.message != null)
+      {
+        errorMsg = e.message;
+      }
+      return "Error";
     }
-    return "";
   }
 
-  String get userId {
-    return _userId;
-  }
-
-  set email (String email) {
-    _userEmail = email;
-  }
-
-  set password (String password) {
-    _userPassword = password;
-  }
-
-  Future<void> _authenticate(String email, String password) async {
-    print("logged $email $password"); // TODO test
-    if (email == "test" && password == "test") {
-      _expiryDate = DateTime.now().add(const Duration(hours: 1));
-      _token = "log";
-    } else {
-      _expiryDate = DateTime.now();
-      _token = "";
+  Future<String> singUp({required String email, required String password}) async{
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      return "Signed up";
+    } on FirebaseAuthException catch (e) {
+      if (e.message != null)
+      {
+        errorMsg = e.message;
+      }
+      return "Error";
     }
-    print("_token is ${_token} and token is ${token}\n"); // TODO test
-    notifyListeners();
   }
 
-  Future<void> signup() async {
-    return _authenticate(_userEmail, _userPassword);
-  }
-
-  Future<void> login() async {
-    return _authenticate(_userEmail, _userPassword);
-  }
-
-  bool isEmail(String string) {
-    if (string.isEmpty) {
-      return false;
-    }
-
-    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    final regExp = RegExp(pattern);
-
-    if (!regExp.hasMatch(string)) {
-      return false;
-    }
-    return true;
+  Future<void> singOut() async {
+    await _firebaseAuth.signOut();
   }
 
   bool isValid(String val, BuildContext context, controller) {

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/screens/login_screen.dart';
@@ -22,10 +23,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
-        ChangeNotifierProvider.value(value: Auth()),
+        ChangeNotifierProvider.value(value: Products()),
+        ChangeNotifierProvider.value(value: Orders()),
+        Provider<Auth>(
+          create: (_) => Auth(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) => context.read<Auth>().authStateChanges, initialData: null,
+        ),
       ],
-      child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
+      child: MaterialApp(
           theme: ThemeData(
             buttonTheme: const ButtonThemeData(
               buttonColor: Colors.black,
@@ -43,11 +50,23 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
-          home: TabsScreen(), // auth.isAuth ? TabsScreen() : LoginScreen(),
+          home: AuthenticationWrapper(), // auth.isAuth ? TabsScreen() : LoginScreen(),
           // home: TabsScreen(),
           routes: {},
         ),
-      ),
     );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User?>();
+    if (firebaseUser != null) {
+      return TabsScreen();
+    }
+    return LoginScreen();
   }
 }

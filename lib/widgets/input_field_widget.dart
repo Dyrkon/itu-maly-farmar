@@ -19,8 +19,6 @@ Widget inputField(String text, padding,
         if (Provider.of<Auth>(context, listen: false).isValid(val, context, controller) == false) {
           return;
         }
-        obstruct == false ? Provider.of<Auth>(context, listen: false).email = val :
-        Provider.of<Auth>(context, listen: false).password = val;
       },
 
       obscureText: obstruct,

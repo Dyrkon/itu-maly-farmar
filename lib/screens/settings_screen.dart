@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
+import 'package:maly_farmar/providers/auth.dart';
+import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -67,6 +69,22 @@ class SettingsScreen extends StatelessWidget {
               inputField("Zadejte své jméno a příjmení:", 5, _nameController, false, context),
               inputField("Zadejte svou adresu:", 5, _addressController, false, context),
               inputField("Zadejte svůj telefon:", 5, _numberController, false, context),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 80),
+                child: TextButton(
+                  onPressed: () => {
+                    context.read<Auth>().singOut(),
+                  },
+                  child: const Text(
+                    "Odhlásit se",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

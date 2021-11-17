@@ -13,18 +13,27 @@ class OrdersScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final productData = Provider.of<Products>(context);
 
-
     return SafeArea(
-        child: Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView.builder(
-          itemCount: orderData.activeOrders.length,
-            itemBuilder: (BuildContext ctx, int index) {
-              return Container();
-            }
+      child: Scaffold(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ListView.builder(
+              itemCount: orderData.activeOrders.length,
+              itemBuilder: (BuildContext ctx, int index) {
+                return OrderWidget(
+                    productData
+                        .productWithId(orderData.activeOrders[index].id)
+                        .name,
+                    orderData.activeOrders[index].id,
+                    10,
+                    DateTime.now(),
+                    false,
+                    productData
+                        .productWithId(orderData.activeOrders[index].id)
+                        .unit);
+              }),
         ),
       ),
-    ));
+    );
   }
 }

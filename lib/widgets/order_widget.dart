@@ -6,12 +6,13 @@ import '../colors/colors.dart';
 class OrderWidget extends StatefulWidget {
   final String productName;
   final String farmersName;
+  final String unit;
   bool isConfirmed;
   int quantity;
   DateTime date;
 
-  OrderWidget(
-      this.productName, this.farmersName, this.quantity, this.date, this.isConfirmed,
+  OrderWidget(this.productName, this.farmersName, this.quantity, this.date,
+      this.isConfirmed, this.unit,
       {Key? key})
       : super(key: key);
 
@@ -27,35 +28,43 @@ class _OrderWidgetState extends State<OrderWidget> {
         color:
             (widget.isConfirmed ? Palette.farmersGreen.shade300 : Colors.white),
       ),
-      child: Row(
-        children: [
-          Container(
-              // child: Image.asset(""),
-              ),
-          Column(
-            children: [
-              Text(widget.productName),
-              const Text("Množství:"),
-              Text(widget.quantity.toString()),
-            ],
-          ),
-          Column(
-            children: [
-              Text(widget.farmersName),
-              const Text("Datum"),
-              Text(widget.date.day.toString() +
-                  " " +
-                  widget.date.month.toString()),
-            ],
-          ),
-          widget.isConfirmed
-              ? const SizedBox.shrink()
-              : const Icon(CustomIcons.cross),
-          widget.isConfirmed
-              ? const SizedBox.shrink()
-              : const Icon(CustomIcons.check),
-        ],
-      ),
+      child: Column(
+          children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+                // child: Image.asset(""),
+                ),
+            Column(
+              children: [
+                Text(widget.productName),
+                const Text("Množství:"),
+                Text(widget.quantity.toString() + " " + widget.unit),
+              ],
+            ),
+            Column(
+              children: [
+                Text(widget.farmersName),
+                const Text("Datum"),
+                Text(widget.date.day.toString() +
+                    " " +
+                    widget.date.month.toString()),
+              ],
+            ),
+            widget.isConfirmed
+                ? const SizedBox.shrink()
+                : const Icon(CustomIcons.cross),
+            widget.isConfirmed
+                ? const SizedBox.shrink()
+                : const Icon(CustomIcons.check),
+          ],
+        ),
+      ]),
     );
   }
 }

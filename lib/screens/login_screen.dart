@@ -7,13 +7,13 @@ import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/providers/auth.dart';
 import '../widgets/input_field_widget.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool singUp = false;
 
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
@@ -48,12 +48,42 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: ElevatedButton(
             onPressed: () => {
-              Provider.of<Auth>(context, listen: false).login()
+              singUp
+                  ? context.read<Auth>().singUp(
+                        email: _nameController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      )
+                  : context.read<Auth>().singIn(
+                        email: _nameController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      )
             },
-            child: const Text(
-              "Přihlásit",
-              style: TextStyle(
+            child: Text(
+              singUp ? "Registrovat se" : "Přihlásit",
+              style: const TextStyle(
                 fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 80),
+          child: TextButton(
+            onPressed: () => {
+              setState(() {
+                if (singUp) {
+                  singUp = false;
+                } else {
+                  singUp = true;
+                }
+              })
+            },
+            child: Text(
+              singUp ? "Přihlásit se" :"Registrovat se",
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+                decoration: TextDecoration.underline,
               ),
             ),
           ),
