@@ -21,16 +21,11 @@ class OrdersScreen extends StatelessWidget {
               itemCount: orderData.activeOrders.length,
               itemBuilder: (BuildContext ctx, int index) {
                 return OrderWidget(
-                    productData
-                        .productWithId(orderData.activeOrders[index].id)
-                        .name,
-                    productData.productWithId(orderData.activeOrders[index].id).name,
-                    10,
-                    DateTime.now(),
-                    false,
-                    productData
-                        .productWithId(orderData.activeOrders[index].id)
-                        .unit);
+                  orderData.activeOrders[index],
+                  productData.productWithId(orderData.activeOrders[index].id),
+                  orderData.denyOrder,
+                  orderData.confirmOrder,
+                );
               }),
         ),
       ),

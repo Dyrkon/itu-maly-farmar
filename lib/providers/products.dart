@@ -7,6 +7,7 @@ class Products with ChangeNotifier {
     Product(
       "1",
       "Vajíčka",
+      "Honza Metelesk",
       "ks",
       40,
       20,
@@ -15,6 +16,7 @@ class Products with ChangeNotifier {
     Product(
       "2",
       "Hovězí",
+      "Honza Metelesk",
       "kg",
       30,
       23,
@@ -23,6 +25,7 @@ class Products with ChangeNotifier {
     Product(
       "3",
       "Oves",
+      "Honza Metelesk",
       "kg",
       45,
       36,
@@ -31,6 +34,7 @@ class Products with ChangeNotifier {
     Product(
       "4",
       "Sýr",
+      "Honza Metelesk",
       "ks",
       40,
       20,

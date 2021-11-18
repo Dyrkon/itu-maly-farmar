@@ -23,3 +23,5 @@ doc/api/
 
 # Databse stuff
 android/app/google-services.json
+
+.flutter-plugins-dependencies

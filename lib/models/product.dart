@@ -2,7 +2,8 @@
 
 class Product {
   String id;
-  String name;
+  String productName;
+  String sellersName;
   int accessibleAmount;
   int reservedAmount;
   int totalAmount;
@@ -10,7 +11,8 @@ class Product {
 
   Product(
       this.id,
-      this.name,
+      this.productName,
+      this.sellersName,
       this.unit,
       this.totalAmount,
       this.accessibleAmount,

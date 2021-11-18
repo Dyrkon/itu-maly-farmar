@@ -45,6 +45,8 @@ class Auth {
     await _firebaseAuth.signOut();
   }
 
+  FirebaseAuth get firebaseInstance => _firebaseAuth;
+
   bool isValid(String val, BuildContext context, controller) {
     if (val.isEmpty) {
       showDialog(
