@@ -24,7 +24,7 @@ class OrdersScreen extends StatelessWidget {
                     productData
                         .productWithId(orderData.activeOrders[index].id)
                         .name,
-                    orderData.activeOrders[index].id,
+                    productData.productWithId(orderData.activeOrders[index].id).name,
                     10,
                     DateTime.now(),
                     false,
