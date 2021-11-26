@@ -18,77 +18,84 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
 
-  Widget mainContent(buttonColor, deviceSize) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          CustomIcons.wheelchair,
-          color: Palette.farmersGreen,
-          size: 60,
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        const Text(
-          "Malý farmář",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        inputField("Váš email", 5, _nameController, false, context),
-        inputField("Váše heslo", 5, _passwordController, true, context),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: ElevatedButton(
-            onPressed: () => {
-              singUp
-                  ? context.read<Auth>().singUp(
+  Widget mainContent(buttonColor,Size deviceSize) {
+    return SingleChildScrollView(
+      reverse: true,
+          child: SizedBox(
+            height: deviceSize.height - 30,
+            width: deviceSize.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  CustomIcons.wheelchair,
+                  color: Palette.farmersGreen,
+                  size: 60,
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                const Text(
+                  "Malý farmář",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                inputField("Váš email", 5, _nameController, false, context),
+                inputField("Váše heslo", 5, _passwordController, true, context),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      singUp
+                          ? context.read<Auth>().singUp(
                         email: _nameController.text.trim(),
                         password: _passwordController.text.trim(),
                       )
-                  : context.read<Auth>().singIn(
+                          : context.read<Auth>().singIn(
                         email: _nameController.text.trim(),
                         password: _passwordController.text.trim(),
                       )
-            },
-            child: Text(
-              singUp ? "Registrovat se" : "Přihlásit",
-              style: const TextStyle(
-                fontSize: 20,
-              ),
+                    },
+                    child: Text(
+                      singUp ? "Registrovat se" : "Přihlásit",
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 80),
+                  child: TextButton(
+                    onPressed: () => {
+                      setState(() {
+                        if (singUp) {
+                          singUp = false;
+                        } else {
+                          singUp = true;
+                        }
+                      })
+                    },
+                    child: Text(
+                      singUp ? "Přihlásit se" :"Registrovat se",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black54,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 80),
-          child: TextButton(
-            onPressed: () => {
-              setState(() {
-                if (singUp) {
-                  singUp = false;
-                } else {
-                  singUp = true;
-                }
-              })
-            },
-            child: Text(
-              singUp ? "Přihlásit se" :"Registrovat se",
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black54,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -102,14 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
     ]);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).canvasColor,
       body: SafeArea(
-        child: _deviceSize.height > 650
-            ? mainContent(_buttonColor, _deviceSize)
-            : SingleChildScrollView(
-                child: mainContent(_buttonColor, _deviceSize),
-              ),
+        child: mainContent(_buttonColor, _deviceSize),
       ),
     );
   }
