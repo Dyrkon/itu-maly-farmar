@@ -8,30 +8,37 @@ import 'package:provider/provider.dart';
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({Key? key}) : super(key: key);
 
+  Future<void> _refresh() async {
+    print("text");
+  }
+
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
     final size = MediaQuery.of(context).size;
     final productData = Provider.of<Products>(context);
 
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: ListView.builder(
-              itemCount: orderData.activeOrders.length,
-              itemBuilder: (BuildContext ctx, int index) {
-                return orderData.activeOrders[index].status !=
-                        Status.confirmedByBuyer
-                    ? OrderWidget(
-                        orderData.activeOrders[index],
-                        productData
-                            .productWithId(orderData.activeOrders[index].id),
-                        orderData.denyOrder,
-                        orderData.confirmOrder,
-                      )
-                    : const SizedBox.shrink();
-              }),
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+                itemCount: orderData.activeOrders.length,
+                itemBuilder: (BuildContext ctx, int index) {
+                  return orderData.activeOrders[index].status !=
+                          Status.confirmedByBuyer
+                      ? OrderWidget(
+                          orderData.activeOrders[index],
+                          productData
+                              .productWithId(orderData.activeOrders[index].id),
+                          orderData.denyOrder,
+                          orderData.confirmOrder,
+                        )
+                      : const SizedBox.shrink();
+                }),
+          ),
         ),
       ),
     );
