@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
-          home: AuthenticationWrapper(), // auth.isAuth ? TabsScreen() : LoginScreen(),
+          home: const AuthenticationWrapper(),
           // home: TabsScreen(),
           routes: {},
         ),
@@ -65,7 +65,7 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
     if (firebaseUser != null) {
-      return TabsScreen();
+      return const TabsScreen();
     }
     return LoginScreen();
   }

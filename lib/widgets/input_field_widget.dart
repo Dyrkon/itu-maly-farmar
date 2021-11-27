@@ -16,11 +16,8 @@ Widget inputField(String text, padding,
     child: TextField(
       controller: controller,
       onSubmitted: (val) {
-        if (Provider.of<Auth>(context, listen: false).isValid(val, context, controller) == false) {
-          return;
-        }
+        // TODO add shift focus
       },
-
       obscureText: obstruct,
       decoration: InputDecoration(
         labelText: text,
