@@ -5,6 +5,8 @@
 .packages
 .idea
 build/
+.flutter-plugins
+.flutter-plugins-dependencies
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
@@ -24,4 +26,3 @@ doc/api/
 # Databse stuff
 android/app/google-services.json
 
-.flutter-plugins-dependencies

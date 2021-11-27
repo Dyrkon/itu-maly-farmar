@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import '/icons/custom_icons.dart';
 import '/models/order.dart';
 import '/colors/colors.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class MakeOrderWidget extends StatelessWidget {
+class MakeOrderWidget extends StatefulWidget {
+  @override
+  State<MakeOrderWidget> createState() => _MakeOrderWidgetState();
+}
+
+class _MakeOrderWidgetState extends State<MakeOrderWidget> {
   var options = List.generate(50, (index) => "$index");
 
+  void _showDatePicker() {
+    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(DateTime.now().year + 2));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +39,12 @@ class MakeOrderWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Text("Vyberte datum: "),
-              // TODO add calendar picker
+              // TODO style more
+              const Text("Vyberte datum: "),
+              ElevatedButton(
+                  onPressed: _showDatePicker,
+                  child: const Text("Datum"),
+              )
             ],
           ),
           const Text("Vaše rezervace bude předložena prodejci"),

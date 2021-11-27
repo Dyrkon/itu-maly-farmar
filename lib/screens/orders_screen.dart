@@ -15,7 +15,6 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
-    final size = MediaQuery.of(context).size;
     final productData = Provider.of<Products>(context);
 
     return RefreshIndicator(
