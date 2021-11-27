@@ -114,7 +114,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Provider.of<Tabs>(context).isFarmer && !isConfirmed // TODO
+                  Provider.of<Tabs>(context).isFarmer && !isConfirmed
                       ? SizedBox(
                           width: 20,
                           child: IconButton(

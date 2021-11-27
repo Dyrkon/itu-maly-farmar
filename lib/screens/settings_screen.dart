@@ -18,74 +18,87 @@ class SettingsScreen extends StatelessWidget {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Nastavení",
-                style: TextStyle(fontSize: 30),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      "Přidejte svou fotku:",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 60,),
-                  TextButton(
-                    onPressed: () {  },
-                    child: Stack(
-                      alignment: Alignment.center,
+          child: Builder(
+            builder: (context) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Palette.farmersGreen,
-                          ),
-                          height: 100,
-                          width: 80,
+                        const SizedBox(
+                          height: 10,
                         ),
-                        const Icon(
-                          CustomIcons.plus,
-                          color: Colors.white,
+                        const Text(
+                          "Nastavení",
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Text(
+                                "Přidejte svou fotku:",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 60,),
+                            TextButton(
+                              onPressed: () {  },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Palette.farmersGreen,
+                                    ),
+                                    height: 100,
+                                    width: 80,
+                                  ),
+                                  const Icon(
+                                    CustomIcons.plus,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20,),
+                        inputField("Zadejte své jméno a příjmení:", 5, _nameController, false, context),
+                        inputField("Zadejte svou adresu:", 5, _addressController, false, context),
+                        inputField("Zadejte svůj telefon:", 5, _numberController, false, context),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 80),
+                          child: TextButton(
+                            onPressed: () => {
+                              context.read<Auth>().singOut(),
+                            },
+                            child: const Text(
+                              "Odhlásit se",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 20,),
-              inputField("Zadejte své jméno a příjmení:", 5, _nameController, false, context),
-              inputField("Zadejte svou adresu:", 5, _addressController, false, context),
-              inputField("Zadejte svůj telefon:", 5, _numberController, false, context),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 80),
-                child: TextButton(
-                  onPressed: () => {
-                    context.read<Auth>().singOut(),
-                  },
-                  child: const Text(
-                    "Odhlásit se",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
                 ),
-              ),
-            ],
+              );
+            }
           ),
         ),
       ),

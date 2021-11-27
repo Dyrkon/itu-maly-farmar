@@ -49,28 +49,28 @@ class Auth {
 
   FirebaseAuth get firebaseInstance => _firebaseAuth;
 
-  bool isValid(String val, BuildContext context, controller) {
-    if (val.isEmpty) {
-      showDialog(
-          context: context,
+  void invalidCredentialsAlert(value, context, nameController, passwordController) {
+    if (value == "Error") {
+      showDialog(context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              content:
-                  const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
-              title: const Text("Neplatné přihlašovací údaje!"),
+              content: const Text(
+                  "Zadali jste neplatné údaje. \nZkuste to znovu."),
+              title: const Text(
+                  "Neplatné přihlašovací údaje!"),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text("OK"),
+                  child: Text("OK"),
                 )
               ],
             );
-          });
-      controller.clear();
-      return false;
+          }
+      );
+      passwordController.clear();
+      nameController.clear();
     }
-    return true;
   }
 }
