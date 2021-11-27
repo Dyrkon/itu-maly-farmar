@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/models/product.dart';
-import 'package:provider/provider.dart';
-import '../colors/colors.dart';
 
 class ProductWidget extends StatefulWidget {
   final Product product;
@@ -19,18 +16,17 @@ class _ProductWidgetState extends State<ProductWidget> {
     var product = widget.product;
 
     return Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
-            color: Palette.farmersGreen.shade50,
-            borderRadius: BorderRadius.circular(10)),
+            color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 7,
+        height: MediaQuery.of(context).size.height * 1 / 9,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              width: MediaQuery.of(context).size.height * 1 / 10,
+              width: MediaQuery.of(context).size.height * 1 / 9,
+              height: MediaQuery.of(context).size.height * 1 / 9,
               decoration: const BoxDecoration(
                   borderRadius:
                       BorderRadius.horizontal(left: Radius.circular(10)),
@@ -39,71 +35,100 @@ class _ProductWidgetState extends State<ProductWidget> {
                       image: NetworkImage(
                           "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"))),
             ),
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  width: 5,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  child: Text(
+                    product.productName + " (" + product.unit + ")",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      product.productName + " (" + product.unit + ")",
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    const Text(
-                      "Celkem:",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      product.totalAmount.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Celkem:",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            product.totalAmount.toString(),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Text(
-                      " ",
-                      style: TextStyle(fontSize: 16),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    const Text(
-                      "Dostupné:",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      product.accessibleAmount.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            "Dostupné:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            product.accessibleAmount.toString(),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Text(
-                      " ",
-                      style: TextStyle(fontSize: 16),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    const Text(
-                      "Rezervováno:",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      product.reservedAmount.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            "Rezervováno:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            product.reservedAmount.toString(),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

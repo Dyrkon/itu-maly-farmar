@@ -8,24 +8,13 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<Products>(context);
 
-    return SafeArea(
+
+    return const SafeArea(
       child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: ListView.builder(
-              itemCount: productData.products.length,
-              itemBuilder: (BuildContext ctx, int index) {
-                return ElevatedButton(
-                  onPressed: () => {},
-                  child: ProductWidget(
-                    productData.products[index],
-                  ),
-                );
-              }),
-        ),
+        body: Center(child: Text("Farmers product screen"),),
       ),
+
     );
   }
 }
