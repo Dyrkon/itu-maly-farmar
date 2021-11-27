@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class Products with ChangeNotifier {
-  List<Product> _products = [
+  final List<Product> _products = [
     Product(
       "1",
       "Vajíčka",

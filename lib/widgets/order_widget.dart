@@ -113,7 +113,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  false// isConfirmed TODO
+                  false // isConfirmed TODO
                       ? const SizedBox.shrink()
                       : SizedBox(
                           width: 20,
@@ -128,10 +128,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                             ),
                           ),
                         ),
-                  SizedBox(
-                    width: 10//isConfirmed ? 0 : 10,
-                  ),
-                  false// isConfirmed TODO
+                  const SizedBox(width: 10 //isConfirmed ? 0 : 10,
+                      ),
+                  false // isConfirmed TODO
                       ? const SizedBox.shrink()
                       : SizedBox(
                           width: 20,
