@@ -10,31 +10,33 @@ class Auth {
   String? errorMsg;
 
   Auth(
-      this._firebaseAuth,
-      );
+    this._firebaseAuth,
+  );
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<String> singIn({required String email, required String password}) async {
+  Future<String> singIn(
+      {required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       return "Signed in";
     } on FirebaseAuthException catch (e) {
-      if (e.message != null)
-      {
+      if (e.message != null) {
         errorMsg = e.message;
       }
       return "Error";
     }
   }
 
-  Future<String> singUp({required String email, required String password}) async{
+  Future<String> singUp(
+      {required String email, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
       return "Signed up";
     } on FirebaseAuthException catch (e) {
-      if (e.message != null)
-      {
+      if (e.message != null) {
         errorMsg = e.message;
       }
       return "Error";

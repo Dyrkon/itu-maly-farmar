@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 
 class Tabs with ChangeNotifier {
   int screenIndex = 0;
+  bool isFarmer = false;
 
   int changeIndex(newIndex) {
     screenIndex = newIndex;
+    if (screenIndex == 0) {
+      isFarmer = true;
+    } else if (screenIndex == 1) {
+      isFarmer = false;
+    }
     notifyListeners();
     return screenIndex;
   }

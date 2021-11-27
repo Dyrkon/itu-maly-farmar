@@ -26,7 +26,7 @@ class Orders with ChangeNotifier {
     ),
     Order(
       "3",
-      Status.pending,
+      Status.confirmedBySeller,
       10,
       DateTime.now(),
       DateTime.now(),

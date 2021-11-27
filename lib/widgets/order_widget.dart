@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/models/order.dart';
 import 'package:maly_farmar/models/product.dart';
+import 'package:maly_farmar/providers/tabs.dart';
 import 'package:provider/provider.dart';
 import '../colors/colors.dart';
 
@@ -34,7 +35,7 @@ class _OrderWidgetState extends State<OrderWidget> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
               color:
-                  isConfirmed ? Palette.farmersGreen.shade300 : Colors.white54,
+                  isConfirmed ? Palette.farmersGreen.shade200 : Colors.grey[200],
               borderRadius: BorderRadius.circular(10)),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1 / 10,
@@ -113,9 +114,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  false// isConfirmed TODO
-                      ? const SizedBox.shrink()
-                      : SizedBox(
+                  Provider.of<Tabs>(context).isFarmer && !isConfirmed // TODO
+                      ? SizedBox(
                           width: 20,
                           child: IconButton(
                             onPressed: () {
@@ -127,23 +127,27 @@ class _OrderWidgetState extends State<OrderWidget> {
                               color: Colors.red,
                             ),
                           ),
-                        ),
+                        )
+                      : const SizedBox.shrink(),
                   SizedBox(
-                    width: 10//isConfirmed ? 0 : 10,
-                  ),
-                  false// isConfirmed TODO
-                      ? const SizedBox.shrink()
-                      : SizedBox(
+                      width: Provider.of<Tabs>(context).isFarmer
+                          ? 10
+                          : 0 //isConfirmed ? 0 : 10,
+                      ),
+                  (isConfirmed && !Provider.of<Tabs>(context).isFarmer) ||
+                          (!isConfirmed && Provider.of<Tabs>(context).isFarmer)
+                      ? SizedBox(
                           width: 20,
                           child: IconButton(
                             onPressed: () {
                               widget.confirm(order.id);
                             },
                             icon: const Icon(CustomIcons.check),
-                            color: Colors.green,
+                            color: Colors.green[600],
                             iconSize: 20,
                           ),
-                        ),
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
               const SizedBox(

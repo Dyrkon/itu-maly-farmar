@@ -57,11 +57,45 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? context.read<Auth>().singUp(
                         email: _nameController.text.trim(),
                         password: _passwordController.text.trim(),
-                      )
+                      ).then((value) {
+                        showDialog(context: context, builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
+                            title: Text("Neplatné přihlašovací údaje!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("OK"),
+                              )
+                            ],
+                          );
+                        });
+                        _passwordController.clear();
+                        _nameController.clear();
+                      })
                           : context.read<Auth>().singIn(
                         email: _nameController.text.trim(),
                         password: _passwordController.text.trim(),
-                      )
+                      ).then((value) {
+                        showDialog(context: context, builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
+                            title: Text("Neplatné přihlašovací údaje!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("OK"),
+                              )
+                            ],
+                          );
+                        });
+                        _passwordController.clear();
+                        _nameController.clear();
+                      })
                     },
                     child: Text(
                       singUp ? "Registrovat se" : "Přihlásit",
