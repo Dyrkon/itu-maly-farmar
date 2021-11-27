@@ -41,22 +41,21 @@ class _TabsScreenState extends State<TabsScreen> {
         title: const Text(
           "Malý farmář",
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold
-          ),
+              color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(
             CustomIcons.cog,
             color: Colors.black,
           ),
-          onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(2),
+          onPressed: () =>
+              Provider.of<Tabs>(context, listen: false).changeIndex(2),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(3),
+            onPressed: () =>
+                Provider.of<Tabs>(context, listen: false).changeIndex(3),
             icon: const Icon(
               CustomIcons.list,
               color: Colors.black,

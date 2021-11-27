@@ -4,10 +4,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth;
   String? errorMsg;
+
+  var _firstTimeLogin = true;
 
   Auth(
     this._firebaseAuth,
@@ -15,7 +18,7 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<String> singIn(
+  Future<String> signIn(
       {required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -29,7 +32,7 @@ class Auth {
     }
   }
 
-  Future<String> singUp(
+  Future<String> signUp(
       {required String email, required String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -43,21 +46,22 @@ class Auth {
     }
   }
 
-  Future<void> singOut() async {
+  Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
 
   FirebaseAuth get firebaseInstance => _firebaseAuth;
 
-  void invalidCredentialsAlert(value, context, nameController, passwordController) {
+  void invalidCredentialsAlert(
+      value, context, nameController, passwordController) {
     if (value == "Error") {
-      showDialog(context: context,
+      showDialog(
+          context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              content: const Text(
-                  "Zadali jste neplatné údaje. \nZkuste to znovu."),
-              title: const Text(
-                  "Neplatné přihlašovací údaje!"),
+              content:
+                  const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
+              title: const Text("Neplatné přihlašovací údaje!"),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -67,10 +71,23 @@ class Auth {
                 )
               ],
             );
-          }
-      );
+          });
       passwordController.clear();
       nameController.clear();
     }
+  }
+
+  Future<void> FirstTimeLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool firstTime = prefs.getBool('first_time') ?? true;
+    if (firstTime) {
+      await prefs.setBool('first_time', false);
+      _firstTimeLogin = true;
+    }
+    _firstTimeLogin = false;
+  }
+
+  bool get firstTime {
+    return _firstTimeLogin;
   }
 }
