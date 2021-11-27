@@ -4,9 +4,9 @@ class Product {
   String id;
   String productName;
   String sellersName;
-  int accessibleAmount;
-  int reservedAmount;
-  int totalAmount;
+  var accessibleAmount;
+  var reservedAmount;
+  var totalAmount;
   String unit;
 
   Product(

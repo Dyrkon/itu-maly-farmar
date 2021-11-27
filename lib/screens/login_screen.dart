@@ -113,10 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
       DeviceOrientation.portraitUp,
     ]);
 
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
-      body: SafeArea(
-        child: Builder(
+      body: Builder(
           builder: (context) {
             return mainContent(_buttonColor, MediaQuery.of(context).size);
           }
