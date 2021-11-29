@@ -18,7 +18,7 @@ class OrdersScreen extends StatelessWidget {
     final productData = Provider.of<Products>(context);
 
     return RefreshIndicator(
-      onRefresh: _refresh,
+      onRefresh: orderData.fetchOrders,
       child: SafeArea(
         child: Scaffold(
           body: Container(

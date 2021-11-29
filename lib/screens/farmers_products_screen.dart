@@ -44,7 +44,7 @@ class LandingPageWrapper extends StatelessWidget {
     context.read<Auth>().FirstTimeLogin();
     if (true /*context.read<Auth>().firstTime*/) {
       return Stack(
-        children: [FarmersProducts(), const LandingPage()],
+        children: [FarmersProducts(), /*const LandingPage()*/],
       );
     } else {
       return FarmersProducts();

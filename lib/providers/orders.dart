@@ -7,7 +7,11 @@ import 'package:provider/provider.dart';
 
 class Orders with ChangeNotifier {
   var orderIndex = 0;
-  final _fireStoreInstance = FirebaseFirestore.instance;
+  final FirebaseFirestore _fireStoreInstance;
+
+  Orders(
+      this._fireStoreInstance,
+      );
 
   final List<Order> _orders = [
     Order(
@@ -54,10 +58,11 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchOrders() async {
-    _fireStoreInstance.collection("users").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        print(element); // TODO
-      });
+    _fireStoreInstance
+        .collection("users").doc("jety")
+        .get()
+        .then((value) {
+        print(value.data());
     });
   }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,6 +86,10 @@ class Auth {
       _firstTimeLogin = true;
     }
     _firstTimeLogin = false;
+  }
+
+  FirebaseFirestore get getUser {
+    return FirebaseFirestore.instance;
   }
 
   bool get firstTime {
