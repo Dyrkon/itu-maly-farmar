@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:maly_farmar/models/user.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:maly_farmar/screens/login_screen.dart';
 import 'icons/custom_icons.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
-        ChangeNotifierProvider.value(value: Products()),
+        ChangeNotifierProvider.value(value: UserProvider(UserProfile(FirebaseAuth.instance.currentUser?.uid, FirebaseAuth.instance.currentUser?.email), FirebaseAuth.instance)),
+        ChangeNotifierProvider.value(value: Products(FirebaseFirestore.instance, FirebaseAuth.instance.currentUser?.uid)),
         ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance, FirebaseAuth.instance.currentUser?.uid)),
         Provider<Auth>(
           create: (_) => Auth(FirebaseAuth.instance),

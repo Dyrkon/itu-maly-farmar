@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class Products with ChangeNotifier {
@@ -59,32 +58,28 @@ class Products with ChangeNotifier {
     // print(userId);
 
     var snapshot = _fireStoreInstance
-        .collection("users")
-        .doc(_userId)
-        .collection("orders")
+        .collection("products")
         .snapshots();
 
     snapshot.forEach((element) {
       element.docs.forEach((element) {
         Map<String, dynamic> product = element.data();
         if (_products.indexWhere((element) {
-              if (element.id == product["id"]) {
-                return true;
-              }
-              return false;
-            }) ==
-            -1) {
+          if (element.id == product["id"]) {
+            return true;
+          }
+          return false;
+        }) == -1) {
           _products.add(Product(
             product["id"],
             product["productName"],
-            product["sellersName"],
+            product["sellersID"],
             product["unit"],
             product["totalAmount"],
-            product["accessibleAmount"],
+            product["totalAmount"] - product["reservedAmount"],
             product["reservedAmount"],
           ));
-        }
-      });
+        }});
     });
     _products.forEach((element) {
       print(element.id);

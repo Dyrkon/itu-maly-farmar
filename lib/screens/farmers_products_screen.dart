@@ -11,7 +11,6 @@ class FarmersProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (false /*!context.read<Auth>().firstTime*/) {
       return SafeArea(
         child: Scaffold(
           body: LandingPageWrapper(),
@@ -26,13 +25,6 @@ class FarmersProductsScreen extends StatelessWidget {
           ),
         ),
       );
-    } else {
-      return const SafeArea(
-        child: Scaffold(
-          body: LandingPageWrapper(),
-        ),
-      );
-    }
   }
 }
 
@@ -42,9 +34,9 @@ class LandingPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<Auth>().FirstTimeLogin();
-    if (true /*context.read<Auth>().firstTime*/) {
+    if (context.read<Auth>().firstTime) {
       return Stack(
-        children: [FarmersProducts(), /*const LandingPage()*/],
+        children: [FarmersProducts(),/* const LandingPage() */],
       );
     } else {
       return FarmersProducts();
@@ -58,18 +50,21 @@ class FarmersProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
-          itemCount: productData.products.length,
-          itemBuilder: (BuildContext ctx, int index) {
-            return TextButton(
-              onPressed: () => {},
-              child: ProductWidget(
-                productData.products[index],
-              ),
-            );
-          }),
+    return RefreshIndicator(
+      onRefresh: productData.fetchOrders,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView.builder(
+            itemCount: productData.products.length,
+            itemBuilder: (BuildContext ctx, int index) {
+              return TextButton(
+                onPressed: () => {},
+                child: ProductWidget(
+                  productData.products[index],
+                ),
+              );
+            }),
+      ),
     );
   }
 }

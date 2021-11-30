@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
+import 'package:maly_farmar/providers/auth.dart';
+import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatelessWidget {
@@ -81,7 +83,9 @@ class LandingPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                          onPressed: () => {},
+                          onPressed: () => {
+                            // TODO redo shared prefs
+                          },
                           child: const Text("Chápu, jdeme na to!",
                               style: TextStyle(
                                 fontSize: 20,
