@@ -11,11 +11,11 @@ class Orders with ChangeNotifier {
   final userId;
 
   Orders(
-      this._fireStoreInstance,
-      this.userId,
-      );
+    this._fireStoreInstance,
+    this.userId,
+  );
 
-  final List<Order> _orders = [
+  List<Order> _orders = [
     Order(
       "1",
       Status.pending,
@@ -61,21 +61,31 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchOrders() async {
     // print(userId);
-    var orderSnapshot = _fireStoreInstance
-        .collection("users").doc(userId).collection("orders").snapshots();
-    print(orderSnapshot.first);
-    orderSnapshot.forEach((element) {
-      element.docs.map((order) {
-        _orders.add(Order(
-            order["id"],
-            order["status"],
-          order["amount"],
-          DateTime.now(),
-          DateTime.now(),
-        ));
+
+    var snapshot = _fireStoreInstance
+        .collection("users")
+        .doc(userId)
+        .collection("orders")
+        .snapshots();
+
+    snapshot.forEach((element) {
+      element.docs.forEach((element) {
+        Map<String, dynamic> order = element.data();
+        if (_orders.indexWhere((element) {
+          if (element.orderId == order["id"]) {
+            return true;
+          }
+          return false;
+        }) == -1) {
+          _orders.add(Order(order["id"], Status.values[order["status"]],
+              order["amount"], DateTime.now(), DateTime.now()));
+        }
       });
     });
-    print(userId);
+    _orders.forEach((element) {
+      print(element.orderId);
+    });
+    notifyListeners();
   }
 
   Future<void> pushOrder(FirebaseAuth authInstance, Order orderToAdd) async {
@@ -97,7 +107,7 @@ class Orders with ChangeNotifier {
 
   Order orderWithId(String id) {
     return activeOrders.firstWhere((order) {
-      if (order.id == id) {
+      if (order.orderId == id) {
         return true;
       } else {
         return false;
@@ -107,7 +117,7 @@ class Orders with ChangeNotifier {
 
   void denyOrder(String id) {
     activeOrders.firstWhere((element) {
-      if (element.id == id) {
+      if (element.orderId == id) {
         return true;
       } else {
         return false;
@@ -118,7 +128,7 @@ class Orders with ChangeNotifier {
 
   void confirmOrder(String id) {
     var order = activeOrders.firstWhere((element) {
-      if (element.id == id) {
+      if (element.orderId == id) {
         return true;
       } else {
         return false;

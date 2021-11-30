@@ -5,17 +5,27 @@ import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/widgets/order_widget.dart';
 import 'package:provider/provider.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
 
-  Future<void> _refresh() async {
-    print("text");
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  var listLength = 0;
+
+  Future<void> _refresh(orderProvider) async {
+    setState(() {
+      orderProvider.fetchOrders();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
     final productData = Provider.of<Products>(context);
+
 
     return RefreshIndicator(
       onRefresh: orderData.fetchOrders,
@@ -30,8 +40,8 @@ class OrdersScreen extends StatelessWidget {
                           Status.confirmedByBuyer
                       ? OrderWidget(
                           orderData.activeOrders[index],
-                          productData
-                              .productWithId(orderData.activeOrders[index].id),
+                          productData.products[0],
+                              //.productWithId(orderData.activeOrders[index].id),
                           orderData.denyOrder,
                           orderData.confirmOrder,
                         )
