@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 class Orders with ChangeNotifier {
   var orderIndex = 0;
   final FirebaseFirestore _fireStoreInstance;
+  final userId;
 
   Orders(
       this._fireStoreInstance,
+      this.userId,
       );
 
   final List<Order> _orders = [
@@ -58,12 +60,22 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchOrders() async {
-    _fireStoreInstance
-        .collection("users").doc("jety")
-        .get()
-        .then((value) {
-        print(value.data());
+    // print(userId);
+    var orderSnapshot = _fireStoreInstance
+        .collection("users").doc(userId).collection("orders").snapshots();
+    print(orderSnapshot.first);
+    orderSnapshot.forEach((element) {
+      element.docs.map((order) {
+        _orders.add(Order(
+            order["id"],
+            order["status"],
+          order["amount"],
+          DateTime.now(),
+          DateTime.now(),
+        ));
+      });
     });
+    print(userId);
   }
 
   Future<void> pushOrder(FirebaseAuth authInstance, Order orderToAdd) async {

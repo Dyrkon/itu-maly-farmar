@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
         ChangeNotifierProvider.value(value: Products()),
-        ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance)),
+        ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance, FirebaseAuth.instance.currentUser?.uid)),
         Provider<Auth>(
           create: (_) => Auth(FirebaseAuth.instance),
         ),
