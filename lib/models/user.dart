@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maly_farmar/models/product.dart';
 
 class UserProfile {
@@ -5,7 +6,7 @@ class UserProfile {
   String fullName = "";
   String phoneNumber = "";
   String? email;
-  var location;
+  GeoPoint location = GeoPoint(0,0);
 
   UserProfile(
     this.id,

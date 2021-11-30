@@ -1,19 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
+import 'package:maly_farmar/models/user.dart';
 import 'package:maly_farmar/providers/auth.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
   final _numberController = TextEditingController();
 
+  String nameField = "Zadejte své jméno a příjmení:";
+  var addressField = "Zadejte svou adresu:";
+  String phoneField = "Zadejte svůj telefon:";
+
   @override
   Widget build(BuildContext context) {
+    var _user = Provider.of<UserProvider>(context).user;
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -78,11 +91,11 @@ class SettingsScreen extends StatelessWidget {
                           const SizedBox(
                             height: 20,
                           ),
-                          inputField("Zadejte své jméno a příjmení:", 5,
+                          inputField(nameField, 5,
                               _nameController, false, context),
-                          inputField("Zadejte svou adresu:", 5,
+                          inputField(addressField, 5,
                               _addressController, false, context),
-                          inputField("Zadejte svůj telefon:", 5,
+                          inputField(phoneField, 5,
                               _numberController, false, context),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 80),
@@ -103,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 80),
                             child: TextButton(
-                              onPressed: Provider.of<UserProvider>(context).printUserDetails,
+                              onPressed: Provider.of<UserProvider>(context, listen: false).fetchUserData,
                               child: const Text(
                                 "Načíst údaje ze serveru",
                                 textAlign: TextAlign.center,

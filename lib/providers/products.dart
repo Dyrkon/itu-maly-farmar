@@ -54,7 +54,7 @@ class Products with ChangeNotifier {
     return [..._products];
   }
 
-  Future<void> fetchOrders() async {
+  Future<void> fetchProducts() async {
     // print(userId);
 
     var snapshot = _fireStoreInstance
@@ -70,6 +70,7 @@ class Products with ChangeNotifier {
           }
           return false;
         }) == -1) {
+          print(product);
           _products.add(Product(
             product["id"],
             product["productName"],

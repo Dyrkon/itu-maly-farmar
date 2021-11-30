@@ -51,7 +51,7 @@ class FarmersProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
     return RefreshIndicator(
-      onRefresh: productData.fetchOrders,
+      onRefresh: productData.fetchProducts,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView.builder(

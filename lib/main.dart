@@ -26,9 +26,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
-        ChangeNotifierProvider.value(value: UserProvider(UserProfile(FirebaseAuth.instance.currentUser?.uid, FirebaseAuth.instance.currentUser?.email), FirebaseAuth.instance)),
-        ChangeNotifierProvider.value(value: Products(FirebaseFirestore.instance, FirebaseAuth.instance.currentUser?.uid)),
-        ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance, FirebaseAuth.instance.currentUser?.uid)),
+        ChangeNotifierProvider.value(value: UserProvider(
+            UserProfile(FirebaseAuth.instance.currentUser?.uid,
+            FirebaseAuth.instance.currentUser?.email),
+            FirebaseFirestore.instance)),
+        ChangeNotifierProvider.value(value: Products(FirebaseFirestore.instance,
+            FirebaseAuth.instance.currentUser?.uid)),
+        ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance,
+            FirebaseAuth.instance.currentUser?.uid)),
         Provider<Auth>(
           create: (_) => Auth(FirebaseAuth.instance),
         ),

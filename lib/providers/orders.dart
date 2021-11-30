@@ -75,8 +75,14 @@ class Orders with ChangeNotifier {
           }
           return false;
         }) == -1) {
-          _orders.add(Order(order["id"], Status.values[order["status"]],
-              order["amount"], DateTime.now(), DateTime.now()));
+          print(order);
+          _orders.add(Order(
+              order["id"],
+              Status.values[order["status"]],
+              order["amount"],
+              DateTime.now(),
+              DateTime.now()),
+          );
         }
       });
     });
