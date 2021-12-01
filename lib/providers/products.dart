@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -55,36 +57,33 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    // print(userId);
+    var snapshot = await _fireStoreInstance.collection("products").get();
 
-    var snapshot = _fireStoreInstance
-        .collection("products")
-        .snapshots();
-
-    snapshot.forEach((element) {
-      element.docs.forEach((element) {
-        Map<String, dynamic> product = element.data();
-        if (_products.indexWhere((element) {
-          if (element.id == product["id"]) {
-            return true;
-          }
-          return false;
-        }) == -1) {
-          print(product);
-          _products.add(Product(
-            product["id"],
-            product["productName"],
-            product["sellersID"],
-            product["unit"],
-            product["totalAmount"],
-            product["totalAmount"] - product["reservedAmount"],
-            product["reservedAmount"],
-          ));
-        }});
+    snapshot.docs.forEach((element) {
+      Map<String, dynamic> product = element.data();
+      // print(product);
+      if (_products.indexWhere((element) {
+            if (element.id == product["id"]) {
+              return true;
+            }
+            return false;
+          }) ==
+          -1) {
+        _products.add(Product(
+          product["id"],
+          product["productName"],
+          product["sellersID"],
+          product["unit"],
+          product["totalAmount"],
+          product["totalAmount"] - product["reservedAmount"],
+          product["reservedAmount"],
+        ));
+      }
     });
-    _products.forEach((element) {
+
+    /* _products.forEach((element) {
       print(element.id);
-    });
+    }); */
     notifyListeners();
   }
 
