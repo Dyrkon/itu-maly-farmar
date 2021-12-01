@@ -16,13 +16,8 @@ Widget inputField(String text, padding,
     child: TextField(
       controller: controller,
       onSubmitted: (val) {
-        if (Provider.of<Auth>(context, listen: false).isValid(val, context, controller) == false) {
-          return;
-        }
-        obstruct == false ? Provider.of<Auth>(context, listen: false).email = val :
-        Provider.of<Auth>(context, listen: false).password = val;
+        // TODO add shift focus
       },
-
       obscureText: obstruct,
       decoration: InputDecoration(
         labelText: text,

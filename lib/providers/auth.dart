@@ -1,76 +1,61 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Auth with ChangeNotifier {
-  String _token = "";
-  DateTime _expiryDate = DateTime.now();
-  String _userId = "";
-  String _userEmail = "";
-  String _userPassword = "";
+class Auth {
+  final FirebaseAuth _firebaseAuth;
+  String? errorMsg;
 
-  bool get isAuth {
-    return token != "";
-  }
+  var _firstTimeLogin = true;
 
-  String get token {
-    if (_expiryDate.isAfter(DateTime.now()) && _token != "") {
-      return _token;
+  Auth(
+    this._firebaseAuth,
+  );
+
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  Future<String> signIn(
+      {required String email, required String password}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return "Signed in";
+    } on FirebaseAuthException catch (e) {
+      if (e.message != null) {
+        errorMsg = e.message;
+      }
+      return "Error";
     }
-    return "";
   }
 
-  String get userId {
-    return _userId;
-  }
-
-  set email (String email) {
-    _userEmail = email;
-  }
-
-  set password (String password) {
-    _userPassword = password;
-  }
-
-  Future<void> _authenticate(String email, String password) async {
-    print("logged $email $password"); // TODO test
-    if (email == "test" && password == "test") {
-      _expiryDate = DateTime.now().add(const Duration(hours: 1));
-      _token = "log";
-    } else {
-      _expiryDate = DateTime.now();
-      _token = "";
+  Future<String> signUp(
+      {required String email, required String password}) async {
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return "Signed up";
+    } on FirebaseAuthException catch (e) {
+      if (e.message != null) {
+        errorMsg = e.message;
+      }
+      return "Error";
     }
-    print("_token is ${_token} and token is ${token}\n"); // TODO test
-    notifyListeners();
   }
 
-  Future<void> signup() async {
-    return _authenticate(_userEmail, _userPassword);
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
   }
 
-  Future<void> login() async {
-    return _authenticate(_userEmail, _userPassword);
-  }
+  FirebaseAuth get firebaseInstance => _firebaseAuth;
 
-  bool isEmail(String string) {
-    if (string.isEmpty) {
-      return false;
-    }
-
-    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    final regExp = RegExp(pattern);
-
-    if (!regExp.hasMatch(string)) {
-      return false;
-    }
-    return true;
-  }
-
-  bool isValid(String val, BuildContext context, controller) {
-    if (val.isEmpty) {
+  void invalidCredentialsAlert(
+      value, context, nameController, passwordController) {
+    if (value == "Error") {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -88,9 +73,26 @@ class Auth with ChangeNotifier {
               ],
             );
           });
-      controller.clear();
-      return false;
+      passwordController.clear();
+      nameController.clear();
     }
-    return true;
+  }
+
+  Future<void> FirstTimeLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool firstTime = prefs.getBool('first_time') ?? true;
+    if (firstTime) {
+      await prefs.setBool('first_time', false);
+      _firstTimeLogin = true;
+    }
+    _firstTimeLogin = false;
+  }
+
+  FirebaseFirestore get getUser {
+    return FirebaseFirestore.instance;
+  }
+
+  bool get firstTime {
+    return _firstTimeLogin;
   }
 }

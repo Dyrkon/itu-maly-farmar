@@ -7,79 +7,126 @@ import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/providers/auth.dart';
 import '../widgets/input_field_widget.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool singUp = false;
 
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
 
-  Widget mainContent(buttonColor, deviceSize) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          CustomIcons.wheelchair,
-          color: Palette.farmersGreen,
-          size: 60,
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        const Text(
-          "Malý farmář",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        inputField("Váš email", 5, _nameController, false, context),
-        inputField("Váše heslo", 5, _passwordController, true, context),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: ElevatedButton(
-            onPressed: () => {
-              Provider.of<Auth>(context, listen: false).login()
-            },
-            child: const Text(
-              "Přihlásit",
-              style: TextStyle(
-                fontSize: 20,
+  Widget mainContent(buttonColor, Size deviceSize) {
+    return SizedBox(
+      height: deviceSize.height,
+      width: deviceSize.width,
+      child: Center(
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                CustomIcons.wheelchair,
+                color: Palette.farmersGreen,
+                size: 60,
               ),
-            ),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                "Malý farmář",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              inputField("Váš email", 5, _nameController, false, context),
+              inputField("Váše heslo", 5, _passwordController, true, context),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: ElevatedButton(
+                  onPressed: () => {
+                    singUp
+                        ? context
+                            .read<Auth>()
+                            .signUp(
+                              email: _nameController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            )
+                            .then((value) {
+                            context.read<Auth>().invalidCredentialsAlert(value,
+                                context, _nameController, _passwordController);
+                          })
+                        : context
+                            .read<Auth>()
+                            .signIn(
+                              email: _nameController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            )
+                            .then((value) {
+                            context.read<Auth>().invalidCredentialsAlert(value,
+                                context, _nameController, _passwordController);
+                          })
+                  },
+                  child: Text(
+                    singUp ? "Registrovat se" : "Přihlásit",
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 80),
+                child: TextButton(
+                  onPressed: () => {
+                    setState(() {
+                      if (singUp) {
+                        singUp = false;
+                      } else {
+                        singUp = true;
+                      }
+                    })
+                  },
+                  child: Text(
+                    singUp ? "Přihlásit se" : "Registrovat se",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     var _buttonColor = Theme.of(context).primaryColor;
-    var _deviceSize = MediaQuery.of(context).size;
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).canvasColor,
       body: SafeArea(
-        child: _deviceSize.height > 650
-            ? mainContent(_buttonColor, _deviceSize)
-            : SingleChildScrollView(
-                child: mainContent(_buttonColor, _deviceSize),
-              ),
+        child: Builder(builder: (context) {
+          return mainContent(_buttonColor, MediaQuery.of(context).size);
+        }),
       ),
     );
   }
