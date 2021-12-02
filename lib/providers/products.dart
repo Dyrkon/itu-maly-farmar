@@ -14,42 +14,14 @@ class Products with ChangeNotifier {
   );
 
   List<Product> _products = [
-    Product(
-      "1",
-      "Vajíčka",
-      "Honza Metelesk",
-      "ks",
-      40,
-      20,
-      10,
-    ),
-    Product(
-      "2",
-      "Hovězí",
-      "Honza Metelesk",
-      "kg",
-      30,
-      23,
-      9,
-    ),
-    Product(
-      "3",
-      "Oves",
-      "Honza Metelesk",
-      "kg",
-      45,
-      36,
-      23,
-    ),
-    Product(
-      "4",
-      "Sýr",
-      "Honza Metelesk",
-      "ks",
-      40,
-      20,
-      10,
-    ),
+    Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
+        "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
+    Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
+        "prostě z kravičky no víšco hehehe :))))"),
+    Product("3", "Oves", "Honza Metelesk", "kg", 45, 25, 20, 200,
+        "ovsík pro tvýho koníka víšco hehehe :)))"),
+    Product("4", "Sýr", "Honza Metelesk", "ks", 40, 20, 20, 40,
+        "kvalitní sýreček hehehe :))))"),
   ];
 
   List<Product> get products {
@@ -77,6 +49,8 @@ class Products with ChangeNotifier {
           product["totalAmount"],
           product["totalAmount"] - product["reservedAmount"],
           product["reservedAmount"],
+          product["price"],
+          product["description"],
         ));
       }
     });
