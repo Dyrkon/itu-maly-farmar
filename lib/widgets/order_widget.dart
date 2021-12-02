@@ -81,7 +81,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    product.sellersName,
+                    product.sellersID,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
