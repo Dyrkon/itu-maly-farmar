@@ -6,7 +6,8 @@ class FarmerWidget extends StatefulWidget {
   final UserProfile farmer;
   final Product product; // TODO chceme produkt daneho farmare
 
-  const FarmerWidget(this.farmer, this.product, {Key? key}) : super(key : key);
+  // const FarmerWidget(this.farmer, this.product, {Key? key}) : super(key : key);
+  const FarmerWidget({Key? key}) : super(key : key);
 
  @override
   State<StatefulWidget> createState() => _FarmerWidgetState();

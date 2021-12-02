@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maly_farmar/icons/custom_icons.dart';
-import '../widgets/farmer_widget.dart';
+import 'package:maly_farmar/providers/products.dart';
+import 'package:maly_farmar/screens/landing_page.dart';
+import 'package:maly_farmar/widgets/add_product.dart';
+import 'package:maly_farmar/widgets/product_widget.dart';
+import 'package:provider/provider.dart';
 
 class FarmersProductsScreen extends StatefulWidget {
   const FarmersProductsScreen({Key? key}) : super(key: key);
