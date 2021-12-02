@@ -9,16 +9,7 @@ class FarmersProductsScreen extends StatefulWidget {
   const FarmersProductsScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-      return const SafeArea(
-        child: Scaffold(
-          body: Center(child: FarmerWidget()),
-        ),
-      );
-  }
-
-  @override
-  State<StatefulWidget> createState() => _FarmersProductsScreenState();
+  State<FarmersProductsScreen> createState() => _FarmersProductsScreenState();
 }
 
 class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
