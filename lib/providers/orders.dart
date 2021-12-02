@@ -60,35 +60,33 @@ class Orders with ChangeNotifier {
   Future<void> fetchOrders() async {
     // print(userId);
 
-    var snapshot = _fireStoreInstance
+    var snapshot = await _fireStoreInstance
         .collection("users")
         .doc(userId)
         .collection("orders")
-        .snapshots();
+        .get();
 
-    snapshot.forEach((element) {
-      element.docs.forEach((element) {
-        Map<String, dynamic> order = element.data();
-        if (_orders.indexWhere((element) {
-          if (element.orderId == order["id"]) {
-            return true;
-          }
-          return false;
-        }) == -1) {
-          print(order);
-          _orders.add(Order(
-              order["id"],
-              Status.values[order["status"]],
-              order["amount"],
-              DateTime.now(),
-              DateTime.now()),
-          );
-        }
-      });
+    snapshot.docs.forEach((element) {
+      Map<String, dynamic> order = element.data();
+      if (_orders.indexWhere((element) {
+            if (element.orderId == order["id"]) {
+              return true;
+            }
+            return false;
+          }) ==
+          -1) {
+        // print(order);
+        _orders.add(
+          Order(order["id"], Status.values[order["status"]], order["amount"],
+              DateTime.now(), DateTime.now()),
+        );
+      }
     });
+
+    /*
     _orders.forEach((element) {
       print(element.orderId);
-    });
+    }); */
     notifyListeners();
   }
 

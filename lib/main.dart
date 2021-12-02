@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/user.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
+import 'package:maly_farmar/screens/landing_page.dart';
 import 'package:maly_farmar/screens/login_screen.dart';
 import 'icons/custom_icons.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,9 @@ class MyApp extends StatelessWidget {
           ),
           home: const AuthenticationWrapper(),
           // home: TabsScreen(),
-          routes: {},
+          routes: {
+            LandingPage.routeName: (ctx) => const LandingPage(),
+          },
         ),
     );
   }
