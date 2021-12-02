@@ -113,7 +113,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                       width: 20,
                       child: IconButton(
                         onPressed: () {
-                          widget.deny(order.orderId);
+                          widget.deny(order.orderID);
                         },
                         icon: const Icon(
                           CustomIcons.times,
@@ -134,7 +134,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                       width: 20,
                       child: IconButton(
                         onPressed: () {
-                          widget.confirm(order.orderId);
+                          widget.confirm(order.orderID);
                         },
                         icon: const Icon(CustomIcons.check),
                         color: Colors.green[600],

@@ -34,7 +34,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           Status.confirmedByBuyer
                       ? OrderWidget(
                           orderData.activeOrders[index],
-                          productData.products[0],
+                    productData.products[0],
                               //.productWithId(orderData.activeOrders[index].id),
                           orderData.denyOrder,
                           orderData.confirmOrder,

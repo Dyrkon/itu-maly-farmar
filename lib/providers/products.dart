@@ -27,18 +27,19 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    var snapshot = await _fireStoreInstance.collection("products").where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2").get();
+    var snapshot = await _fireStoreInstance
+        .collection("products")
+        .where("sellersID", isEqualTo: _userId)
+        .get();
 
     snapshot.docs.forEach((element) {
       Map<String, dynamic> product = element.data();
-      // print(product);
       if (_products.indexWhere((element) {
             if (element.id == product["id"]) {
               return true;
             }
             return false;
-          }) ==
-          -1) {
+          }) == -1) {
         _products.add(Product(
           product["id"],
           product["productName"],

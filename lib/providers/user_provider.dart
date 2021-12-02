@@ -24,6 +24,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+
   Future<void> updateUserData() async {
 
   }

@@ -20,6 +20,7 @@ Widget inputField(String text,
         controller: controller,
         onSubmitted: (val) {
           // TODO add shift focus
+          controller.text = val;
         },
         obscureText: obstruct,
         decoration: InputDecoration(
