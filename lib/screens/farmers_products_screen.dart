@@ -47,7 +47,6 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
           ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Navigator.pushNamed(context, "/landing-page");
             showDialog(
               barrierColor: Colors.grey.withOpacity(0.9),
                 context: context, builder: (BuildContext context) => AddProduct());

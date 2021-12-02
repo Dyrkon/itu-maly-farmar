@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:maly_farmar/colors/colors.dart';
@@ -91,12 +90,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          inputField(nameField, 5,
-                              _nameController, false, context),
-                          inputField(addressField, 5,
-                              _addressController, false, context),
-                          inputField(phoneField, 5,
-                              _numberController, false, context),
+                          inputField(nameField,
+                              _nameController, false, null, null),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          inputField(addressField,
+                              _addressController, false, null, null),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          inputField(phoneField,
+                              _numberController, false, null, null),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 80),
                             child: TextButton(
@@ -116,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 80),
                             child: TextButton(
-                              onPressed: Provider.of<UserProvider>(context, listen: false).fetchUserData,
+                              onPressed: () => Provider.of<UserProvider>(context, listen: false).fetchUserData(_user.id),
                               child: const Text(
                                 "Načíst údaje ze serveru",
                                 textAlign: TextAlign.center,

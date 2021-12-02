@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -29,7 +27,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    var snapshot = await _fireStoreInstance.collection("products").get();
+    var snapshot = await _fireStoreInstance.collection("products").where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2").get();
 
     snapshot.docs.forEach((element) {
       Map<String, dynamic> product = element.data();
