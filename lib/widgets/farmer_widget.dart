@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/models/user.dart';
 
-class FarmerWidget extends StatelessWidget {
+class FarmerWidget extends StatefulWidget {
   final UserProfile farmer;
   final Product product; // TODO chceme produkt daneho farmare
 

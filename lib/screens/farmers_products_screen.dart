@@ -7,12 +7,15 @@ class FarmersProductsScreen extends StatefulWidget {
 
   @override
   Widget build(BuildContext context) {
-      return SafeArea(
+      return const SafeArea(
         child: Scaffold(
-          body: Center(child: farmerWidget()),
+          body: Center(child: FarmerWidget()),
         ),
       );
   }
+
+  @override
+  State<StatefulWidget> createState() => _FarmersProductsScreenState();
 }
 
 class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
