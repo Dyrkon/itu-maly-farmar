@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Products with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
@@ -15,7 +16,8 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  List<Product> _products = [/*
+  List<Product> _products = [
+    /*
     Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
         "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
     Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
@@ -39,14 +41,15 @@ class Products with ChangeNotifier {
         .where("sellersID", isEqualTo: _userId)
         .get();
 
-    snapshot.docs.forEach((element) {
+    for (var element in snapshot.docs) {
       Map<String, dynamic> product = element.data();
       if (_products.indexWhere((element) {
             if (element.id == product["id"]) {
               return true;
             }
             return false;
-          }) == -1) {
+          }) ==
+          -1) {
         _products.add(Product(
           product["id"],
           product["productName"],
@@ -59,19 +62,14 @@ class Products with ChangeNotifier {
           product["description"],
         ));
       }
-    });
+    }
 
-    /* _products.forEach((element) {
-      print(element.id);
-    }); */
     notifyListeners();
   }
 
   Future<Product> getProduct(productID) async {
-    var productSnapshot = await _fireStoreInstance
-        .collection("products")
-        .doc(productID)
-        .get();
+    var productSnapshot =
+        await _fireStoreInstance.collection("products").doc(productID).get();
     Map<String, dynamic>? product = productSnapshot.data();
 
     notifyListeners();
@@ -96,4 +94,27 @@ class Products with ChangeNotifier {
       }
     });
   }
+
+  Future<bool> pushProduct(Product product) async {
+    var id = DateTime.now().toString();
+    bool tmp = false;
+    var products = await _fireStoreInstance
+        .collection('products')
+        .doc(id)
+        .set({
+          'id': id,
+          'productName': product.productName,
+          'sellersID': _userId,
+          'unit': product.unit,
+          'totalAmount': product.totalAmount,
+          'reservedAmount': 0,
+          'price': product.price,
+          'description': product.description
+        })
+        .then((value) => tmp = true)
+        .catchError((error) => tmp = false);
+    return tmp;
+  }
+
+  //Future<bool> updateProduct(Product product) async {}
 }

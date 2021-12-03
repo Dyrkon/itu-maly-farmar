@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/screens/landing_page.dart';
 import 'package:maly_farmar/widgets/add_product.dart';
+import 'package:maly_farmar/widgets/edit_product_widget.dart';
 import 'package:maly_farmar/widgets/product_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -19,18 +20,21 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-              "Nemáte žádné produkty, můžete je vytvořit, nebo zkusit načíst",
+            "Nemáte žádné produkty, můžete je vytvořit, nebo zkusit načíst",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22,
             ),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           ElevatedButton(
-              onPressed: provider.fetchProducts,
-              child: const Text(
-                "Načíst produkt",
-              ),),
+            onPressed: provider.fetchProducts,
+            child: const Text(
+              "Načíst produkt",
+            ),
+          ),
         ],
       ),
     );
@@ -52,9 +56,14 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
                     itemCount: productData.products.length,
                     itemBuilder: (BuildContext ctx, int index) {
                       if (index < productData.products.length - 1) {
-                        return RawMaterialButton(
-                          onLongPress: () => {},
-                          onPressed: () => {},
+                        return ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                                barrierColor: Colors.grey.withOpacity(0.9),
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    EditProduct());
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: ProductWidget(
