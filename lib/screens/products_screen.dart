@@ -46,7 +46,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         }
                         Return Container(
                           DropdownButton(
-                            items: items)
+                            items: productItems,
                         ),
                       }
                     },
