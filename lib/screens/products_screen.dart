@@ -36,8 +36,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 DropdownButton(
                   items: _productsType.map((value)=>DropdownMenuItem(
                     child: Text(
-                      value,
-                      style: TextStyle(color: Color(0xff11b719)),
+                      value
                     ),
                     value: value,
                     )).toList(),

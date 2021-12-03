@@ -48,6 +48,7 @@ class Offers with ChangeNotifier {
           fetchedUser,
           offer["unit"],
           offer["totalAmount"] - offer["reservedAmount"],
+          offer["price"],
         ));
       }
     });

@@ -7,6 +7,7 @@ class Offer {
   var accessibleAmount;
   var reservedAmount;
   var totalAmount;
+  var price;
   String unit;
 
   Offer(
@@ -15,5 +16,6 @@ class Offer {
       this.seller,
       this.unit,
       this.accessibleAmount,
+      this.price,
       );
 }

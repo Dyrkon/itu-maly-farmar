@@ -38,7 +38,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                   image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: NetworkImage(
-                          "https://images.unsplash.com/photo-1589923188900-85dae523342b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"))),
+                          "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"))),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -46,8 +46,11 @@ class _FarmerWidgetState extends State<FarmerWidget> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  child: Text(
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  child: Flex(
+                    flex: 1,
+                    direction: MainAxisAlignment,
+                    child: Text(
                     offer.seller.fullName,
                     style: const TextStyle(
                       fontSize: 20,
@@ -56,28 +59,33 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                     ),
                   ),
                 ),
+                ),
+                const SizedBox(
+                      height: 10,
+                    ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            offer.accessibleAmount.toString(), // FIXME
+                            offer.accessibleAmount.toString() + offer.unit, // FIXME
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 20,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(
-                      width: 30,
+                      width: 110,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -85,10 +93,11 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            offer.unit, //FIXME cena za jednotku
+                            offer.price.toString() + "Kč/" + offer.unit, //FIXME cena za jednotku
                             style: const TextStyle(
-                              fontSize: 17,
+                              fontSize: 20,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
