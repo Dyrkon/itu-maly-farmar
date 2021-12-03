@@ -28,7 +28,7 @@ class UserProvider extends ChangeNotifier {
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    // print(fetchedUser);
+    print(fetchedUser);
 
     var newUser = UserProfile(userId, "");
     if (fetchedUser != null)
