@@ -25,10 +25,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var _user = Provider.of<UserProvider>(context);
-    print(_user.user.id);
+    // print(_user.user.id);
     // print("IDDD ");
 
-        return SafeArea(
+    return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
             future: _user.getUserDataByID(_user.user.id),
@@ -48,134 +48,166 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: SingleChildScrollView(
                             reverse: true,
                             child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    "Nastavení",
-                                    style: TextStyle(fontSize: 30),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
-                                        child: Text(
-                                          "Přidejte svou fotku:",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 60,
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Provider.of<UserProvider>(context, listen: false).uploadImage();
-                                        },
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Palette.farmersGreen,
-                                              ),
-                                              height: 100,
-                                              width: 80,
-                                            ),
-                                            const Icon(
-                                              CustomIcons.plus,
-                                              color: Colors.white,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  inputField(nameField, _nameController, false,
-                                      null, null),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  inputField(addressField, _addressController,
-                                      false, null, null),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  inputField(phoneField, _numberController,
-                                      false, null, null),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width * 1/2,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                      var userData = UserProfile(
-                                          user.id,
-                                          user.email,
-                                      );
-                                      userData.phoneNumber = _numberController.text.trim();
-                                      userData.fullName = _nameController.text.trim();
-                                      // user.location = _addressController.text;
-                                      Provider.of<UserProvider>(context,
-                                          listen: false)
-                                          .updateUserData(user.id, userData);
-                                    }, child: Text("Uložit údaje")),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 80),
-                                    child: TextButton(
-                                      onPressed: () => {
-                                        context.read<Auth>().signOut(),
-                                      },
-                                      child: const Text(
-                                        "Odhlásit se",
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  "Nastavení",
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 15),
+                                      child: Text(
+                                        "Přidejte svou fotku:",
                                         style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black54,
-                                          decoration: TextDecoration.underline,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 80),
-                                    child: TextButton(
+                                    const SizedBox(
+                                      width: 60,
+                                    ),
+                                    _user.profilePicture != ""
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: FutureBuilder(
+                                              future: _user.getUserImage(_user.user.id),
+                                                builder:
+                                                (BuildContext context,
+                                                    AsyncSnapshot<dynamic>
+                                                        snapshot) {
+                                              if (snapshot.hasData) {
+                                                return SizedBox(
+                                                    height: 120,
+                                                    width: 90,
+                                                    child: Image.network(
+                                                        _user.profilePicture));
+                                              }
+                                              else if (snapshot.hasError){
+                                                return const Center(
+                                                  child: Text("Nastala chyba"),
+                                                );
+                                              }
+                                              else {
+                                                return const Center(
+                                                  child: CircularProgressIndicator(),
+                                                );
+                                              }
+                                            }),
+                                          )
+                                        : TextButton(
+                                            onPressed: () {
+                                              Provider.of<UserProvider>(context,
+                                                      listen: false)
+                                                  .uploadUserPhoto();
+                                            },
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Palette.farmersGreen,
+                                                  ),
+                                                  height: 100,
+                                                  width: 80,
+                                                ),
+                                                const Icon(
+                                                  CustomIcons.plus,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                inputField(nameField, _nameController, false,
+                                    null, null),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                inputField(addressField, _addressController,
+                                    false, null, null),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                inputField(phoneField, _numberController, false,
+                                    null, null),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 1 / 2,
+                                  child: ElevatedButton(
                                       onPressed: () {
+                                        _user.user.phoneNumber =
+                                            _numberController.text.trim();
+                                        _user.user.fullName =
+                                            _nameController.text.trim();
+                                        // user.location = _addressController.text;
                                         Provider.of<UserProvider>(context,
                                                 listen: false)
-                                            .fetchUserData(user.id);
-                                        _nameController.text =
-                                            user.fullName;
-                                        _addressController.text =
-                                            user.location.toString();
-                                        _numberController.text =
-                                            user.phoneNumber;
+                                            .updateUserData(
+                                                user.id, _user.user);
                                       },
-                                      child: const Text(
-                                        "Načíst údaje ze serveru",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black54,
-                                          decoration: TextDecoration.underline,
-                                        ),
+                                      child: const Text("Uložit údaje")),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 80),
+                                  child: TextButton(
+                                    onPressed: () => {
+                                      context.read<Auth>().signOut(),
+                                    },
+                                    child: const Text(
+                                      "Odhlásit se",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black54,
+                                        decoration: TextDecoration.underline,
                                       ),
                                     ),
                                   ),
-                                ]),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 80),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Provider.of<UserProvider>(context,
+                                              listen: false)
+                                          .fetchUserData(user.id);
+                                      _nameController.text = user.fullName;
+                                      _addressController.text =
+                                          user.location.toString();
+                                      _numberController.text = user.phoneNumber;
+                                    },
+                                    child: const Text(
+                                      "Načíst údaje ze serveru",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black54,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ));
                   }),

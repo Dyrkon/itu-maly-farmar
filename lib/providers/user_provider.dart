@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/user.dart';
@@ -9,6 +11,8 @@ class UserProvider extends ChangeNotifier {
   FirebaseFirestore _firebaseFirestore;
   final firebase_storage.FirebaseStorage _storage =
       firebase_storage.FirebaseStorage.instance;
+
+  String profilePicture = "";
 
   UserProvider(
       this.user,
@@ -38,6 +42,7 @@ class UserProvider extends ChangeNotifier {
     var newUser = UserProfile(userId, "");
     if (fetchedUser != null)
     {
+      newUser.profilePicture = await getUserImage(userId);
       newUser.fullName = fetchedUser["fullName"];
       newUser.phoneNumber = fetchedUser["phoneNumber"];
       newUser.location = fetchedUser["location"];
@@ -53,21 +58,46 @@ class UserProvider extends ChangeNotifier {
       "email" : profile.email,
       "fullName" : profile.fullName,
       "phoneNumber" : profile.phoneNumber,
+      "profilePicture" : profile.profilePicture,
       // TODO location
     },SetOptions(merge: true),);
-
-    print(profile.fullName);
   }
 
-  Future uploadImage() async {
-    var _picker = ImagePicker();
-
-    var image = await _picker.pickImage(source: ImageSource.gallery);
+  Future<String> getUserImage(String? userID) async {
 
     firebase_storage.Reference ref =
-    firebase_storage.FirebaseStorage.instance.ref('/IMG_20211129_122822.jpg');
+    firebase_storage.FirebaseStorage.instance.ref("$userID-profile.jpg");
 
-    var url = ref.getDownloadURL();
-    print(url);
+    try {
+      profilePicture = await ref.getDownloadURL();
+    } catch (e) {
+      return "";
+    }
+    return profilePicture;
+  }
+
+  Future<bool> uploadUserPhoto() async {
+    var _picker = ImagePicker();
+    var image;
+
+    try {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+    } catch (e) {
+      return true;
+    }
+
+    var imageFile = File(image.path);
+
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref("${user.id}-profile.jpg")
+          .putFile(imageFile);
+    }catch (e) {
+      return false;
+    }
+    user.profilePicture = "${user.id}-profile.jpg";
+    await updateUserData(user.id, user);
+
+    return true;
   }
 }

@@ -6,6 +6,7 @@ class UserProfile {
   String fullName = "";
   String phoneNumber = "";
   String? email;
+  String? profilePicture;
   GeoPoint location = GeoPoint(0,0);
 
   UserProfile(
