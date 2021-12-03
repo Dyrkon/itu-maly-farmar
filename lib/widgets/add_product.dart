@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:maly_farmar/models/product.dart';
+import 'package:maly_farmar/providers/products.dart';
 import 'input_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
@@ -15,6 +19,8 @@ class _AddProductState extends State<AddProduct> {
   int? dropdownValue;
   bool invalidInput = false;
   bool outOfBrackets = true;
+  FirebaseFirestore firestorm = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -121,7 +127,7 @@ class _AddProductState extends State<AddProduct> {
                                 }).toList(),
                                 onChanged: (Object? value) {
                                   setState(() {
-                                    dropdownValue = value as int?;
+                                    dropdownValue = value as int;
                                   });
                                 },
                               ),
@@ -150,10 +156,34 @@ class _AddProductState extends State<AddProduct> {
                             Palette.farmersGreen.shade500),
                       ),
                       child: const Text("Přidej produkt"),
-                      onPressed: () {
+                      onPressed: () async {
                         try {
                           var value = double.parse(_amount.text);
+                          if (value <= 0 || value % 1 != 0) {
+                            Fluttertoast.showToast(
+                                msg: "Množství musí být kladné celé číslo",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            invalidInput = true;
+                            outOfBrackets = false;
+                          }
                           value = double.parse(_price.text);
+                          if (value <= 0 || value % 1 != 0) {
+                            Fluttertoast.showToast(
+                                msg: "Cena musí být kladné celé číslo",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            invalidInput = true;
+                            outOfBrackets = false;
+                          }
                         } on FormatException {
                           invalidInput = true;
                           outOfBrackets = false;
@@ -187,7 +217,31 @@ class _AddProductState extends State<AddProduct> {
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else {
-                          Navigator.of(context).pop();
+                          if (await Provider.of<Products>(context,
+                                      listen: false)
+                                  .pushProduct(Product(
+                                      "",
+                                      _name.text.trim(),
+                                      "",
+                                      dropDownValues[dropdownValue!.toInt()],
+                                      _amount.text.trim(),
+                                      _amount.text.trim(),
+                                      0,
+                                      _price.text.trim(),
+                                      _description.text.trim())) ==
+                              false) {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Nepodařilo se přidat produkt. Zkontrolujte internetové připojení.",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else {
+                            Navigator.of(context).pop();
+                          }
                         }
                       },
                     ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Products with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
@@ -11,7 +12,7 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  List<Product> _products = [
+  final List<Product> _products = [
     Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
         "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
     Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
@@ -27,7 +28,10 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    var snapshot = await _fireStoreInstance.collection("products").where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2").get();
+    var snapshot = await _fireStoreInstance
+        .collection("products")
+        .where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2")
+        .get();
 
     snapshot.docs.forEach((element) {
       Map<String, dynamic> product = element.data();
@@ -53,9 +57,6 @@ class Products with ChangeNotifier {
       }
     });
 
-    /* _products.forEach((element) {
-      print(element.id);
-    }); */
     notifyListeners();
   }
 
@@ -67,5 +68,26 @@ class Products with ChangeNotifier {
         return false;
       }
     });
+  }
+
+  Future<bool> pushProduct(Product product) async {
+    var id = DateTime.now().toString();
+    bool tmp = false;
+    var products = await _fireStoreInstance
+        .collection('products')
+        .doc(id)
+        .set({
+          'id': id,
+          'productName': product.productName,
+          'sellersID': _userId,
+          'unit': product.unit,
+          'totalAmount': product.totalAmount,
+          'reservedAmount': 0,
+          'price': product.price,
+          'description': product.description
+        })
+        .then((value) => tmp = true)
+        .catchError((error) => tmp = false);
+    return tmp;
   }
 }
