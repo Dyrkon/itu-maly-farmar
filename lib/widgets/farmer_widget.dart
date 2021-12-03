@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/models/user.dart';
+import 'package:maly_farmar/providers/offers.dart';
+import 'package:maly_farmar/models/offer.dart';
 
 class FarmerWidget extends StatefulWidget {
-  final UserProfile farmer;
-  final Product product; // TODO chceme produkt daneho farmare
+  final Offer offer;
 
   // const FarmerWidget(this.farmer, this.product, {Key? key}) : super(key : key);
-  const FarmerWidget(this.product, {Key? key}) : super(key : key);
+  const FarmerWidget(this.offer, {Key? key}) : super(key : key);
 
  @override
   State<StatefulWidget> createState() => _FarmerWidgetState();
@@ -16,8 +17,8 @@ class FarmerWidget extends StatefulWidget {
 class _FarmerWidgetState extends State<FarmerWidget> {
   @override
   Widget build(BuildContext context) {
-    var farmer = widget.farmer;
-    var product = widget.product;
+    var offer = widget.offer;
+
 
     return Container(
         decoration: BoxDecoration(
@@ -47,7 +48,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Text(
-                    farmer.fullName,
+                    offer.seller.fullName,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -66,7 +67,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            product.accessibleAmount.toString(), // FIXME
+                            offer.accessibleAmount.toString(), // FIXME
                             style: const TextStyle(
                               fontSize: 15,
                               color: Colors.black,
@@ -84,7 +85,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            product.unit, //FIXME cena za jednotku
+                            offer.unit, //FIXME cena za jednotku
                             style: const TextStyle(
                               fontSize: 17,
                               color: Colors.black,

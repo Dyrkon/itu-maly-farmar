@@ -14,6 +14,8 @@ import './providers/products.dart';
 import './screens/tabs_screen.dart';
 import './providers/tabs.dart';
 import './providers/auth.dart';
+import 'package:maly_farmar/providers/offers.dart';
+import 'package:maly_farmar/models/offer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
             FirebaseAuth.instance.currentUser?.uid)),
         ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance,
             FirebaseAuth.instance.currentUser?.uid)),
+        ChangeNotifierProvider.value(value: Offers(FirebaseFirestore.instance)),
         Provider<Auth>(
           create: (_) => Auth(FirebaseAuth.instance),
         ),
