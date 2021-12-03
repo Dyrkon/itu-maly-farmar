@@ -25,8 +25,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var _user = Provider.of<UserProvider>(context);
+    print(_user.user.id);
+    // print("IDDD ");
 
-    return SafeArea(
+        return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
             future: _user.getUserDataByID(_user.user.id),
@@ -120,8 +122,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           user.id,
                                           user.email,
                                       );
-                                      userData.phoneNumber = _numberController.text;
-                                      userData.fullName = _nameController.text;
+                                      userData.phoneNumber = _numberController.text.trim();
+                                      userData.fullName = _nameController.text.trim();
                                       // user.location = _addressController.text;
                                       Provider.of<UserProvider>(context,
                                           listen: false)
