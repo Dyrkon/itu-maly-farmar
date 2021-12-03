@@ -11,11 +11,10 @@ import '../colors/colors.dart';
 
 class OrderWidget extends StatefulWidget {
   final Order order;
-  final Product product;
   final deny;
   final confirm;
 
-  const OrderWidget(this.order, this.product, this.deny, this.confirm,
+  const OrderWidget(this.order, this.deny, this.confirm,
       {Key? key})
       : super(key: key);
 

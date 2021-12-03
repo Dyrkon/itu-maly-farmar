@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/user.dart';
 
@@ -25,7 +24,9 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<UserProfile> getUserDataByID(String? userId) async {
+    print(user.id);
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
+
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
     // print(fetchedUser);
@@ -42,8 +43,16 @@ class UserProvider extends ChangeNotifier {
     return newUser;
   }
 
+  Future<void> updateUserData(String? userID, UserProfile profile) async {
+    _firebaseFirestore.collection("users").doc(userID).set({
 
-  Future<void> updateUserData() async {
+      "email" : profile.email,
+      "fullName" : profile.fullName,
+      "phoneNumber" : profile.phoneNumber,
+      // TODO location
+    },SetOptions(merge: true),);
 
+    print(profile.fullName);
   }
+
 }

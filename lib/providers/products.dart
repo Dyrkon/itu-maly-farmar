@@ -11,7 +11,7 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  List<Product> _products = [
+  List<Product> _products = [/*
     Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
         "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
     Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
@@ -19,7 +19,7 @@ class Products with ChangeNotifier {
     Product("3", "Oves", "Honza Metelesk", "kg", 45, 25, 20, 200,
         "ovsík pro tvýho koníka víšco hehehe :)))"),
     Product("4", "Sýr", "Honza Metelesk", "ks", 40, 20, 20, 40,
-        "kvalitní sýreček hehehe :))))"),
+        "kvalitní sýreček hehehe :))))"), */
   ];
 
   List<Product> get products {
@@ -27,6 +27,9 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
+    _products.clear();
+    // print("ID "+_userId);
+
     var snapshot = await _fireStoreInstance
         .collection("products")
         .where("sellersID", isEqualTo: _userId)

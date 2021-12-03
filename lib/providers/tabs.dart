@@ -2,21 +2,20 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class Tabs with ChangeNotifier {
-  int screenIndex = 0;
+  int _screenIndex = 0;
   bool isFarmer = false;
 
-  int changeIndex(newIndex) {
-    screenIndex = newIndex;
-    if (screenIndex == 0) {
+  void changeIndex(newIndex) {
+    _screenIndex = newIndex;
+    if (_screenIndex == 0) {
       isFarmer = true;
-    } else if (screenIndex == 1) {
+    } else if (_screenIndex == 1) {
       isFarmer = false;
     }
     notifyListeners();
-    return screenIndex;
   }
 
   int get getIndex {
-    return screenIndex;
+    return _screenIndex;
   }
 }

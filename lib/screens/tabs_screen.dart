@@ -26,12 +26,9 @@ class _TabsScreenState extends State<TabsScreen> {
     OrdersScreen(),
   ];
 
-  int _selectedPage = 0;
-
   void _selectPage(int index) {
     setState(() {
-      _selectedPage =
-          Provider.of<Tabs>(context, listen: false).changeIndex(index);
+      Provider.of<Tabs>(context, listen: false).changeIndex(index);
     });
   }
 
@@ -65,10 +62,10 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
         ],
       ),
-      body: _pages[Provider.of<Tabs>(context).screenIndex],
+      body: _pages[Provider.of<Tabs>(context).getIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
-        currentIndex: _selectedPage,
+        currentIndex: Provider.of<Tabs>(context).getIndex,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
