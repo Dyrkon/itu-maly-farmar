@@ -224,10 +224,10 @@ class _AddProductState extends State<AddProduct> {
                                       _name.text.trim(),
                                       "",
                                       dropDownValues[dropdownValue!.toInt()],
-                                      _amount.text.trim(),
-                                      _amount.text.trim(),
+                                      int.parse(_amount.text.trim()),
+                                      int.parse(_amount.text.trim()),
                                       0,
-                                      _price.text.trim(),
+                                      int.parse(_price.text.trim()),
                                       _description.text.trim())) ==
                               false) {
                             Fluttertoast.showToast(
