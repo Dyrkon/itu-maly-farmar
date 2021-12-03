@@ -27,6 +27,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
+    _products.clear();
+
     var snapshot = await _fireStoreInstance
         .collection("products")
         .where("sellersID", isEqualTo: _userId)

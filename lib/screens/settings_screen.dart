@@ -112,6 +112,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ),
                                   inputField(phoneField, _numberController,
                                       false, null, null),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width * 1/2,
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                      var userData = UserProfile(
+                                          user.id,
+                                          user.email,
+                                      );
+                                      userData.phoneNumber = _numberController.text;
+                                      userData.fullName = _nameController.text;
+                                      // user.location = _addressController.text;
+                                      Provider.of<UserProvider>(context,
+                                          listen: false)
+                                          .updateUserData(user.id, userData);
+                                    }, child: Text("Uložit údaje")),
+                                  ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 80),

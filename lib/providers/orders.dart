@@ -50,8 +50,9 @@ class Orders with ChangeNotifier {
     ];
   }
 
-  // TODO solve double pull
   Future<void> fetchOrders() async {
+    _orders.clear();
+
     var snapshot = await _fireStoreInstance
         .collection("users")
         .doc(userId)
