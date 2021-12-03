@@ -12,7 +12,7 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  final List<Product> _products = [
+  List<Product> _products = [/*
     Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
         "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
     Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
@@ -20,7 +20,7 @@ class Products with ChangeNotifier {
     Product("3", "Oves", "Honza Metelesk", "kg", 45, 25, 20, 200,
         "ovsík pro tvýho koníka víšco hehehe :)))"),
     Product("4", "Sýr", "Honza Metelesk", "ks", 40, 20, 20, 40,
-        "kvalitní sýreček hehehe :))))"),
+        "kvalitní sýreček hehehe :))))"), */
   ];
 
   List<Product> get products {
@@ -28,21 +28,22 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
+    _products.clear();
+    // print("ID "+_userId);
+
     var snapshot = await _fireStoreInstance
         .collection("products")
-        .where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2")
+        .where("sellersID", isEqualTo: _userId)
         .get();
 
     snapshot.docs.forEach((element) {
       Map<String, dynamic> product = element.data();
-      // print(product);
       if (_products.indexWhere((element) {
             if (element.id == product["id"]) {
               return true;
             }
             return false;
-          }) ==
-          -1) {
+          }) == -1) {
         _products.add(Product(
           product["id"],
           product["productName"],
@@ -58,6 +59,26 @@ class Products with ChangeNotifier {
     });
 
     notifyListeners();
+  }
+
+  Future<Product> getProduct(productID) async {
+    var productSnapshot = await _fireStoreInstance
+        .collection("products")
+        .doc(productID)
+        .get();
+    Map<String, dynamic>? product = productSnapshot.data();
+
+    notifyListeners();
+    return Product(
+        product!["id"],
+        product["productName"],
+        product["sellersID"],
+        product["unit"],
+        product["totalAmount"],
+        product["totalAmount"] - product["reservedAmount"],
+        product["reservedAmount"],
+        product["price"],
+        product["description"]);
   }
 
   Product productWithId(String id) {

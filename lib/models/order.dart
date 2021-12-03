@@ -9,14 +9,16 @@ enum Status {
 }
 
 class Order {
-  String orderId;
+  String orderID;
   Status status;
+  String productID;
   int orderedAmount;
   DateTime orderTime;
   DateTime pickupTime;
 
   Order(
-      this.orderId,
+      this.orderID,
+      this.productID,
       this.status,
       this.orderedAmount,
       this.orderTime,

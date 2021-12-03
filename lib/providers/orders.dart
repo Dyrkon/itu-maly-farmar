@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
+import 'package:maly_farmar/models/product.dart';
+import '../providers/user_provider.dart';
 
 class Orders with ChangeNotifier {
   var orderIndex = 0;
@@ -14,34 +18,23 @@ class Orders with ChangeNotifier {
   );
 
   List<Order> _orders = [
+    /*
     Order(
-      "1",
+      "0",
+      Product,
       Status.pending,
       10,
       DateTime.now(),
       DateTime.now(),
     ),
     Order(
+      "1",
       "2",
       Status.pending,
       10,
       DateTime.now(),
       DateTime.now(),
-    ),
-    Order(
-      "3",
-      Status.confirmedBySeller,
-      10,
-      DateTime.now(),
-      DateTime.now(),
-    ),
-    Order(
-      "4",
-      Status.pending,
-      10,
-      DateTime.now(),
-      DateTime.now(),
-    ),
+    ),*/
   ];
 
   List<Order> get activeOrders {
@@ -58,7 +51,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchOrders() async {
-    // print(userId);
+    _orders.clear();
 
     var snapshot = await _fireStoreInstance
         .collection("users")
@@ -66,19 +59,24 @@ class Orders with ChangeNotifier {
         .collection("orders")
         .get();
 
-    snapshot.docs.forEach((element) {
+    snapshot.docs.forEach((element) async {
       Map<String, dynamic> order = element.data();
       if (_orders.indexWhere((element) {
-            if (element.orderId == order["id"]) {
+            if (element.orderID == order["orderID"]) {
               return true;
             }
             return false;
-          }) ==
-          -1) {
-        // print(order);
+          }) == -1) {
+
         _orders.add(
-          Order(order["id"], Status.values[order["status"]], order["amount"],
-              DateTime.now(), DateTime.now()),
+          Order(
+            order["orderID"],
+            order["productID"],
+            Status.values[order["status"]],
+            order["orderedAmount"],
+            order["orderTime"].toDate(),
+            order["pickupTime"].toDate(),
+          ),
         );
       }
     });
@@ -89,6 +87,7 @@ class Orders with ChangeNotifier {
     }); */
     notifyListeners();
   }
+
 
   Future<void> pushOrder(FirebaseAuth authInstance, Order orderToAdd) async {
     _fireStoreInstance
@@ -109,7 +108,7 @@ class Orders with ChangeNotifier {
 
   Order orderWithId(String id) {
     return activeOrders.firstWhere((order) {
-      if (order.orderId == id) {
+      if (order.orderID == id) {
         return true;
       } else {
         return false;
@@ -119,18 +118,33 @@ class Orders with ChangeNotifier {
 
   void denyOrder(String id) {
     activeOrders.firstWhere((element) {
-      if (element.orderId == id) {
+      if (element.orderID == id) {
         return true;
       } else {
         return false;
       }
     }).status = Status.denied;
+
+    print(id);
+    updateStatus(id, Status.denied);
+
     notifyListeners();
+  }
+
+  Future<void> updateStatus(String id, Status status) async {
+    print(id);
+
+    _fireStoreInstance
+        .collection("users")
+        .doc(userId)
+        .collection("orders")
+        .doc(id)
+        .update({"status": status.index});
   }
 
   void confirmOrder(String id) {
     var order = activeOrders.firstWhere((element) {
-      if (element.orderId == id) {
+      if (element.orderID == id) {
         return true;
       } else {
         return false;
@@ -144,6 +158,9 @@ class Orders with ChangeNotifier {
     } else {
       // TODO handle error
     }
+    print(id);
+    updateStatus(id, order.status);
+
     notifyListeners();
   }
 }

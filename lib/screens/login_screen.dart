@@ -49,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
               inputField("Váš email", _nameController, false, null, null),
+              SizedBox(height: 10,),
               inputField("Váše heslo", _passwordController, true, null, null),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40),

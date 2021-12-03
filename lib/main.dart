@@ -6,7 +6,6 @@ import 'package:maly_farmar/models/user.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:maly_farmar/screens/landing_page.dart';
 import 'package:maly_farmar/screens/login_screen.dart';
-import 'icons/custom_icons.dart';
 import 'package:provider/provider.dart';
 import './colors/colors.dart';
 import './providers/orders.dart';
@@ -24,6 +23,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // print("start");
+    print(FirebaseAuth.instance.currentUser?.uid);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
