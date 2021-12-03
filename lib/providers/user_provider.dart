@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/user.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UserProvider extends ChangeNotifier {
   UserProfile user;
   FirebaseFirestore _firebaseFirestore;
+  final firebase_storage.FirebaseStorage _storage =
+      firebase_storage.FirebaseStorage.instance;
 
   UserProvider(
       this.user,
@@ -55,4 +59,15 @@ class UserProvider extends ChangeNotifier {
     print(profile.fullName);
   }
 
+  Future uploadImage() async {
+    var _picker = ImagePicker();
+
+    var image = await _picker.pickImage(source: ImageSource.gallery);
+
+    firebase_storage.Reference ref =
+    firebase_storage.FirebaseStorage.instance.ref('/IMG_20211129_122822.jpg');
+
+    var url = ref.getDownloadURL();
+    print(url);
+  }
 }

@@ -77,7 +77,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         width: 60,
                                       ),
                                       TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Provider.of<UserProvider>(context, listen: false).uploadImage();
+                                        },
                                         child: Stack(
                                           alignment: Alignment.center,
                                           children: [
