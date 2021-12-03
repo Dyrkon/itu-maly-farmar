@@ -4,11 +4,11 @@ import 'package:maly_farmar/models/offer.dart';
 import 'package:maly_farmar/models/user.dart';
 import '../models/product.dart';
 
-class Products with ChangeNotifier {
+class Offers with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
 
 
-  Products(this._fireStoreInstance,);
+  Offers(this._fireStoreInstance,);
 
   List<Offer> _offers = [];
 
