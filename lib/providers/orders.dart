@@ -66,11 +66,11 @@ class Orders with ChangeNotifier {
             }
             return false;
           }) == -1) {
-        var product = await getProduct(order["productID"]);
+
         _orders.add(
           Order(
             order["orderID"],
-            product,
+            order["productID"],
             Status.values[order["status"]],
             order["orderedAmount"],
             order["orderTime"].toDate(),
@@ -87,24 +87,6 @@ class Orders with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Product> getProduct(productID) async {
-    var productSnapshot = await _fireStoreInstance
-        .collection("products")
-        .doc(productID)
-        .get();
-    Map<String, dynamic>? product = productSnapshot.data();
-
-    return Product(
-        product!["id"],
-        product["productName"],
-        product["sellersID"],
-        product["unit"],
-        product["totalAmount"],
-        product["totalAmount"] - product["reservedAmount"],
-        product["reservedAmount"],
-        product["price"],
-        product["description"]);
-  }
 
   Future<void> pushOrder(FirebaseAuth authInstance, Order orderToAdd) async {
     _fireStoreInstance

@@ -60,6 +60,26 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Product> getProduct(productID) async {
+    var productSnapshot = await _fireStoreInstance
+        .collection("products")
+        .doc(productID)
+        .get();
+    Map<String, dynamic>? product = productSnapshot.data();
+
+    notifyListeners();
+    return Product(
+        product!["id"],
+        product["productName"],
+        product["sellersID"],
+        product["unit"],
+        product["totalAmount"],
+        product["totalAmount"] - product["reservedAmount"],
+        product["reservedAmount"],
+        product["price"],
+        product["description"]);
+  }
+
   Product productWithId(String id) {
     return products.firstWhere((product) {
       if (product.id == id) {

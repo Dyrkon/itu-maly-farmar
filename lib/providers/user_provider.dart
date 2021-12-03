@@ -24,6 +24,24 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<UserProfile> getUserDataByID(String? userId) async {
+    var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
+
+    Map<String, dynamic>? fetchedUser = snapshot.data();
+    // print(fetchedUser);
+
+    var newUser = UserProfile(userId, "");
+    if (fetchedUser != null)
+    {
+      newUser.fullName = fetchedUser["fullName"];
+      newUser.phoneNumber = fetchedUser["phoneNumber"];
+      newUser.location = fetchedUser["location"];
+      newUser.email = fetchedUser["email"];
+    }
+
+    return newUser;
+  }
+
 
   Future<void> updateUserData() async {
 
