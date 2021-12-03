@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'input_field_widget.dart';
 
 class AddProduct extends StatefulWidget {
@@ -12,11 +12,14 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+  int? dropdownValue;
+  bool invalidInput = false;
+  bool outOfBrackets = true;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    int? dropdownValue = 1;
-    var dropDownValues = ["ks", "kg", "l", "g", "ml", "t", "dg"];
+    dropdownValue ??= 0;
+    var dropDownValues = ["ks", "g", "dg", "kg", "t", "ml", "l"];
     TextEditingController _name = TextEditingController();
     TextEditingController _amount = TextEditingController();
     TextEditingController _price = TextEditingController();
@@ -30,7 +33,9 @@ class _AddProductState extends State<AddProduct> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-              height: MediaQuery.of(context).viewInsets.bottom == 0 ? size.height * 1 / 6 : 0,
+            height: MediaQuery.of(context).viewInsets.bottom == 0
+                ? size.height * 1 / 6
+                : 0,
           ),
           Container(
             decoration: BoxDecoration(
@@ -60,7 +65,8 @@ class _AddProductState extends State<AddProduct> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text("Přidejte obrázek:",
+                          const Text(
+                            "Přidejte obrázek:",
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -89,8 +95,8 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ],
                       ),
-                      inputField(
-                          "Zadejte název položky", _name, false, size.width, 50),
+                      inputField("Zadejte název položky", _name, false,
+                          size.width, 50),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -113,17 +119,23 @@ class _AddProductState extends State<AddProduct> {
                                     child: Text(e),
                                   );
                                 }).toList(),
-                                onChanged: (Object? value) {},
+                                onChanged: (Object? value) {
+                                  setState(() {
+                                    dropdownValue = value as int?;
+                                  });
+                                },
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10,),
+                          const SizedBox(
+                            width: 10,
+                          ),
                         ],
                       ),
-                      inputField(
-                          "Zadejte cenu za položku", _price, false, size.width, 50),
-                      inputField(
-                          "Přidejte popis", _description, false, size.width, 80),
+                      inputField("Zadejte cenu za položku", _price, false,
+                          size.width, 50),
+                      inputField("Přidejte popis", _description, false,
+                          size.width, 80),
                     ],
                   ),
                 ),
@@ -134,11 +146,49 @@ class _AddProductState extends State<AddProduct> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                        backgroundColor: MaterialStateProperty.all(
+                            Palette.farmersGreen.shade500),
                       ),
-                      child: const Text("Označit za splněné"),
+                      child: const Text("Přidej produkt"),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        try {
+                          var value = double.parse(_amount.text);
+                          value = double.parse(_price.text);
+                        } on FormatException {
+                          invalidInput = true;
+                          outOfBrackets = false;
+                        } finally {
+                          if (outOfBrackets) {
+                            invalidInput = false;
+                          }
+                        }
+                        outOfBrackets = true;
+
+                        //name amount price description
+                        if (_name.text == "" ||
+                            _amount.text == "" ||
+                            _price.text == "" ||
+                            _description.text == "") {
+                          Fluttertoast.showToast(
+                              msg: "Nejsou zadány všechny informace",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        } else if (invalidInput) {
+                          Fluttertoast.showToast(
+                              msg: "Cenu a množství zadejte číslem",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        } else {
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   ),

@@ -80,7 +80,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   }),
           )
       ),
-
     );
   }
 }
