@@ -56,13 +56,14 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
                     itemCount: productData.products.length,
                     itemBuilder: (BuildContext ctx, int index) {
                       if (index < productData.products.length - 1) {
-                        return ElevatedButton(
+                        return RawMaterialButton(
                           onPressed: () {
                             showDialog(
                                 barrierColor: Colors.grey.withOpacity(0.9),
                                 context: context,
-                                builder: (BuildContext context) =>
-                                    EditProduct());
+                                builder: (BuildContext context) {
+                                  return EditProduct();
+                                });
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),

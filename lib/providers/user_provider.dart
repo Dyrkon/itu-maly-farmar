@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/user.dart';
@@ -37,7 +38,7 @@ class UserProvider extends ChangeNotifier {
 
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    // print(fetchedUser);
+    print(fetchedUser);
 
     var newUser = UserProfile(userId, "");
     if (fetchedUser != null)
@@ -53,13 +54,17 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserData(String? userID, UserProfile profile) async {
+    if (userID == null) {
+      return;
+    }
+
     _firebaseFirestore.collection("users").doc(userID).set({
 
       "email" : profile.email,
       "fullName" : profile.fullName,
       "phoneNumber" : profile.phoneNumber,
       "profilePicture" : profile.profilePicture,
-      // TODO location
+      "location" : profile.location
     },SetOptions(merge: true),);
   }
 
@@ -100,4 +105,42 @@ class UserProvider extends ChangeNotifier {
 
     return true;
   }
+
+  Future<GeoPoint> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      print('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        print('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print('Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    var location = await Geolocator.getCurrentPosition();
+
+    return GeoPoint(location.latitude, location.longitude);
+  }
+
 }

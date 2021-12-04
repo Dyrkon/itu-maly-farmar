@@ -47,9 +47,8 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                  child: Flex(
+                  child: Flexible(
                     flex: 1,
-                    direction: MainAxisAlignment,
                     child: Text(
                     offer.seller.fullName,
                     style: const TextStyle(
