@@ -42,13 +42,13 @@ class Products with ChangeNotifier {
     for (var element in snapshot.docs) {
       Map<String, dynamic> product = element.data();
       if (_products.indexWhere((element) {
-        // print("ID "+element.id);
+            // print("ID "+element.id);
             if (element.id == product["id"]) {
               // print("ID2 "+product["id"]);
               // print(true);
               return true;
             }
-        // print("ID3 "+product["id"]);
+            // print("ID3 "+product["id"]);
             return false;
           }) ==
           -1) {
@@ -62,6 +62,7 @@ class Products with ChangeNotifier {
           product["reservedAmount"],
           product["price"],
           product["description"],
+          product["offered"],
         );
         newProduct.imagePath = product["imagePath"];
         _products.add(newProduct);
@@ -79,10 +80,9 @@ class Products with ChangeNotifier {
 
     Map<String, dynamic>? product = productSnapshot.data();
 
-    if (product == null)
-      {
-        return null;
-      }
+    if (product == null) {
+      return null;
+    }
 
     Product newProduct = Product(
       product["id"],
@@ -91,8 +91,11 @@ class Products with ChangeNotifier {
       product["unit"],
       product["totalAmount"],
       product["totalAmount"] - product["reservedAmount"],
-      product["reservedAmount"], product["price"],
-      product["description"],);
+      product["reservedAmount"],
+      product["price"],
+      product["description"],
+      product["offered"],
+    );
 
     newProduct.imagePath = product["imagePath"];
 
@@ -125,20 +128,17 @@ class Products with ChangeNotifier {
           'reservedAmount': 0,
           'price': product.price,
           'description': product.description,
-          'imagePath' : product.imagePath,
+          'imagePath': product.imagePath,
+          'offered': product.offered,
         })
         .then((value) => tmp = true)
         .catchError((error) => tmp = false);
     return tmp;
   }
 
-  Future<bool> updateProduct(Product product, int newAmount) async {
-    // print(product.id);
-    var products = await _fireStoreInstance
-        .collection('products')
-        .doc(product.id)
-        .update({'totalAmount': newAmount});
-    return true; //tmp;
+  Future<bool> updateProduct(Product product, int newAmount, bool toOffer) async {
+    var products = await _fireStoreInstance.collection('products').doc(product.id).update({'totalAmount': newAmount, 'offered': toOffer});
+    return true;
   }
 
   Future<String> uploadProductPhoto(String productID) async {
@@ -157,7 +157,7 @@ class Products with ChangeNotifier {
       await firebase_storage.FirebaseStorage.instance
           .ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg")
           .putFile(imageFile);
-    }catch (e) {
+    } catch (e) {
       return "";
     }
     // print("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
@@ -165,15 +165,12 @@ class Products with ChangeNotifier {
   }
 
   Future<String> getProductImage(String? productID) async {
-
     if (productID == null) {
       return "";
     }
 
     firebase_storage.Reference ref =
-    firebase_storage.FirebaseStorage.instance.ref(
-        "p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg"
-    );
+        firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
 
     var url;
 

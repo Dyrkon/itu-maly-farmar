@@ -9,6 +9,7 @@ class Product {
   var imagePath;
   String unit;
   String description;
+  bool offered;
 
   Product(
     this.id,
@@ -20,5 +21,6 @@ class Product {
     this.reservedAmount,
     this.price,
     this.description,
+    this.offered,
   );
 }

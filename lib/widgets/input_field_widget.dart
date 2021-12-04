@@ -3,8 +3,7 @@ import '../colors/colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
-Widget inputField(String text,
-    TextEditingController controller, bool obstruct, double? customWidth, double? customHeight) {
+Widget inputField(String text, TextEditingController controller, bool obstruct, double? customWidth, double? customHeight, bool numeric) {
   return Container(
     width: customWidth,
     height: customHeight,
@@ -31,6 +30,7 @@ Widget inputField(String text,
           ),
           border: InputBorder.none,
         ),
+        keyboardType: numeric ? TextInputType.number : null,
       ),
     ),
   );

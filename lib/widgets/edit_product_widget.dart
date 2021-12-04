@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/models/product.dart';
@@ -17,11 +18,14 @@ class EditProduct extends StatefulWidget {
 
 class _EditProductState extends State<EditProduct> {
   FirebaseFirestore firestorm = FirebaseFirestore.instance;
+  TextEditingController _amount = TextEditingController();
   int? amount;
+  bool? toOffer;
 
   @override
   Widget build(BuildContext context) {
     var product = widget.targetProduct;
+    toOffer ??= product.offered;
     amount ??= product.accessibleAmount;
     String text = amount.toString();
     var size = MediaQuery.of(context).size;
@@ -41,7 +45,7 @@ class _EditProductState extends State<EditProduct> {
               borderRadius: BorderRadius.circular(10),
             ),
             height: size.height * 0.28,
-            width: size.width * 8 / 10,
+            width: size.width * 9 / 10,
             margin: const EdgeInsets.symmetric(horizontal: 10),
             padding: const EdgeInsets.all(15),
             child: Column(children: [
@@ -94,11 +98,20 @@ class _EditProductState extends State<EditProduct> {
                       height: size.height,
                       child: Material(
                         child: TextField(
+                          controller: _amount,
                           decoration: InputDecoration(
+                            labelStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
                             labelText: text,
                             border: InputBorder.none,
                           ),
                           keyboardType: TextInputType.number,
+                          onSubmitted: (val) {
+                            amount = int.parse(val);
+                            text = amount.toString();
+                          },
                         ),
                       ),
                     ),
@@ -120,6 +133,34 @@ class _EditProductState extends State<EditProduct> {
                         primary: Palette.farmersGreen.shade500,
                       ),
                     ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "nabídnout položku k prodeji?",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    Material(
+                      child: Transform.scale(
+                        scale: 1.3,
+                        child: Checkbox(
+                            value: toOffer,
+                            fillColor: MaterialStateProperty.all(Palette.farmersGreen.shade500),
+                            onChanged: (bool? value) {
+                              setState(() {
+                                toOffer = value!;
+                              });
+                            }),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -151,34 +192,9 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 3,
-                      child: SizedBox(
-                        height: 60,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                amount = 0;
-                                text = amount.toString();
-                              });
-                            },
-                            child: const Icon(
-                              CustomIcons.trash,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(15),
-                              primary: Colors.red, // <-- Button color
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: SizedBox(),
                     ),
                     Expanded(
                       flex: 1,
@@ -187,6 +203,12 @@ class _EditProductState extends State<EditProduct> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
+                            if (int.parse(_amount.text) != amount) {
+                              int newAmount = int.parse(_amount.text);
+                              if (newAmount % 1 == 0) {
+                                amount = newAmount;
+                              }
+                            }
                             if (amount! < 0 || amount! % 1 != 0) {
                               Fluttertoast.showToast(
                                   msg: "Zadejte nezáporné celé číslo.",
@@ -197,18 +219,8 @@ class _EditProductState extends State<EditProduct> {
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
-                              if (await Provider.of<Products>(context, listen: false).updateProduct(product, amount!) == false) {
-                                Fluttertoast.showToast(
-                                    msg: "Nepodařilo se upravit množství. Zkontrolujte internetové připojení.",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              } else {
-                                Navigator.of(context).pop();
-                              }
+                              Provider.of<Products>(context, listen: false).updateProduct(product, amount!, toOffer!);
+                              Navigator.of(context).pop();
                             }
                           },
                           child: const Icon(

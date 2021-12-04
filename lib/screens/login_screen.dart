@@ -48,9 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 25,
               ),
-              inputField("Váš email", _nameController, false, null, null),
-              SizedBox(height: 10,),
-              inputField("Váše heslo", _passwordController, true, null, null),
+              inputField("Váš email", _nameController, false, null, null, false),
+              SizedBox(
+                height: 10,
+              ),
+              inputField("Váše heslo", _passwordController, true, null, null, false),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: ElevatedButton(
@@ -63,8 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: _passwordController.text.trim(),
                             )
                             .then((value) {
-                            context.read<Auth>().invalidCredentialsAlert(value,
-                                context, _nameController, _passwordController);
+                            context.read<Auth>().invalidCredentialsAlert(value, context, _nameController, _passwordController);
                           })
                         : context
                             .read<Auth>()
@@ -73,8 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: _passwordController.text.trim(),
                             )
                             .then((value) {
-                            context.read<Auth>().invalidCredentialsAlert(value,
-                                context, _nameController, _passwordController);
+                            context.read<Auth>().invalidCredentialsAlert(value, context, _nameController, _passwordController);
                           })
                   },
                   child: Text(

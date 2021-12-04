@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:csc_picker/csc_picker.dart';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
@@ -9,7 +7,6 @@ import 'package:maly_farmar/providers/auth.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
-
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -69,8 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 15),
+                                      padding: EdgeInsets.symmetric(horizontal: 15),
                                       child: Text(
                                         "Přidejte svou fotku:",
                                         style: TextStyle(
@@ -83,51 +79,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ),
                                     _user.profilePicture != ""
                                         ? ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                             child: FutureBuilder(
-                                                future: _user.getUserImage(
-                                                    _user.user.id),
-                                                builder: (BuildContext context,
-                                                    AsyncSnapshot<dynamic>
-                                                        snapshot) {
+                                                future: _user.getUserImage(_user.user.id),
+                                                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                                                   if (snapshot.hasData) {
                                                     return SizedBox(
                                                         height: 120,
                                                         width: 90,
                                                         child: Image.network(
-                                                            //_user.profilePicture
+                                                          //_user.profilePicture
                                                           snapshot.data,
                                                           fit: BoxFit.cover,
                                                         ));
-                                                  } else if (snapshot
-                                                      .hasError) {
+                                                  } else if (snapshot.hasError) {
                                                     return const Center(
-                                                      child:
-                                                          Text("Nastala chyba"),
+                                                      child: Text("Nastala chyba"),
                                                     );
                                                   } else {
                                                     return const Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
+                                                      child: CircularProgressIndicator(),
                                                     );
                                                   }
                                                 }),
                                           )
                                         : TextButton(
                                             onPressed: () {
-                                              Provider.of<UserProvider>(context,
-                                                      listen: false)
-                                                  .uploadUserPhoto();
+                                              Provider.of<UserProvider>(context, listen: false).uploadUserPhoto();
                                             },
                                             child: Stack(
                                               alignment: Alignment.center,
                                               children: [
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                                    borderRadius: BorderRadius.circular(5),
                                                     color: Palette.farmersGreen,
                                                   ),
                                                   height: 100,
@@ -145,42 +130,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                inputField(nameField, _nameController, false,
-                                    null, null),
+                                inputField(nameField, _nameController, false, null, null, false),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
-                                  width: MediaQuery.of(context).size.width * 1/ 2,
+                                  width: MediaQuery.of(context).size.width * 1 / 2,
                                   child: ElevatedButton(
-                                      onPressed: () async {geopoint = await _user.determinePosition();},
+                                      onPressed: () async {
+                                        geopoint = await _user.determinePosition();
+                                      },
                                       child: const Text("Uložit moji pozici")),
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                inputField(phoneField, _numberController, false,
-                                    null, null),
+                                inputField(phoneField, _numberController, false, null, null, false),
                                 SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 1 / 2,
+                                  width: MediaQuery.of(context).size.width * 1 / 2,
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        _user.user.phoneNumber =
-                                            _numberController.text.trim();
-                                        _user.user.fullName =
-                                            _nameController.text.trim();
+                                        _user.user.phoneNumber = _numberController.text.trim();
+                                        _user.user.fullName = _nameController.text.trim();
                                         _user.user.location = geopoint;
-                                        Provider.of<UserProvider>(context,
-                                                listen: false)
-                                            .updateUserData(
-                                                user.id, _user.user);
+                                        Provider.of<UserProvider>(context, listen: false).updateUserData(user.id, _user.user);
                                       },
                                       child: const Text("Uložit údaje")),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 80),
+                                  padding: const EdgeInsets.symmetric(horizontal: 80),
                                   child: TextButton(
                                     onPressed: () => {
                                       context.read<Auth>().signOut(),
@@ -196,16 +174,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 80),
+                                  padding: const EdgeInsets.symmetric(horizontal: 80),
                                   child: TextButton(
                                     onPressed: () {
-                                      Provider.of<UserProvider>(context,
-                                              listen: false)
-                                          .fetchUserData(user.id);
+                                      Provider.of<UserProvider>(context, listen: false).fetchUserData(user.id);
                                       _nameController.text = user.fullName;
-                                      _addressController.text =
-                                          user.location.toString();
+                                      _addressController.text = user.location.toString();
                                       _numberController.text = user.phoneNumber;
                                     },
                                     child: const Text(
