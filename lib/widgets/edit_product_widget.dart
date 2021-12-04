@@ -207,6 +207,7 @@ class _EditProductState extends State<EditProduct> {
                                     textColor: Colors.white,
                                     fontSize: 16.0);
                               } else {
+                                Provider.of<Products>(context, listen: false).fetchProducts();
                                 Navigator.of(context).pop();
                               }
                             }
