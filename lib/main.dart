@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print("start");
-    print(FirebaseAuth.instance.currentUser?.uid);
+    // print(FirebaseAuth.instance.currentUser?.uid);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),

@@ -4,6 +4,7 @@ import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/providers/products.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
 import 'input_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,8 @@ class _AddProductState extends State<AddProduct> {
   bool invalidInput = false;
   bool outOfBrackets = true;
   FirebaseFirestore firestorm = FirebaseFirestore.instance;
+  final productID = DateTime.now().toString();
+  String imageUrl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -78,26 +81,52 @@ class _AddProductState extends State<AddProduct> {
                             ),
                           ),
                           Container(
-                            height: 50,
+                            height: 80,
                             width: 80,
                             decoration: BoxDecoration(
                                 color: Palette.farmersGreen,
                                 borderRadius: BorderRadius.circular(10)),
-                            child: RawMaterialButton(
-                              splashColor: Palette.farmersGreen,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              onPressed: () => {},
-                              child: const Center(
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 30),
-                                ),
-                              ),
-                            ),
+                            child: FutureBuilder(
+                                future: Provider.of<Products>(context)
+                                    .getProductImage(productID),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  print("Has");
+                                  print(snapshot.hasData);
+                                  print("Err");
+                                  print(snapshot.hasError);
+                                  print(snapshot.data);
+                                  if (snapshot.hasData && snapshot.data != "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
+                                    return ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        snapshot.data,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError ||snapshot.data == "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
+                                    return RawMaterialButton(
+                                      splashColor: Palette.farmersGreen,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      onPressed: () async => {
+                                        imageUrl = await Provider.of<Products>(context, listen: false).uploadProductPhoto(productID),
+                                      },
+                                      child: const Center(
+                                        child: Text(
+                                          "+",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return const Center(child: CircularProgressIndicator(),);
+                                  }
+                                }),
                           ),
                         ],
                       ),
@@ -141,7 +170,7 @@ class _AddProductState extends State<AddProduct> {
                       inputField("Zadejte cenu za položku", _price, false,
                           size.width, 50),
                       inputField("Přidejte popis", _description, false,
-                          size.width, 80),
+                          size.width, 50),
                     ],
                   ),
                 ),
@@ -217,19 +246,18 @@ class _AddProductState extends State<AddProduct> {
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else {
-                          if (await Provider.of<Products>(context,
-                                      listen: false)
-                                  .pushProduct(Product(
-                                      "",
-                                      _name.text.trim(),
-                                      "",
-                                      dropDownValues[dropdownValue!.toInt()],
-                                      int.parse(_amount.text.trim()),
-                                      int.parse(_amount.text.trim()),
-                                      0,
-                                      int.parse(_price.text.trim()),
-                                      _description.text.trim())) ==
-                              false) {
+                          var newProduct = Product(
+                              productID,
+                              _name.text.trim(),
+                              productID,
+                              dropDownValues[dropdownValue!.toInt()],
+                              int.parse(_amount.text.trim()),
+                              int.parse(_amount.text.trim()),
+                              0,
+                              int.parse(_price.text.trim()),
+                              _description.text.trim());
+                          newProduct.imagePath = imageUrl;
+                          if (await Provider.of<Products>(context, listen: false).pushProduct(newProduct) == false) {
                             Fluttertoast.showToast(
                                 msg:
                                     "Nepodařilo se přidat produkt. Zkontrolujte internetové připojení.",
@@ -240,6 +268,7 @@ class _AddProductState extends State<AddProduct> {
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {
+                            Provider.of<Products>(context, listen: false).fetchProducts();
                             Navigator.of(context).pop();
                           }
                         }

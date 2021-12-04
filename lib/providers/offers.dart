@@ -39,7 +39,7 @@ class Offers with ChangeNotifier {
         fetchedUser.fullName = user["fullName"];
         fetchedUser.location = user["location"];
 
-        print(user);
+        // print(user);
 
 
         _offers.add(Offer(

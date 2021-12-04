@@ -67,7 +67,6 @@ class Orders with ChangeNotifier {
             }
             return false;
           }) == -1) {
-
         _orders.add(
           Order(
             order["orderID"],
@@ -81,10 +80,6 @@ class Orders with ChangeNotifier {
       }
     });
 
-    /*
-    _orders.forEach((element) {
-      print(element.orderId);
-    }); */
     notifyListeners();
   }
 
@@ -102,7 +97,7 @@ class Orders with ChangeNotifier {
       "pickupTime": orderToAdd.pickupTime.toIso8601String()
     }, SetOptions(merge: true) // Objednavku prida nebo updatuje
             ).then((_) {
-      print("succes"); // TODO handle error
+      // print("succes"); // TODO handle error
     });
   }
 
@@ -125,14 +120,14 @@ class Orders with ChangeNotifier {
       }
     }).status = Status.denied;
 
-    print(id);
+    // print(id);
     updateStatus(id, Status.denied);
 
     notifyListeners();
   }
 
   Future<void> updateStatus(String id, Status status) async {
-    print(id);
+    // print(id);
 
     _fireStoreInstance
         .collection("users")
@@ -158,7 +153,7 @@ class Orders with ChangeNotifier {
     } else {
       // TODO handle error
     }
-    print(id);
+    // print(id);
     updateStatus(id, order.status);
 
     notifyListeners();
