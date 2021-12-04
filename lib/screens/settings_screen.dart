@@ -81,29 +81,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             child: FutureBuilder(
-                                              future: _user.getUserImage(_user.user.id),
-                                                builder:
-                                                (BuildContext context,
+                                                future: _user.getUserImage(
+                                                    _user.user.id),
+                                                builder: (BuildContext context,
                                                     AsyncSnapshot<dynamic>
                                                         snapshot) {
-                                              if (snapshot.hasData) {
-                                                return SizedBox(
-                                                    height: 120,
-                                                    width: 90,
-                                                    child: Image.network(
-                                                        _user.profilePicture));
-                                              }
-                                              else if (snapshot.hasError){
-                                                return const Center(
-                                                  child: Text("Nastala chyba"),
-                                                );
-                                              }
-                                              else {
-                                                return const Center(
-                                                  child: CircularProgressIndicator(),
-                                                );
-                                              }
-                                            }),
+                                                  if (snapshot.hasData) {
+                                                    return SizedBox(
+                                                        height: 120,
+                                                        width: 90,
+                                                        child: Image.network(_user
+                                                            .profilePicture));
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return const Center(
+                                                      child:
+                                                          Text("Nastala chyba"),
+                                                    );
+                                                  } else {
+                                                    return const Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    );
+                                                  }
+                                                }),
                                           )
                                         : TextButton(
                                             onPressed: () {

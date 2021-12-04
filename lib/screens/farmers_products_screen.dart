@@ -62,7 +62,7 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
                                 barrierColor: Colors.grey.withOpacity(0.9),
                                 context: context,
                                 builder: (BuildContext context) =>
-                                    EditProduct());
+                                    EditProduct(productData.products[index]));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),

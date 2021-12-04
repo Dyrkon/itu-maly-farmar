@@ -36,10 +36,7 @@ class Products with ChangeNotifier {
     _products.clear();
     // print("ID "+_userId);
 
-    var snapshot = await _fireStoreInstance
-        .collection("products")
-        .where("sellersID", isEqualTo: _userId)
-        .get();
+    var snapshot = await _fireStoreInstance.collection("products").where("sellersID", isEqualTo: _userId).get();
 
     for (var element in snapshot.docs) {
       Map<String, dynamic> product = element.data();
@@ -68,21 +65,12 @@ class Products with ChangeNotifier {
   }
 
   Future<Product> getProduct(productID) async {
-    var productSnapshot =
-        await _fireStoreInstance.collection("products").doc(productID).get();
+    var productSnapshot = await _fireStoreInstance.collection("products").doc(productID).get();
     Map<String, dynamic>? product = productSnapshot.data();
 
     notifyListeners();
-    return Product(
-        product!["id"],
-        product["productName"],
-        product["sellersID"],
-        product["unit"],
-        product["totalAmount"],
-        product["totalAmount"] - product["reservedAmount"],
-        product["reservedAmount"],
-        product["price"],
-        product["description"]);
+    return Product(product!["id"], product["productName"], product["sellersID"], product["unit"], product["totalAmount"],
+        product["totalAmount"] - product["reservedAmount"], product["reservedAmount"], product["price"], product["description"]);
   }
 
   Product productWithId(String id) {
@@ -116,5 +104,9 @@ class Products with ChangeNotifier {
     return tmp;
   }
 
-  //Future<bool> updateProduct(Product product) async {}
+  Future<bool> updateProduct(Product product, int newAmount) async {
+    print(product.id);
+    var products = await _fireStoreInstance.collection('products').doc(product.id).update({'totalAmount': newAmount});
+    return true; //tmp;
+  }
 }
