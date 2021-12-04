@@ -61,7 +61,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         onLongPress: () => {},
                         onPressed: () => {},
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
+                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: FarmerWidget(
                             offerData.offers[index],
                           ),
@@ -70,7 +70,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     }
                     else
                       {
-                        return const SizedBox(height: 50,);
+                        return const SizedBox(height: 10,);
                       }
                   }),
           )

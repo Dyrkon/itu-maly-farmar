@@ -21,7 +21,16 @@ class _FarmerWidgetState extends State<FarmerWidget> {
 
     return Container(
         decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
+          border: Border.all(
+            color: Colors.greenAccent.shade700,
+            width: 1.5
+            ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(7.0)
+          ),
+        ),
+        /*decoration: BoxDecoration(
+            color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),*/
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 1 / 9,
         child: Row(
@@ -31,13 +40,20 @@ class _FarmerWidgetState extends State<FarmerWidget> {
             Container(
               width: MediaQuery.of(context).size.height * 1 / 9,
               height: MediaQuery.of(context).size.height * 1 / 9,
+              child: Padding(
+              padding: const EdgeInsets.all(2), // padding kolem obrazku 
+              child: Container(
               decoration: const BoxDecoration(
-                  borderRadius:
-                      BorderRadius.horizontal(left: Radius.circular(10)),
+                  shape: BoxShape.circle,
+                 /* borderRadius:
+                      BorderRadius.horizontal(left: Radius.circular(10)),*/
                   image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: NetworkImage(
-                          "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"))),
+                          "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"))
+                  ),
+                  ),
+                ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -67,42 +83,42 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                          horizontal: 20, vertical: 4),
+                      child: Expanded(
+                        flex: 1,
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //crossAxisAlignment: CrossAxisAlignment.center,
+                        child: 
                           Text(
                             offer.accessibleAmount.toString() +
-                                offer.unit, // FIXME
+                                offer.unit, 
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
                       ),
                     ),
                     const SizedBox(
-                      width: 110,
+                      width: 100,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                      child: Expanded(
+                        flex: 1,
+                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        child: 
                           Text(
                             offer.price.toString() +
                                 "Kč/" +
-                                offer.unit, //FIXME cena za jednotku
+                                offer.unit, 
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
                       ),
                     ),
                   ],
