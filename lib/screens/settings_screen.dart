@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:csc_picker/csc_picker.dart';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/models/user.dart';
@@ -7,6 +9,7 @@ import 'package:maly_farmar/providers/auth.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
+
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -27,6 +30,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     var _user = Provider.of<UserProvider>(context);
     // print(_user.user.id);
     // print("IDDD ");
+
+    var geopoint;
 
     return SafeArea(
       child: Scaffold(
@@ -142,8 +147,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                inputField(addressField, _addressController,
-                                    false, null, null),
+                                //inputField(addressField, _addressController, false, null, null),
+                                /*Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                  child: CSCPicker(
+                                    defaultCountry: DefaultCountry.Czech_Republic,
+                                    countrySearchPlaceholder: "Země",
+                                    stateSearchPlaceholder: "Okres",
+                                    citySearchPlaceholder: "Město",
+
+                                    ///triggers once country selected in dropdown
+                                    onCountryChanged: (value) {
+                                      setState(() {
+                                        ///store value in country variable
+                                        countryValue = value;
+                                      });
+                                    },
+
+                                    ///triggers once state selected in dropdown
+                                    onStateChanged: (value) {
+                                      setState(() {
+                                        ///store value in state variable
+                                        stateValue = value;
+                                      });
+                                    },
+
+                                    ///triggers once city selected in dropdown
+                                    onCityChanged: (value) {
+                                      setState(() {
+                                        ///store value in city variable
+                                        cityValue = value;
+                                      });
+                                    },
+                                  ),
+                                ),*/
+                                Container(
+                                  width: MediaQuery.of(context).size.width * 1/ 2,
+                                  child: ElevatedButton(
+                                      onPressed: () async {geopoint = await _user.determinePosition();},
+                                      child: const Text("Uložit moji pozici")),
+                                ),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -158,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                             _numberController.text.trim();
                                         _user.user.fullName =
                                             _nameController.text.trim();
-                                        // user.location = _addressController.text;
+                                        _user.user.location = geopoint;
                                         Provider.of<UserProvider>(context,
                                                 listen: false)
                                             .updateUserData(
