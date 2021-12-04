@@ -14,8 +14,7 @@ class OrderWidget extends StatefulWidget {
   final deny;
   final confirm;
 
-  const OrderWidget(this.order, this.deny, this.confirm,
-      {Key? key})
+  const OrderWidget(this.order, this.deny, this.confirm, {Key? key})
       : super(key: key);
 
   @override
@@ -47,8 +46,10 @@ class _OrderWidgetState extends State<OrderWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FutureBuilder(
-                  future: Provider.of<Products>(context).getProductImage(order.productID),
-                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  future: Provider.of<Products>(context)
+                      .getProductImage(order.productID),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasData || snapshot.hasError) {
                       return Container(
                         width: MediaQuery.of(context).size.height * 1 / 10,
@@ -58,8 +59,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                               left: Radius.circular(10)),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(snapshot.data ??
-                                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                            image: NetworkImage(
+                              snapshot.data ??
+                                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                             ),
                           ),
                         ),
@@ -69,8 +71,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                         width: MediaQuery.of(context).size.height * 1 / 9,
                         height: MediaQuery.of(context).size.height * 1 / 9,
                         decoration: const BoxDecoration(
-                          borderRadius:
-                          BorderRadius.horizontal(left: Radius.circular(10)),
+                          borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(10)),
                         ),
                         child: const CircularProgressIndicator(),
                       );
@@ -96,7 +98,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                         Text(
                           order.orderedAmount.toString() +
-                              " " + productData.unit,
+                              " " +
+                              productData.unit,
                           style: const TextStyle(
                             fontSize: 20,
                           ),
@@ -110,31 +113,31 @@ class _OrderWidgetState extends State<OrderWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         FutureBuilder(
-                          future: Provider.of<UserProvider>(context).getUserDataByID(productData.sellersID),
-                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.hasData){
+                            future: Provider.of<UserProvider>(context)
+                                .getUserDataByID(productData.sellersID),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
                                 UserProfile user = snapshot.data;
                                 return Text(
                                   user.fullName,
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 );
-                              }
-                              else if (snapshot.hasError){
+                              } else if (snapshot.hasError) {
                                 return const Center(
                                   child: Text(
                                     'Nastala chyba',
                                     style: TextStyle(fontSize: 18),
                                   ),
                                 );
-                              }
-                              else {
+                              } else {
                                 return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               }
-                            }
-                        ),
+                            }),
                         const Text(
                           "Datum vyzvednutí",
                           style: TextStyle(
@@ -201,17 +204,14 @@ class _OrderWidgetState extends State<OrderWidget> {
               ],
             ),
           );
-        }
-        else if (snapshot.hasError)
-          {
-            return const Center(
-              child: Text(
-                'Nastala chyba',
-                style: TextStyle(fontSize: 18),
-              ),
-            );
-          }
-        else {
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text(
+              'Nastala chyba',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
+        } else {
           return const Center(
             child: CircularProgressIndicator(),
           );

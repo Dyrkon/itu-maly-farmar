@@ -29,6 +29,8 @@ class UserProvider extends ChangeNotifier {
       user.fullName = fetchedUser["fullName"];
       user.phoneNumber = fetchedUser["phoneNumber"];
       user.location = fetchedUser["location"];
+      user.email = fetchedUser["email"];
+      user.profilePicture = fetchedUser["profilePicture"];
     }
   }
 
