@@ -72,11 +72,20 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Product> getProduct(productID) async {
+  Future<Product?> getProduct(productID) async {
     var productSnapshot = await _fireStoreInstance.collection("products").doc(productID).get();
+
+    print(productID);
+
     Map<String, dynamic>? product = productSnapshot.data();
+
+    if (product == null)
+      {
+        return null;
+      }
+
     Product newProduct = Product(
-      product!["id"],
+      product["id"],
       product["productName"],
       product["sellersID"],
       product["unit"],
@@ -160,12 +169,10 @@ class Products with ChangeNotifier {
     if (productID == null) {
       return "";
     }
-    // print("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
+
     firebase_storage.Reference ref =
     firebase_storage.FirebaseStorage.instance.ref(
         "p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg"
-      // "p2021-12-0413D07D19.620979-product-image.jpg"
-      // "p2021-12-0409D38D56.482047-product-image.jpg"
     );
 
     var url;
