@@ -95,8 +95,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                     return SizedBox(
                                                         height: 120,
                                                         width: 90,
-                                                        child: Image.network(_user
-                                                            .profilePicture));
+                                                        child: Image.network(
+                                                            //_user.profilePicture
+                                                          snapshot.data,
+                                                          fit: BoxFit.cover,
+                                                        ));
                                                   } else if (snapshot
                                                       .hasError) {
                                                     return const Center(
@@ -147,40 +150,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                //inputField(addressField, _addressController, false, null, null),
-                                /*Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: CSCPicker(
-                                    defaultCountry: DefaultCountry.Czech_Republic,
-                                    countrySearchPlaceholder: "Země",
-                                    stateSearchPlaceholder: "Okres",
-                                    citySearchPlaceholder: "Město",
-
-                                    ///triggers once country selected in dropdown
-                                    onCountryChanged: (value) {
-                                      setState(() {
-                                        ///store value in country variable
-                                        countryValue = value;
-                                      });
-                                    },
-
-                                    ///triggers once state selected in dropdown
-                                    onStateChanged: (value) {
-                                      setState(() {
-                                        ///store value in state variable
-                                        stateValue = value;
-                                      });
-                                    },
-
-                                    ///triggers once city selected in dropdown
-                                    onCityChanged: (value) {
-                                      setState(() {
-                                        ///store value in city variable
-                                        cityValue = value;
-                                      });
-                                    },
-                                  ),
-                                ),*/
                                 Container(
                                   width: MediaQuery.of(context).size.width * 1/ 2,
                                   child: ElevatedButton(

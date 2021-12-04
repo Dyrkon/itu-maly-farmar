@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/product.dart';
+import 'package:maly_farmar/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class ProductWidget extends StatefulWidget {
   final Product product;
@@ -24,16 +26,36 @@ class _ProductWidgetState extends State<ProductWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.height * 1 / 9,
-              height: MediaQuery.of(context).size.height * 1 / 9,
-              decoration: const BoxDecoration(
-                  borderRadius:
-                      BorderRadius.horizontal(left: Radius.circular(10)),
-                  image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: NetworkImage(
-                          "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"))),
+            FutureBuilder(
+              future: Provider.of<Products>(context).getProductImage(product.id),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData || snapshot.hasError) {
+                  return Container(
+                    width: MediaQuery.of(context).size.height * 1 / 9,
+                    height: MediaQuery.of(context).size.height * 1 / 9,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.horizontal(
+                          left: Radius.circular(10)),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(snapshot.data ??
+                            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    width: MediaQuery.of(context).size.height * 1 / 9,
+                    height: MediaQuery.of(context).size.height * 1 / 9,
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.horizontal(left: Radius.circular(10)),
+                    ),
+                    child: const CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -67,7 +89,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                           const Text(
                             "Celkem:",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                           ),
@@ -115,7 +137,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           const Text(
-                            "Rezervováno:",
+                            "Rezervace:",
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,

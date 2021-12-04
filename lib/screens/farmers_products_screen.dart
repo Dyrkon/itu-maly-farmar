@@ -53,10 +53,10 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
             child: productData.products.isEmpty
                 ? noProducts(productData)
                 : ListView.builder(
-                    itemCount: productData.products.length,
+                    itemCount: productData.products.length + 1,
                     itemBuilder: (BuildContext ctx, int index) {
-                      if (index < productData.products.length - 1) {
-                        return ElevatedButton(
+                      if (index < productData.products.length) {
+                        return RawMaterialButton(
                           onPressed: () {
                             showDialog(
                                 barrierColor: Colors.grey.withOpacity(0.9),

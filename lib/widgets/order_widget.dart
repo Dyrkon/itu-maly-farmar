@@ -46,17 +46,36 @@ class _OrderWidgetState extends State<OrderWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.height * 1 / 10,
-                  decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.horizontal(left: Radius.circular(10)),
-                    image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: NetworkImage(
-                          "https://solidstarts.com/wp-content/uploads/when-can-babies-eat-eggs.jpg"),
-                    ),
-                  ),
+                FutureBuilder(
+                  future: Provider.of<Products>(context).getProductImage(order.productID),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData || snapshot.hasError) {
+                      return Container(
+                        width: MediaQuery.of(context).size.height * 1 / 10,
+                        height: MediaQuery.of(context).size.height * 1 / 10,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(10)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(snapshot.data ??
+                                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        width: MediaQuery.of(context).size.height * 1 / 9,
+                        height: MediaQuery.of(context).size.height * 1 / 9,
+                        decoration: const BoxDecoration(
+                          borderRadius:
+                          BorderRadius.horizontal(left: Radius.circular(10)),
+                        ),
+                        child: const CircularProgressIndicator(),
+                      );
+                    }
+                  },
                 ),
                 Row(
                   children: [

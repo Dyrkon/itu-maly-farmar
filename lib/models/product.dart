@@ -6,6 +6,7 @@ class Product {
   var reservedAmount;
   var totalAmount;
   var price;
+  var imagePath;
   String unit;
   String description;
 

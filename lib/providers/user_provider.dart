@@ -33,12 +33,15 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<UserProfile> getUserDataByID(String? userId) async {
-    print(user.id);
+    // TODO repeating
+    // print(user.id);
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    print(fetchedUser);
+    // print(fetchedUser);
+    // print(fetchedUser!["location"].latitude);
+    // print(fetchedUser["location"].longitude);
 
     var newUser = UserProfile(userId, "");
     if (fetchedUser != null)
