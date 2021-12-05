@@ -20,6 +20,8 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  var search = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var offerData = Provider.of<Offers>(context);
@@ -41,7 +43,62 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         Flexible(
                           child: Center(
                             child: ElevatedButton(
-                              onPressed: () => {},
+                              onPressed: () => {
+                                showDialog(
+                                    barrierColor: Colors.grey.withOpacity(0.9),
+                                    context: context,
+                                    builder: (BuildContext context) => Dialog(
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                1 /
+                                                5,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  "Zadejte co chete vyhledat:",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      1 /
+                                                      3.3,
+                                                  child: TextField(
+                                                    controller: search,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      Provider.of<Offers>(
+                                                              context,
+                                                              listen: false)
+                                                          .fetchSearchedOffers(
+                                                              search.text
+                                                                  .toString());
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child:
+                                                        const Text("Vyhledat")),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                              },
                               child: const Text("Vyberte si produkt"),
                             ),
                           ),
@@ -59,7 +116,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     textColor: Colors.white,
                                     fontSize: 16.0);
                                 geopoint = await _user.determinePosition();
-                                if (geopoint.latitude == 90 && geopoint.longitude == 180) {
+                                if (geopoint.latitude == 90 &&
+                                    geopoint.longitude == 180) {
                                   Fluttertoast.showToast(
                                       msg: "Nebylo možné získat polohu",
                                       toastLength: Toast.LENGTH_LONG,
@@ -101,7 +159,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     return RawMaterialButton(
                       onPressed: () {
                         offerData.currentOffer = index - 1;
-                        Navigator.of(context).pushNamed(ProductsDetailScreen.routeName);
+                        Navigator.of(context)
+                            .pushNamed(ProductsDetailScreen.routeName);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),

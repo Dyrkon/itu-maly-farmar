@@ -16,7 +16,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   var listLength = 0;
 
   Widget noOrders(provider) {
-    return Center(child: ElevatedButton(onPressed: provider.fetchOrders, child: const Text("Načíst produkty")));
+    return Center(child: ElevatedButton(onPressed: Provider.of<Tabs>(context).isFarmer ? provider.fetchFarmersOrders : provider.fetchOrders, child: const Text("Načíst produkty")));
   }
 
   @override
