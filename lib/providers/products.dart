@@ -139,7 +139,7 @@ class Products with ChangeNotifier {
     var image;
 
     try {
-      image = await _picker.pickImage(source: ImageSource.gallery);
+      image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     } catch (e) {
       return "";
     }
