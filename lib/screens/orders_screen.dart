@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
 import 'package:maly_farmar/providers/orders.dart';
+import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/widgets/order_widget.dart';
 import 'package:provider/provider.dart';
 

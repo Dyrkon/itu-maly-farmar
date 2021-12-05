@@ -67,33 +67,27 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Product?> getProduct(productID) async {
-    var productSnapshot = await _fireStoreInstance.collection("products").doc(productID).get();
+  Future<Product> getProduct(productID) async {
+    var snapshot = await _fireStoreInstance.collection("products").where("offered", isEqualTo: true).where("id", isEqualTo: productID).get();
+    Product newProduct = Product("", "", "", "", -1, -1, -1, -1, "", false);
 
-    print(productID);
-
-    Map<String, dynamic>? product = productSnapshot.data();
-
-    if (product == null) {
-      return null;
+    for (var element in snapshot.docs) {
+      if (element.exists) {
+        Map<String, dynamic> product = element.data();
+        newProduct.id = product["id"];
+        newProduct.unit = product["unit"];
+        newProduct.price = product["price"];
+        newProduct.accessibleAmount = product["accessibleAmount"];
+        newProduct.description = product["description"];
+        newProduct.productName = product["productName"];
+        newProduct.imagePath = product["imagePath"];
+        newProduct.totalAmount = product["totalAmount"];
+        newProduct.offered = true;
+        newProduct.sellersID = product["sellersID"];
+        return newProduct;
+      }
     }
 
-    Product newProduct = Product(
-      product["id"],
-      product["productName"],
-      product["sellersID"],
-      product["unit"],
-      product["totalAmount"],
-      product["totalAmount"] - product["reservedAmount"],
-      product["reservedAmount"],
-      product["price"],
-      product["description"],
-      product["offered"],
-    );
-
-    newProduct.imagePath = product["imagePath"];
-
-    notifyListeners();
     return newProduct;
   }
 

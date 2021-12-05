@@ -30,6 +30,22 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<UserProfile> getUserFromProductID(String productID) async {
+    var product = await _firebaseFirestore.collection("products").doc(productID).get();
+
+    if (product.exists) {
+      Map<String, dynamic>? productMap = product.data();
+
+      var user = await getUserDataByID(productMap!["sellersID"]);
+
+      return user;
+    }
+    else
+      {
+        return UserProfile("", "");
+      }
+  }
+
   Future<void> fetchUserData(String? userId) async {
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
