@@ -126,7 +126,6 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     var order = widget.order;
     bool isConfirmed = order.status == Status.confirmedBySeller;
-    var orderedProductData = Provider.of<Products>(context);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -151,7 +150,6 @@ class _OrderWidgetState extends State<OrderWidget> {
               const SizedBox(
                 width: 5,
               ),
-              // TODO
              FutureBuilder(
                 future: Provider.of<Products>(context).getProduct(order.productID),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {

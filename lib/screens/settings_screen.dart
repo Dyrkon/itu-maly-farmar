@@ -32,7 +32,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
-            future: _user.getUserDataByID(_user.user.id),
+          // TODO tady testuj
+            future: _user.getUserDataByID(Provider.of<UserProvider>(context).userID),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 UserProfile user = snapshot.data;

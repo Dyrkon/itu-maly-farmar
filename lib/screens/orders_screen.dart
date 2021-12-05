@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
 import 'package:maly_farmar/providers/orders.dart';
-import 'package:maly_farmar/providers/products.dart';
+import 'package:maly_farmar/providers/tabs.dart';
 import 'package:maly_farmar/widgets/order_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final orderData = Provider.of<Orders>(context);
 
     return RefreshIndicator(
-      onRefresh: orderData.fetchOrders,
+      onRefresh: Provider.of<Tabs>(context).isFarmer ? orderData.fetchFarmersOrders : orderData.fetchOrders,
       child: SafeArea(
         child: Scaffold(
           body: Container(
@@ -35,7 +35,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   return orderData.activeOrders[index].status !=
                           Status.confirmedByBuyer
                       ? OrderWidget(
-                          orderData.activeOrders[index],
+                          !Provider.of<Tabs>(context).isFarmer ?  orderData.activeOrders[index] : orderData.activeOrders[index],
                           orderData.denyOrder,
                           orderData.confirmOrder,
                         )

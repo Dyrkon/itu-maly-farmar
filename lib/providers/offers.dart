@@ -41,8 +41,12 @@ class Offers with ChangeNotifier {
             .get();
         Map<String, dynamic>? user = userSnapshot.data();
 
+        if (user == null) {
+          return;
+        }
+
         UserProfile fetchedUser =
-            UserProfile(offer["sellersID"], user!["email"]);
+            UserProfile(offer["sellersID"], user["email"]);
         fetchedUser.phoneNumber = user["phoneNumber"];
         fetchedUser.fullName = user["fullName"];
         fetchedUser.location = user["location"];

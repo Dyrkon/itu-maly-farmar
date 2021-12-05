@@ -13,6 +13,8 @@ class Orders with ChangeNotifier {
   );
 
   List<Order> _orders = [];
+  List<String> _exterOrdersIDs = [];
+  List<Order> _exterOrders = [];
 
   List<Order> get activeOrders {
     return [
@@ -25,6 +27,85 @@ class Orders with ChangeNotifier {
         }
       })
     ];
+  }
+
+  Future<void> fetchFarmersOrders() async {
+    _orders.clear();
+
+    await _fireStoreInstance
+        .collection("users")
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var element in querySnapshot.docs) {
+        await _fireStoreInstance
+            .collection("users")
+            .doc(element.id)
+            .collection("orders")
+            .get()
+            .then((value) {
+          for (var element in value.docs) {
+            if (element.exists) {
+              Map<String, dynamic> target = element.data();
+              if (target["productID"] != null) {
+                _exterOrders.add(
+                  Order(
+                    target["orderID"],
+                    target["productID"],
+                    Status.values[target["status"]],
+                    target["orderedAmount"],
+                    target["orderTime"].toDate(),
+                    target["pickupTime"].toDate(),
+                  ),
+                );
+                _exterOrdersIDs.add(target["productID"]);
+              }
+            }
+          }
+        });
+      }
+    });
+
+
+    for (var productID in _exterOrdersIDs) {
+      await _fireStoreInstance
+          .collection("products")
+          .where("id", isEqualTo: productID)
+          .where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2")
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          if (element.exists) {
+            Map<String, dynamic> target = element.data();
+            if (_exterOrdersIDs.any((element) {
+              if (element == target["id"]) {
+                return true;
+              } else {
+                return false;
+              }
+            })) {
+              if (_orders.indexWhere((element) {
+                // print("HEJ1"+_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID);
+                // print("HEJ2"+element.orderID);
+                if(_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID == element.orderID) {
+                  print("false");
+                  return false;
+                }
+                else {
+                  print("true");
+                  return true;
+                }
+              }) == -1) {
+                _orders.removeWhere((element) => element.orderID == _exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID);
+                _orders.add(_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])]);
+              }
+
+            }
+          }
+        }
+      });
+    }
+
+    notifyListeners();
   }
 
   Future<void> fetchOrders() async {
@@ -43,7 +124,8 @@ class Orders with ChangeNotifier {
               return true;
             }
             return false;
-          }) == -1) {
+          }) ==
+          -1) {
         _orders.add(
           Order(
             order["orderID"],
@@ -60,21 +142,22 @@ class Orders with ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<bool> pushOrder(String userId, Order orderToAdd) async {
     bool exitValue = false;
 
     await _fireStoreInstance
         .collection("users")
-        .doc(userId).collection("orders").add({
-      "orderID" : orderToAdd.productID,
-      "orderTime" : orderToAdd.orderTime,
-      "orderedAmount" : orderToAdd.orderedAmount,
-      "pickupTime" : orderToAdd.pickupTime,
-      "productID" : orderToAdd.productID,
-      "status" : orderToAdd.status.index,
+        .doc(userId)
+        .collection("orders")
+        .add({
+      "orderID": orderToAdd.productID,
+      "orderTime": orderToAdd.orderTime,
+      "orderedAmount": orderToAdd.orderedAmount,
+      "pickupTime": orderToAdd.pickupTime,
+      "productID": orderToAdd.productID,
+      "status": orderToAdd.status.index,
     }).then((value) {
-      exitValue =  true;
+      exitValue = true;
     });
 
     return exitValue;
