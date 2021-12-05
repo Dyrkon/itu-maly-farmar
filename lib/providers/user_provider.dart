@@ -12,22 +12,20 @@ class UserProvider extends ChangeNotifier {
   UserProfile user;
   FirebaseFirestore _firebaseFirestore;
   FirebaseAuth authInstance = FirebaseAuth.instance;
-  final firebase_storage.FirebaseStorage _storage =
-      firebase_storage.FirebaseStorage.instance;
+  final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
 
   String profilePicture = "";
 
   UserProvider(
-      this.user,
-      this._firebaseFirestore,
-      );
+    this.user,
+    this._firebaseFirestore,
+  );
 
   String get userID {
     var ret = authInstance.currentUser?.uid;
     if (ret != null) {
       return ret;
-    }
-    else {
+    } else {
       return "";
     }
   }
@@ -36,8 +34,7 @@ class UserProvider extends ChangeNotifier {
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    if (fetchedUser != null)
-    {
+    if (fetchedUser != null) {
       user.fullName = fetchedUser["fullName"];
       user.phoneNumber = fetchedUser["phoneNumber"];
       user.location = fetchedUser["location"];
@@ -51,15 +48,13 @@ class UserProvider extends ChangeNotifier {
     // print(user.id);
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
-
     Map<String, dynamic>? fetchedUser = snapshot.data();
     // print(fetchedUser);
     // print(fetchedUser!["location"].latitude);
     // print(fetchedUser["location"].longitude);
 
     var newUser = UserProfile(userId, "");
-    if (fetchedUser != null)
-    {
+    if (fetchedUser != null) {
       newUser.profilePicture = await getUserImage(userId);
       newUser.fullName = fetchedUser["fullName"];
       newUser.phoneNumber = fetchedUser["phoneNumber"];
@@ -75,20 +70,20 @@ class UserProvider extends ChangeNotifier {
       return;
     }
 
-    _firebaseFirestore.collection("users").doc(userID).set({
-
-      "email" : profile.email,
-      "fullName" : profile.fullName,
-      "phoneNumber" : profile.phoneNumber,
-      "profilePicture" : profile.profilePicture,
-      "location" : profile.location
-    },SetOptions(merge: true),);
+    _firebaseFirestore.collection("users").doc(userID).set(
+      {
+        "email": profile.email,
+        "fullName": profile.fullName,
+        "phoneNumber": profile.phoneNumber,
+        "profilePicture": profile.profilePicture,
+        "location": profile.location
+      },
+      SetOptions(merge: true),
+    );
   }
 
   Future<String> getUserImage(String? userID) async {
-
-    firebase_storage.Reference ref =
-    firebase_storage.FirebaseStorage.instance.ref("$userID-profile.jpg");
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref("$userID-profile.jpg");
 
     try {
       profilePicture = await ref.getDownloadURL();
@@ -111,10 +106,8 @@ class UserProvider extends ChangeNotifier {
     var imageFile = File(image.path);
 
     try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref("${user.id}-profile.jpg")
-          .putFile(imageFile);
-    }catch (e) {
+      await firebase_storage.FirebaseStorage.instance.ref("${user.id}-profile.jpg").putFile(imageFile);
+    } catch (e) {
       return false;
     }
     user.profilePicture = "${user.id}-profile.jpg";
@@ -162,5 +155,4 @@ class UserProvider extends ChangeNotifier {
 
     return GeoPoint(location.latitude, location.longitude);
   }
-
 }

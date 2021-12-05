@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:maly_farmar/providers/products.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class FarmerWidget extends StatefulWidget {
@@ -16,10 +18,13 @@ class _FarmerWidgetState extends State<FarmerWidget> {
   @override
   Widget build(BuildContext context) {
     var offer = widget.offer;
+    var userLocation = Provider.of<UserProvider>(context).user.location;
+    var offerLocation = offer.seller.location;
+    int distance =
+        (Geolocator.distanceBetween(userLocation.latitude, userLocation.longitude, offerLocation.latitude, offerLocation.longitude) / 1000).round();
 
     return Container(
-        decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 1 / 9,
         child: Row(
@@ -34,8 +39,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                     width: MediaQuery.of(context).size.height * 1 / 9,
                     height: MediaQuery.of(context).size.height * 1 / 9,
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(10)),
+                      borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
@@ -50,8 +54,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                     width: MediaQuery.of(context).size.height * 1 / 9,
                     height: MediaQuery.of(context).size.height * 1 / 9,
                     decoration: const BoxDecoration(
-                      borderRadius:
-                          BorderRadius.horizontal(left: Radius.circular(10)),
+                      borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
                     ),
                     child: const CircularProgressIndicator(),
                   );
@@ -66,8 +69,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width
-                      - MediaQuery.of(context).size.width * 1 / 3.1,
+                  width: MediaQuery.of(context).size.width - MediaQuery.of(context).size.width * 1 / 3.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -76,20 +78,18 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                         child: Text(
                           offer.seller.fullName,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const Flexible(
+                      Flexible(
                         flex: 1,
-                        child: Text("+ X km"),
+                        child: Text("${distance} km"),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).size.width * 1 / 3.1,
+                  width: MediaQuery.of(context).size.width - MediaQuery.of(context).size.width * 1 / 3.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -98,16 +98,14 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                         child: Text(
                           "${offer.accessibleAmount} ${offer.unit}",
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Flexible(
                         flex: 2,
                         child: Text(
                           "${offer.price} Kč/ks",
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
