@@ -203,12 +203,7 @@ class _EditProductState extends State<EditProduct> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (int.parse(_amount.text) != amount) {
-                              int newAmount = int.parse(_amount.text);
-                              if (newAmount % 1 == 0) {
-                                amount = newAmount;
-                              }
-                            }
+                            amount = int.parse(_amount.text);
                             if (amount! < 0 || amount! % 1 != 0) {
                               Fluttertoast.showToast(
                                   msg: "Zadejte nezáporné celé číslo.",
@@ -220,6 +215,7 @@ class _EditProductState extends State<EditProduct> {
                                   fontSize: 16.0);
                             } else {
                               Provider.of<Products>(context, listen: false).updateProduct(product, amount!, toOffer!);
+                              Provider.of<Products>(context, listen: false).fetchProducts();
                               Navigator.of(context).pop();
                             }
                           },
