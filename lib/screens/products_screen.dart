@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:maly_farmar/models/user.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:maly_farmar/screens/product_detail_screen.dart';
 //import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/widgets/product_widget.dart';
@@ -8,6 +10,7 @@ import 'package:maly_farmar/widgets/product_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/models/offer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -17,11 +20,11 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     var offerData = Provider.of<Offers>(context);
+    var _user = Provider.of<UserProvider>(context);
+    var geopoint;
 
     return SafeArea(
       child: Scaffold(
@@ -37,12 +40,58 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       children: [
                         Flexible(
                           child: Center(
-                            child: ElevatedButton(onPressed: () => {}, child: const Text("Vyberte si produkt"),),
+                            child: ElevatedButton(
+                              onPressed: () => {},
+                              child: const Text("Vyberte si produkt"),
+                            ),
                           ),
                         ),
                         Flexible(
                           child: Center(
-                            child: ElevatedButton(onPressed: () => {}, child: const Text("Zvolte svou polohu"),),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                Fluttertoast.showToast(
+                                    msg: "Zjišťuji polohu",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                geopoint = await _user.determinePosition();
+                                if (geopoint.latitude == 90 && geopoint.longitude == 180) {
+                                  Fluttertoast.showToast(
+                                      msg: "Nebylo možné získat polohu",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Poloha úspěšně nastavena!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+
+                                  _user.user.location = geopoint;
+                                  //Provider.of<UserProvider>(context, listen: false).updateUserData(Provider.of<UserProvider>(context).userID, _user.user);
+                                  Fluttertoast.showToast(
+                                      msg: "Změny uloženy",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                }
+                              },
+                              child: const Text("Zvolte svou polohu"),
+                            ),
                           ),
                         ),
                       ],

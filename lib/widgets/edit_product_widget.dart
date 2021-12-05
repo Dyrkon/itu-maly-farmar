@@ -26,7 +26,7 @@ class _EditProductState extends State<EditProduct> {
   Widget build(BuildContext context) {
     var product = widget.targetProduct;
     toOffer ??= product.offered;
-    amount ??= product.accessibleAmount;
+    amount ??= product.totalAmount;
     String text = amount.toString();
     var size = MediaQuery.of(context).size;
     bool invalidInput = false;
@@ -217,6 +217,7 @@ class _EditProductState extends State<EditProduct> {
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
+                                invalidInput = true;
                               }
                             } on FormatException {
                               if (_amount.text.trim() == "") {
