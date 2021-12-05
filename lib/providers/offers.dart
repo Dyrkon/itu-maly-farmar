@@ -65,4 +65,56 @@ class Offers with ChangeNotifier {
     });
     notifyListeners();
   }
+
+  Future<void> fetchSearchedOffers(String name) async {
+    var productSnapshot = await _fireStoreInstance
+        .collection("products")
+        .where("offered", isEqualTo: true).where("productName", isEqualTo: name)
+        .get();
+
+    _offers.clear();
+
+    for (var element in productSnapshot.docs) {
+      Map<String, dynamic> offer = element.data();
+      // print(product);
+      if (_offers.indexWhere((element) {
+        if (element.id == offer["id"]) {
+          return true;
+        }
+        return false;
+      }) ==
+          -1) {
+        var userSnapshot = await _fireStoreInstance
+            .collection("users")
+            .doc(offer["sellersID"])
+            .get();
+        Map<String, dynamic>? user = userSnapshot.data();
+
+        if (user == null) {
+          return;
+        }
+
+        UserProfile fetchedUser =
+        UserProfile(offer["sellersID"], user["email"]);
+        fetchedUser.phoneNumber = user["phoneNumber"];
+        fetchedUser.fullName = user["fullName"];
+        fetchedUser.location = user["location"];
+
+        _offers.add(Offer(
+            id: offer["id"],
+            productName: offer["productName"],
+            seller: fetchedUser,
+            unit: offer["unit"],
+            imagePath: offer["imagePath"],
+            description: offer["description"],
+            accessibleAmount: offer["totalAmount"] - offer["reservedAmount"],
+            price: offer["price"]));
+      }
+    }
+
+    _offers.forEach((element) {
+      print(element.id);
+    });
+    notifyListeners();
+  }
 }
