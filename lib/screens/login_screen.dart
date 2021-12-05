@@ -7,6 +7,10 @@ import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/providers/auth.dart';
 import '../widgets/input_field_widget.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -30,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                CustomIcons.wheelchair,
+                CustomIcons.carrot, //carrot
                 color: Palette.farmersGreen,
                 size: 60,
               ),
@@ -49,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
               inputField("Váš email", _nameController, false, null, null, false),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               inputField("Váše heslo", _passwordController, true, null, null, false),

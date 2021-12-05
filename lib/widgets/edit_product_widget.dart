@@ -8,6 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class EditProduct extends StatefulWidget {
   Product targetProduct;
   EditProduct(this.targetProduct, {Key? key}) : super(key: key);
@@ -26,9 +30,10 @@ class _EditProductState extends State<EditProduct> {
   Widget build(BuildContext context) {
     var product = widget.targetProduct;
     toOffer ??= product.offered;
-    amount ??= product.accessibleAmount;
+    amount ??= product.totalAmount;
     String text = amount.toString();
     var size = MediaQuery.of(context).size;
+    bool invalidInput = false;
 
     return SizedBox(
       height: size.height * 0.7,
@@ -79,6 +84,7 @@ class _EditProductState extends State<EditProduct> {
                       onPressed: () {
                         setState(() {
                           amount = (amount! - 1);
+                          _amount.text = amount.toString();
                           text = amount.toString();
                         });
                       },
@@ -204,19 +210,38 @@ class _EditProductState extends State<EditProduct> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            print(_amount.text);
-                            amount = int.parse(_amount.text.trim());
-                            if (amount! < 0 || amount! % 1 != 0) {
-                              Fluttertoast.showToast(
-                                  msg: "Zadejte nezáporné celé číslo.",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            } else {
-                              Provider.of<Products>(context, listen: false).updateProduct(product, amount!, toOffer!);
+                            try {
+                              amount = int.parse(_amount.text.trim());
+                              if (amount! < 0 || amount! % 1 != 0) {
+                                Fluttertoast.showToast(
+                                    msg: "Zadejte nezáporné celé číslo.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                invalidInput = true;
+                              }
+                            } on FormatException {
+                              if (_amount.text.trim() == "") {
+                                invalidInput = false;
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "nastala chyba.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                invalidInput = true;
+                              }
+                            }
+                            if (!invalidInput) {
+                              product.totalAmount = amount;
+                              product.offered = toOffer!;
+                              Provider.of<Products>(context, listen: false).updateProduct(product);
                               Provider.of<Products>(context, listen: false).fetchProducts();
                               Navigator.of(context).pop();
                             }

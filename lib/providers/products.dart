@@ -8,6 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+//autor: Adam Jetmar
+//
+//
+//
 class Products with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
   final _userId;
@@ -17,17 +21,7 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  List<Product> _products = [
-    /*
-    Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
-        "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
-    Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
-        "prostě z kravičky no víšco hehehe :))))"),
-    Product("3", "Oves", "Honza Metelesk", "kg", 45, 25, 20, 200,
-        "ovsík pro tvýho koníka víšco hehehe :)))"),
-    Product("4", "Sýr", "Honza Metelesk", "ks", 40, 20, 20, 40,
-        "kvalitní sýreček hehehe :))))"), */
-  ];
+  List<Product> _products = [];
 
   List<Product> get products {
     return [..._products];
@@ -42,13 +36,9 @@ class Products with ChangeNotifier {
     for (var element in snapshot.docs) {
       Map<String, dynamic> product = element.data();
       if (_products.indexWhere((element) {
-            // print("ID "+element.id);
             if (element.id == product["id"]) {
-              // print("ID2 "+product["id"]);
-              // print(true);
               return true;
             }
-            // print("ID3 "+product["id"]);
             return false;
           }) ==
           -1) {
@@ -68,38 +58,31 @@ class Products with ChangeNotifier {
         _products.add(newProduct);
       }
     }
-    // sleep(Duration(seconds: 2));
-    // _products.forEach((element) {print("Actual "+element.productName);});
     notifyListeners();
   }
 
-  Future<Product?> getProduct(productID) async {
-    var productSnapshot = await _fireStoreInstance.collection("products").doc(productID).get();
+  Future<Product> getProduct(productID) async {
+    var snapshot = await _fireStoreInstance.collection("products").where("id", isEqualTo: productID).get();
+    Product newProduct = Product("", "", "", "", -1, -1, -1, -1, "", false);
 
-    print(productID);
-
-    Map<String, dynamic>? product = productSnapshot.data();
-
-    if (product == null) {
-      return null;
+    for (var element in snapshot.docs) {
+      if (element.exists) {
+        Map<String, dynamic> product = element.data();
+        newProduct.id = product["id"];
+        newProduct.unit = product["unit"];
+        newProduct.price = product["price"];
+        newProduct.accessibleAmount = product["totalAmount"] - product["reservedAmount"];
+        newProduct.description = product["description"];
+        newProduct.productName = product["productName"];
+        newProduct.imagePath = product["imagePath"];
+        newProduct.totalAmount = product["totalAmount"];
+        newProduct.reservedAmount = product["reservedAmount"];
+        newProduct.offered = true;
+        newProduct.sellersID = product["sellersID"];
+        return newProduct;
+      }
     }
 
-    Product newProduct = Product(
-      product["id"],
-      product["productName"],
-      product["sellersID"],
-      product["unit"],
-      product["totalAmount"],
-      product["totalAmount"] - product["reservedAmount"],
-      product["reservedAmount"],
-      product["price"],
-      product["description"],
-      product["offered"],
-    );
-
-    newProduct.imagePath = product["imagePath"];
-
-    notifyListeners();
     return newProduct;
   }
 
@@ -114,7 +97,6 @@ class Products with ChangeNotifier {
   }
 
   Future<bool> pushProduct(Product product) async {
-    // print("In provider" + product.imagePath);
     bool tmp = false;
     var products = await _fireStoreInstance
         .collection('products')
@@ -136,8 +118,19 @@ class Products with ChangeNotifier {
     return tmp;
   }
 
-  Future<bool> updateProduct(Product product, int newAmount, bool toOffer) async {
-    var products = await _fireStoreInstance.collection('products').doc(product.id).update({'totalAmount': newAmount, 'offered': toOffer});
+  Future<bool> updateProduct(Product product) async {
+    print(product.id);
+    print(product.productName);
+    print(product.totalAmount);
+    print(product.reservedAmount);
+
+    var products = await _fireStoreInstance.collection('products').doc(product.id).update({
+      'accessibleAmount': product.totalAmount - product.reservedAmount,
+      'reservedAmount': product.reservedAmount,
+      'totalAmount': product.totalAmount,
+      'offered': product.offered == true ? (((product.totalAmount - product.reservedAmount) > 0) ? true : false) : false,
+    });
+
     return true;
   }
 
@@ -146,7 +139,7 @@ class Products with ChangeNotifier {
     var image;
 
     try {
-      image = await _picker.pickImage(source: ImageSource.gallery);
+      image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     } catch (e) {
       return "";
     }
@@ -154,13 +147,10 @@ class Products with ChangeNotifier {
     var imageFile = File(image.path);
 
     try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg")
-          .putFile(imageFile);
+      await firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg").putFile(imageFile);
     } catch (e) {
       return "";
     }
-    // print("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
     return "p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg";
   }
 
@@ -169,18 +159,14 @@ class Products with ChangeNotifier {
       return "";
     }
 
-    firebase_storage.Reference ref =
-        firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
 
     var url;
 
     try {
       url = await ref.getDownloadURL();
-      // print("URLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-      // print(url);
       return url;
     } catch (e) {
-      //print(e);
       return "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1";
     }
   }

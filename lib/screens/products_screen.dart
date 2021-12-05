@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:maly_farmar/models/user.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
+import 'package:maly_farmar/screens/product_detail_screen.dart';
 //import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/widgets/product_widget.dart';
 import 'package:maly_farmar/widgets/farmer_widget.dart';
@@ -7,7 +10,12 @@ import 'package:maly_farmar/widgets/product_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/models/offer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({Key? key}) : super(key: key);
 
@@ -16,252 +24,158 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  final _formKey = GlobalKey<FormState>();
+  var search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-  final offerData = Provider.of<Offers>(context);
-  var selectedType;
-  List<String> _productsType=<String>[
-    'Vejce',
-    'Slepice',
-    'Mléko',
-    'Prase'
-  ];
+    var offerData = Provider.of<Offers>(context);
+    var _user = Provider.of<UserProvider>(context);
+    var geopoint;
+
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          bottomOpacity: 0.0,
-          elevation: 0.0,
-          actions: <Widget> [
-           Align(
-             alignment: Alignment.topLeft,
-            child: SizedBox(
-              height: 30,
-              width: 100,
-            child: ElevatedButton(
-               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                side: BorderSide(
-                  width: 1.5,
-                  color: Colors.black,
-                ),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Stack(
-                        children: [
-                          Positioned(
-                            right: -40.0,
-                            top: -40.0,
-                            child: InkResponse(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: CircleAvatar(
-                                child: Icon(Icons.close),
-                                backgroundColor: Colors.red,
-                              ),
-                              ),
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text("Zadej hledaný produkt:"),
-                                Padding(
-                                  padding: EdgeInsets.all(3.0),
-                                  child: TextFormField(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: ElevatedButton(
-                                    child: Text("Hledat produkt"),
-                                    onPressed: () {
-                                      if(_formKey.currentState!.validate()) {
-                                        _formKey.currentState?.save();
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  });
-                  },
-                  child: const Text(
-                    "Vejce",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    ),
-              
-            ),
-            ),
-            ),
-
-            // 2. BUUUUTOOOOOOOOOOOOON
-            Align(
-             alignment: Alignment.topRight,
-            child: SizedBox(
-              height: 30,
-              width: 100,
-            child: ElevatedButton(
-               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                side: BorderSide(
-                  width: 1.5,
-                  color: Colors.black,
-                ),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Stack(
-                        children: [
-                          Positioned(
-                            right: -40.0,
-                            top: -40.0,
-                            child: InkResponse(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: CircleAvatar(
-                                child: Icon(Icons.close),
-                                backgroundColor: Colors.red,
-                              ),
-                              ),
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text("Zadej místo vyzvednutí:"),
-                                Padding(
-                                  padding: EdgeInsets.all(3.0),
-                                  child: TextFormField(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: ElevatedButton(
-                                    child: Text("Hledat lokalitu"),
-                                    onPressed: () {
-                                      if(_formKey.currentState!.validate()) {
-                                        _formKey.currentState?.save();
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  });
-                  },
-                  child: const Text(
-                    "Přerov",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    ),
-              
-            ),
-            ),
-            ),
-
-          ]
-        /*  actions: <Widget> 
-            [
-              Row( // row for the two dropdown forms
-                children: <Widget>[
-                DropdownButton(
-                  items: _productsType.map((value)=>DropdownMenuItem(
-                    child: Text(
-                      value
-                    ),
-                    value: value,
-                    )).toList(),
-                  onChanged: (selectedProductsType) {
-                    setState(() {
-                      selectedType = selectedProductsType;
-                    });
-                  },
-                  value: selectedType,
-                ),
-              ],  
-          ),
-        ],     
-        */
-        ),
         body: RefreshIndicator(
           onRefresh: offerData.fetchOffers,
-          child: ListView.builder(
-                  itemCount: offerData.offers.length, // WHAAAAAAAAAAAAAAAAAAAAAAAAAT
-                  itemBuilder: (BuildContext ctx, int index) {
-                    if (index > 0) {
-                      return RawMaterialButton(
-                        onLongPress: () => {},
-                        onPressed: () => {},
-                        child: Padding(
-                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: FarmerWidget(
-                            offerData.offers[index],
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+                itemCount: offerData.offers.length + 1,
+                itemBuilder: (BuildContext ctx, int index) {
+                  if (index == 0) {
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () => {
+                                showDialog(
+                                    barrierColor: Colors.grey.withOpacity(0.9),
+                                    context: context,
+                                    builder: (BuildContext context) => Dialog(
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                1 /
+                                                5,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  "Zadejte co chete vyhledat:",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      1 /
+                                                      3.3,
+                                                  child: TextField(
+                                                    controller: search,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      Provider.of<Offers>(
+                                                              context,
+                                                              listen: false)
+                                                          .fetchSearchedOffers(
+                                                              search.text
+                                                                  .toString());
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child:
+                                                        const Text("Vyhledat")),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                              },
+                              child: const Text("Vyberte si produkt"),
+                            ),
                           ),
                         ),
-                      );
-                    }
-                    else
-                      {
-                        return const SizedBox(height: 10,);
-                      }
-                  }),
-          )
+                        Flexible(
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                Fluttertoast.showToast(
+                                    msg: "Zjišťuji polohu",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                geopoint = await _user.determinePosition();
+                                if (geopoint.latitude == 90 &&
+                                    geopoint.longitude == 180) {
+                                  Fluttertoast.showToast(
+                                      msg: "Nebylo možné získat polohu",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Poloha úspěšně nastavena!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+
+                                  _user.user.location = geopoint;
+                                  //Provider.of<UserProvider>(context, listen: false).updateUserData(Provider.of<UserProvider>(context).userID, _user.user);
+                                  Fluttertoast.showToast(
+                                      msg: "Změny uloženy",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                }
+                              },
+                              child: const Text("Zvolte svou polohu"),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    // print(offerData.offers[index -1].seller);
+                    return RawMaterialButton(
+                      onPressed: () {
+                        offerData.currentOffer = index - 1;
+                        Navigator.of(context)
+                            .pushNamed(ProductsDetailScreen.routeName);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: FarmerWidget(offerData.offers[index - 1]),
+                      ),
+                    );
+                  }
+                }),
+          ),
+        ),
       ),
     );
   }
 }
-
-
-/*
-StreamBuilder<QuerySnapshot>(
-                    stream: Firestore.instance.collection("products").snapshots(),
-                    builder: (context, snapshot) {
-                      if(!snapshot.hasData) {
-                        Text("Loading");
-                      } else {
-                        List<DropdownMenuItem> productsItems=[];
-                        for(int i = 0; i < snapshot.data.documents.length; i++) {
-                          DocumentSnapshot snap = snapshot.data.documents[i];
-                          productsItems.add(
-                            DropdownMenuItem(
-                              child: Text(
-                                snap.documentID,
-                                style: TextStyle(color: Color(0xff11b719)),
-                              ),
-                              value: "${snap.DocumentID}",
-                            ),
-                          );
-                        }
-                        Return Container(
-                          DropdownButton(
-                            items: productItems,
-                        ),
-                      }
-                    },
-                  ),
-                ],
-              ),
-              */

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,25 +8,51 @@ import 'package:maly_farmar/models/user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+//autor: Ondřej Kříž
+//
+//
+//
 class UserProvider extends ChangeNotifier {
   UserProfile user;
   FirebaseFirestore _firebaseFirestore;
-  final firebase_storage.FirebaseStorage _storage =
-      firebase_storage.FirebaseStorage.instance;
+  FirebaseAuth authInstance = FirebaseAuth.instance;
+  final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
 
   String profilePicture = "";
 
   UserProvider(
-      this.user,
-      this._firebaseFirestore,
-      );
+    this.user,
+    this._firebaseFirestore,
+  );
+
+  String get userID {
+    var ret = authInstance.currentUser?.uid;
+    if (ret != null) {
+      return ret;
+    } else {
+      return "";
+    }
+  }
+
+  Future<UserProfile> getUserFromProductID(String productID) async {
+    var product = await _firebaseFirestore.collection("products").doc(productID).get();
+
+    if (product.exists) {
+      Map<String, dynamic>? productMap = product.data();
+
+      var user = await getUserDataByID(productMap!["sellersID"]);
+
+      return user;
+    } else {
+      return UserProfile("", "");
+    }
+  }
 
   Future<void> fetchUserData(String? userId) async {
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    if (fetchedUser != null)
-    {
+    if (fetchedUser != null) {
       user.fullName = fetchedUser["fullName"];
       user.phoneNumber = fetchedUser["phoneNumber"];
       user.location = fetchedUser["location"];
@@ -35,19 +62,12 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<UserProfile> getUserDataByID(String? userId) async {
-    // TODO repeating
-    // print(user.id);
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
 
-
     Map<String, dynamic>? fetchedUser = snapshot.data();
-    // print(fetchedUser);
-    // print(fetchedUser!["location"].latitude);
-    // print(fetchedUser["location"].longitude);
 
     var newUser = UserProfile(userId, "");
-    if (fetchedUser != null)
-    {
+    if (fetchedUser != null) {
       newUser.profilePicture = await getUserImage(userId);
       newUser.fullName = fetchedUser["fullName"];
       newUser.phoneNumber = fetchedUser["phoneNumber"];
@@ -63,20 +83,14 @@ class UserProvider extends ChangeNotifier {
       return;
     }
 
-    _firebaseFirestore.collection("users").doc(userID).set({
-
-      "email" : profile.email,
-      "fullName" : profile.fullName,
-      "phoneNumber" : profile.phoneNumber,
-      "profilePicture" : profile.profilePicture,
-      "location" : profile.location
-    },SetOptions(merge: true),);
+    _firebaseFirestore.collection("users").doc(userID).set(
+      {"email": profile.email, "fullName": profile.fullName, "phoneNumber": profile.phoneNumber, "profilePicture": profile.profilePicture, "location": profile.location},
+      SetOptions(merge: true),
+    );
   }
 
   Future<String> getUserImage(String? userID) async {
-
-    firebase_storage.Reference ref =
-    firebase_storage.FirebaseStorage.instance.ref("$userID-profile.jpg");
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref("$userID-profile.jpg");
 
     try {
       profilePicture = await ref.getDownloadURL();
@@ -91,7 +105,7 @@ class UserProvider extends ChangeNotifier {
     var image;
 
     try {
-      image = await _picker.pickImage(source: ImageSource.gallery);
+      image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     } catch (e) {
       return true;
     }
@@ -99,10 +113,8 @@ class UserProvider extends ChangeNotifier {
     var imageFile = File(image.path);
 
     try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref("${user.id}-profile.jpg")
-          .putFile(imageFile);
-    }catch (e) {
+      await firebase_storage.FirebaseStorage.instance.ref("${user.id}-profile.jpg").putFile(imageFile);
+    } catch (e) {
       return false;
     }
     user.profilePicture = "${user.id}-profile.jpg";
@@ -122,6 +134,7 @@ class UserProvider extends ChangeNotifier {
       // accessing the position and request users of the
       // App to enable the location services.
       print('Location services are disabled.');
+      return const GeoPoint(90, 180);
     }
 
     permission = await Geolocator.checkPermission();
@@ -134,11 +147,13 @@ class UserProvider extends ChangeNotifier {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         print('Location permissions are denied');
+        return const GeoPoint(90, 180);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       print('Location permissions are permanently denied, we cannot request permissions.');
+      return const GeoPoint(90, 180);
     }
 
     // When we reach here, permissions are granted and we can
@@ -147,5 +162,4 @@ class UserProvider extends ChangeNotifier {
 
     return GeoPoint(location.latitude, location.longitude);
   }
-
 }

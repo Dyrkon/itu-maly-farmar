@@ -3,6 +3,10 @@ import '../colors/colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
+//autor: Adam Jetmar
+//
+//
+//
 Widget inputField(String text, TextEditingController controller, bool obstruct, double? customWidth, double? customHeight, bool numeric) {
   return Container(
     width: customWidth,

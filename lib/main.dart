@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +14,7 @@ import './screens/tabs_screen.dart';
 import './providers/tabs.dart';
 import './providers/auth.dart';
 import 'package:maly_farmar/providers/offers.dart';
-import 'package:maly_farmar/models/offer.dart';
+import './screens/product_detail_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +68,7 @@ class MyApp extends StatelessWidget {
           // home: TabsScreen(),
           routes: {
             LandingPage.routeName: (ctx) => const LandingPage(),
+            ProductsDetailScreen.routeName: (ctx) => ProductsDetailScreen(),
           },
         ),
     );

@@ -3,6 +3,10 @@ import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/providers/products.dart';
 import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class ProductWidget extends StatefulWidget {
   final Product product;
 
@@ -18,8 +22,7 @@ class _ProductWidgetState extends State<ProductWidget> {
     var product = widget.product;
 
     return Container(
-        decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 1 / 9,
         child: Row(
@@ -34,12 +37,11 @@ class _ProductWidgetState extends State<ProductWidget> {
                     width: MediaQuery.of(context).size.height * 1 / 9,
                     height: MediaQuery.of(context).size.height * 1 / 9,
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(10)),
+                      borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(snapshot.data ??
-                            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                        image: NetworkImage(
+                          snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                         ),
                       ),
                     ),
@@ -49,8 +51,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     width: MediaQuery.of(context).size.height * 1 / 9,
                     height: MediaQuery.of(context).size.height * 1 / 9,
                     decoration: const BoxDecoration(
-                      borderRadius:
-                          BorderRadius.horizontal(left: Radius.circular(10)),
+                      borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
                     ),
                     child: const CircularProgressIndicator(),
                   );
@@ -62,8 +63,7 @@ class _ProductWidgetState extends State<ProductWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   child: Text(
                     product.productName + " (" + product.unit + ")",
                     style: const TextStyle(

@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class Auth {
   final FirebaseAuth _firebaseAuth;
   String? errorMsg;
@@ -19,11 +23,9 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<String> signIn(
-      {required String email, required String password}) async {
+  Future<String> signIn({required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return "Signed in";
     } on FirebaseAuthException catch (e) {
       if (e.message != null) {
@@ -33,11 +35,11 @@ class Auth {
     }
   }
 
-  Future<String> signUp(
-      {required String email, required String password}) async {
+//registrace
+  Future<String> signUp({required String email, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+
       return "Signed up";
     } on FirebaseAuthException catch (e) {
       if (e.message != null) {
@@ -53,15 +55,13 @@ class Auth {
 
   FirebaseAuth get firebaseInstance => _firebaseAuth;
 
-  void invalidCredentialsAlert(
-      value, context, nameController, passwordController) {
+  void invalidCredentialsAlert(value, context, nameController, passwordController) {
     if (value == "Error") {
       showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              content:
-                  const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
+              content: const Text("Zadali jste neplatné údaje. \nZkuste to znovu."),
               title: const Text("Neplatné přihlašovací údaje!"),
               actions: [
                 TextButton(

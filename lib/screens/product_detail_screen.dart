@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/colors/colors.dart';
+import 'package:maly_farmar/models/offer.dart';
+import 'package:maly_farmar/models/product.dart';
+import 'package:maly_farmar/providers/offers.dart';
+import 'package:maly_farmar/providers/products.dart';
+import 'package:maly_farmar/providers/user_provider.dart';
+import 'package:maly_farmar/widgets/make_order.dart';
+import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class ProductsDetailScreen extends StatefulWidget {
   const ProductsDetailScreen({Key? key}) : super(key: key);
+
+  static const routeName = "/product-detail-screen";
 
   @override
   State<ProductsDetailScreen> createState() => _ProductsDetailScreenState();
@@ -11,191 +24,201 @@ class ProductsDetailScreen extends StatefulWidget {
 class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final offerData = Provider.of<Offers>(context);
+    final Offer offer = offerData.offers[offerData.currentOffer];
+
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
+        appBar: AppBar(
+          title: const Text(
+            "Malý farmář",
+            textAlign: TextAlign.center,
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Container(
                   decoration: BoxDecoration(
-                      color: Palette.farmersGreen.shade50,
-                      borderRadius: BorderRadius.circular(10)),
+                    color: Palette.farmersGreen[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 0, right: 10),
-                        width: MediaQuery.of(context).size.height / 7,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: const DecorationImage(
-                                fit: BoxFit.fitWidth,
-                                image: NetworkImage(
-                                    "https://thumbs.dreamstime.com/z/happy-african-farmer-working-countryside-holding-wood-box-fresh-vegetables-215052594.jpg"))),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.85 / 3,
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
-                                    Flexible(
-                                      child: Text(
-                                        "Dobromil Veselý",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
+                      FutureBuilder(
+                        future: Provider.of<UserProvider>(context).getUserImage(offer.seller.id),
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.hasData || snapshot.hasError) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 1 / 3.5,
+                              height: MediaQuery.of(context).size.width * 1 / 3.5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                                  ),
                                 ),
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
-                                    Text(
-                                      "Přerov",
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
+                            );
+                          } else {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 1 / 3.5,
+                              height: MediaQuery.of(context).size.width * 1 / 3.5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 1 / 3.5,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                offer.seller.fullName,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                              const Text(
+                                "Misto",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 20, color: Colors.white),
                               ),
                             ],
-                          ),
-                        ),
-                      )
+                          ))
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                              right: Radius.circular(10)),
+                const SizedBox(
+                  height: 10,
+                ),
+                FutureBuilder(
+                  future: Provider.of<Products>(context).getProductImage(offer.id),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData || snapshot.hasError) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width - 8,
+                        height: MediaQuery.of(context).size.width * 1 / 1.5,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                           image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitWidth,
                             image: NetworkImage(
-                                "https://www.womanonly.cz/wp-content/uploads/2014/07/vejce-640x415.jpg"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Row(
-                  children: const [
-                    Flexible(
-                      child: Text(
-                        "Super popis těchle vajíček bráško, naprostá kvalitka no, zkusím sem napsat nějaký extra dlouhý text abych viděl kolik se tam toho vejde a vypadá to že celkem dost no ale určitě tam nechceme víc jak pět řádků pak se to už chová asi dost podivně a navíc je to hafo textu no dobře vejde se jich tam až sedm",
-                        maxLines: 7,
-                        overflow: TextOverflow.fade,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "dostupné:",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "44 ks",
-                            style: TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "cena",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "4 kč / ks",
-                            style: TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 8,
-                  width: MediaQuery.of(context).size.width * 1.5,
-                  padding: const EdgeInsets.all(0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        child: ElevatedButton(
-                          onPressed: () => {},
-                          child: const Text(
-                            "zarezervovat",
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.white,
+                              snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                             ),
                           ),
                         ),
-                      )
-                    ],
+                      );
+                    } else {
+                      return Container(
+                        width: MediaQuery.of(context).size.width - 20,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
+                        ),
+                        child: const CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  offer.description,
+                  style: const TextStyle(fontSize: 18, locale: Locale('cz'), overflow: TextOverflow.fade),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.farmersGreen[300],
+                          ),
+                          height: MediaQuery.of(context).size.width * 1 / 5,
+                          width: MediaQuery.of(context).size.width * 1 / 3,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "dostupné:",
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${offer.accessibleAmount} ${offer.unit}",
+                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.farmersGreen[300],
+                          ),
+                          height: MediaQuery.of(context).size.width * 1 / 5,
+                          width: MediaQuery.of(context).size.width * 1 / 3,
+                        ),
+                        Column(
+                          children: [
+                            const Text(
+                              "cena:",
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${offer.price} Kč/${offer.unit}",
+                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 1 / 14,
+                ),
+                ElevatedButton(
+                  onPressed: () => {print("TEXTtEST"), showDialog(barrierColor: Colors.grey.withOpacity(0.9), context: context, builder: (BuildContext context) => MakeOrderWidget(offer))},
+                  child: const Text(
+                    "Zarezervovat",
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

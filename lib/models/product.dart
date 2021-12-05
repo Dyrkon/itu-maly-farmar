@@ -1,3 +1,7 @@
+//autor: Matěj Mudra
+//
+//
+//
 class Product {
   String id;
   String productName;
