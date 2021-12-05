@@ -7,6 +7,7 @@ import 'package:maly_farmar/providers/auth.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -25,8 +26,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var _user = Provider.of<UserProvider>(context);
-    // print(_user.user.id);
-    // print("IDDD ");
 
     var geopoint;
 
@@ -134,18 +133,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width * 1 / 2,
-                                  child: ElevatedButton(
-                                      onPressed: () async {
-                                        geopoint = await _user.determinePosition();
-                                      },
-                                      child: const Text("Uložit moji pozici")),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 1 / 3,
+                                      child: ElevatedButton(
+                                          onPressed: () async {
+                                            Fluttertoast.showToast(
+                                                msg: "Zjišťuji polohu",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            geopoint = await _user.determinePosition();
+                                            if (geopoint.latitude == 90 && geopoint.longitude == 180) {
+                                              Fluttertoast.showToast(
+                                                  msg: "Nebylo možné získat polohu",
+                                                  toastLength: Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.CENTER,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "Poloha úspěšně nastavena!",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.CENTER,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            }
+                                          },
+                                          child: const Text("Určení polohy")),
+                                    )
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 inputField(phoneField, _numberController, false, null, null, false),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width * 1 / 2,
                                   child: ElevatedButton(
@@ -154,6 +188,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         _user.user.fullName = _nameController.text.trim();
                                         _user.user.location = geopoint;
                                         Provider.of<UserProvider>(context, listen: false).updateUserData(user.id, _user.user);
+                                        Fluttertoast.showToast(
+                                            msg: "Změny uloženy",
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
                                       },
                                       child: const Text("Uložit údaje")),
                                 ),
@@ -181,6 +223,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       _nameController.text = user.fullName;
                                       _addressController.text = user.location.toString();
                                       _numberController.text = user.phoneNumber;
+                                      Fluttertoast.showToast(
+                                          msg: "Údaje načteny!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     },
                                     child: const Text(
                                       "Načíst údaje ze serveru",

@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                CustomIcons.wheelchair,
+                CustomIcons.carrot, //carrot
                 color: Palette.farmersGreen,
                 size: 60,
               ),
