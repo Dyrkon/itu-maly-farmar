@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:maly_farmar/models/offer.dart';
+import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/providers/orders.dart';
+import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:maly_farmar/widgets/input_field_widget.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +75,7 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
                       "Zvolte množství:",
                       style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(height: 25,),
+                    SizedBox(height: 20,),
                     Text(
                       "Vyberte datum:",
                       style: TextStyle(fontSize: 18),
@@ -129,13 +132,33 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
             SizedBox(
               width: size.width * 1 / 1.5,
               child: ElevatedButton(onPressed: () async {
-                print(userID);
-                if (userID != null && _dateIsValid) {
-                  var newOrder = Order(orderTime.toString(), offer.id, Status.pending, int.parse(_amountController.text.trim()), orderTime, _date);
-                  var returnVal = await Provider.of<Orders>(context, listen: false).pushOrder(userID, newOrder);
+                if (
+                _dateIsValid &&
+                    int.parse(_amountController.text.trim()) > 0 &&
+                    int.parse(_amountController.text.trim()) <= offer.accessibleAmount) {
+                  var newOrder = Order(
+                      orderTime.toString(),
+                      offer.id,
+                      Status.pending,
+                      int.parse(_amountController.text.trim()),
+                      orderTime,
+                      _date);
+
+                  var returnVal = await Provider.of<Orders>(context, listen: false)
+                      .pushOrder(userID, newOrder);
+                  Product updatedProduct = await Provider.of<Products>(context, listen: false).getProduct(offer.id);
+                  updatedProduct.reservedAmount = updatedProduct.reservedAmount + newOrder.orderedAmount;
+                  await Provider.of<Products>(context, listen: false).updateProduct(updatedProduct);
 
                   if (returnVal == false) {
-                    // TODO toast
+                    Fluttertoast.showToast(
+                        msg: "Vaši objednávku se nepodařilo vytvořit",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
                   else {
                     Navigator.of(context).pop();
@@ -143,7 +166,14 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
                 }
                 else
                   {
-                    // TODO toast
+                    Fluttertoast.showToast(
+                        msg: "Zadejte prosím validní údaje",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
               }, child: const Text("Potvrdit rezervaci")),
             ),

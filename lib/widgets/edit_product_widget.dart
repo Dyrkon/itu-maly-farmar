@@ -235,7 +235,9 @@ class _EditProductState extends State<EditProduct> {
                               }
                             }
                             if (!invalidInput) {
-                              Provider.of<Products>(context, listen: false).updateProduct(product, amount!, toOffer!);
+                              product.totalAmount = amount;
+                              product.offered = toOffer!;
+                              Provider.of<Products>(context, listen: false).updateProduct(product);
                               Provider.of<Products>(context, listen: false).fetchProducts();
                               Navigator.of(context).pop();
                             }

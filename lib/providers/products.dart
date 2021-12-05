@@ -17,17 +17,7 @@ class Products with ChangeNotifier {
     this._userId,
   );
 
-  List<Product> _products = [
-    /*
-    Product("1", "Vajíčka", "Honza Metelesk", "ks", 40, 20, 20, 5,
-        "Vajíčka snášejí slepičky v doprčicích hehehe :)))"),
-    Product("2", "Hovězí", "Honza Metelesk", "kg", 30, 20, 10, 250,
-        "prostě z kravičky no víšco hehehe :))))"),
-    Product("3", "Oves", "Honza Metelesk", "kg", 45, 25, 20, 200,
-        "ovsík pro tvýho koníka víšco hehehe :)))"),
-    Product("4", "Sýr", "Honza Metelesk", "ks", 40, 20, 20, 40,
-        "kvalitní sýreček hehehe :))))"), */
-  ];
+  List<Product> _products = [];
 
   List<Product> get products {
     return [..._products];
@@ -68,7 +58,7 @@ class Products with ChangeNotifier {
   }
 
   Future<Product> getProduct(productID) async {
-    var snapshot = await _fireStoreInstance.collection("products").where("offered", isEqualTo: true).where("id", isEqualTo: productID).get();
+    var snapshot = await _fireStoreInstance.collection("products").where("id", isEqualTo: productID).get();
     Product newProduct = Product("", "", "", "", -1, -1, -1, -1, "", false);
 
     for (var element in snapshot.docs) {
@@ -77,11 +67,12 @@ class Products with ChangeNotifier {
         newProduct.id = product["id"];
         newProduct.unit = product["unit"];
         newProduct.price = product["price"];
-        newProduct.accessibleAmount = product["accessibleAmount"];
+        newProduct.accessibleAmount = product["totalAmount"] - product["reservedAmount"];
         newProduct.description = product["description"];
         newProduct.productName = product["productName"];
         newProduct.imagePath = product["imagePath"];
         newProduct.totalAmount = product["totalAmount"];
+        newProduct.reservedAmount = product["reservedAmount"];
         newProduct.offered = true;
         newProduct.sellersID = product["sellersID"];
         return newProduct;
@@ -123,8 +114,22 @@ class Products with ChangeNotifier {
     return tmp;
   }
 
-  Future<bool> updateProduct(Product product, int newAmount, bool toOffer) async {
-    var products = await _fireStoreInstance.collection('products').doc(product.id).update({'totalAmount': newAmount, 'offered': toOffer});
+  Future<bool> updateProduct(Product product) async {
+    print(product.id);
+    print(product.productName);
+    print(product.totalAmount);
+    print(product.reservedAmount);
+
+    var products = await _fireStoreInstance
+        .collection('products')
+        .doc(product.id)
+        .update({
+      'accessibleAmount' : product.totalAmount - product.reservedAmount,
+      'reservedAmount' : product.reservedAmount,
+      'totalAmount': product.totalAmount,
+      'offered': product.offered == true ? (((product.totalAmount - product.reservedAmount) > 0) ? true : false) : false,
+    });
+
     return true;
   }
 
