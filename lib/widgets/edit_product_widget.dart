@@ -119,6 +119,7 @@ class _EditProductState extends State<EditProduct> {
                       onPressed: () {
                         setState(() {
                           amount = (amount! + 1);
+                          _amount.text = amount.toString();
                           text = amount.toString();
                         });
                       },
@@ -203,7 +204,8 @@ class _EditProductState extends State<EditProduct> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            amount = int.parse(_amount.text);
+                            print(_amount.text);
+                            amount = int.parse(_amount.text.trim());
                             if (amount! < 0 || amount! % 1 != 0) {
                               Fluttertoast.showToast(
                                   msg: "Zadejte nezáporné celé číslo.",
