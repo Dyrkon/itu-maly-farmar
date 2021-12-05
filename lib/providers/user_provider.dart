@@ -8,6 +8,10 @@ import 'package:maly_farmar/models/user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+//autor: Ondřej Kříž
+//
+//
+//
 class UserProvider extends ChangeNotifier {
   UserProfile user;
   FirebaseFirestore _firebaseFirestore;
@@ -39,11 +43,9 @@ class UserProvider extends ChangeNotifier {
       var user = await getUserDataByID(productMap!["sellersID"]);
 
       return user;
+    } else {
+      return UserProfile("", "");
     }
-    else
-      {
-        return UserProfile("", "");
-      }
   }
 
   Future<void> fetchUserData(String? userId) async {
@@ -82,13 +84,7 @@ class UserProvider extends ChangeNotifier {
     }
 
     _firebaseFirestore.collection("users").doc(userID).set(
-      {
-        "email": profile.email,
-        "fullName": profile.fullName,
-        "phoneNumber": profile.phoneNumber,
-        "profilePicture": profile.profilePicture,
-        "location": profile.location
-      },
+      {"email": profile.email, "fullName": profile.fullName, "phoneNumber": profile.phoneNumber, "profilePicture": profile.profilePicture, "location": profile.location},
       SetOptions(merge: true),
     );
   }

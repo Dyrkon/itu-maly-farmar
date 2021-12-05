@@ -1,5 +1,9 @@
 import 'package:maly_farmar/models/user.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class Offer {
   String id;
   String productName;

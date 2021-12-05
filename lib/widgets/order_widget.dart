@@ -9,33 +9,33 @@ import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../colors/colors.dart';
 
+//autor: Adam Jetmar
+//
+//
+//
 class OrderWidget extends StatefulWidget {
   final Order order;
   final deny;
   final confirm;
 
-  const OrderWidget(this.order, this.deny, this.confirm, {Key? key})
-      : super(key: key);
+  const OrderWidget(this.order, this.deny, this.confirm, {Key? key}) : super(key: key);
 
   @override
   State<OrderWidget> createState() => _OrderWidgetState();
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
-
   Widget productPictureBuilder(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.hasData || snapshot.hasError) {
       return Container(
         width: MediaQuery.of(context).size.height * 1 / 10,
         height: MediaQuery.of(context).size.height * 1 / 10,
         decoration: BoxDecoration(
-          borderRadius:
-              const BorderRadius.horizontal(left: Radius.circular(10)),
+          borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
           image: DecorationImage(
             fit: BoxFit.cover,
             image: NetworkImage(
-              snapshot.data ??
-                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+              snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
             ),
           ),
         ),
@@ -53,7 +53,6 @@ class _OrderWidgetState extends State<OrderWidget> {
   }
 
   Widget productsDetailsBuilder(BuildContext context, AsyncSnapshot snapshot, Order order) {
-
     if (snapshot.hasData) {
       Product product = snapshot.data;
       return Column(
@@ -61,8 +60,7 @@ class _OrderWidgetState extends State<OrderWidget> {
         children: [
           Text(
             product.productName,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const Text(
             "Množství:",
@@ -76,15 +74,13 @@ class _OrderWidgetState extends State<OrderWidget> {
           ),
         ],
       );
-    }
-    else {
+    } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [
           Text(
             "...",
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
             "Množství:",
@@ -129,18 +125,15 @@ class _OrderWidgetState extends State<OrderWidget> {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-          color: isConfirmed ? Palette.farmersGreen.shade200 : Colors.grey[200],
-          borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: isConfirmed ? Palette.farmersGreen.shade200 : Colors.grey[200], borderRadius: BorderRadius.circular(10)),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 1 / 10,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           FutureBuilder(
-            future:
-                Provider.of<Products>(context).getProductImage(order.productID),
+          FutureBuilder(
+            future: Provider.of<Products>(context).getProductImage(order.productID),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               return productPictureBuilder(context, snapshot);
             },
@@ -150,12 +143,11 @@ class _OrderWidgetState extends State<OrderWidget> {
               const SizedBox(
                 width: 5,
               ),
-             FutureBuilder(
-                future: Provider.of<Products>(context).getProduct(order.productID),
+              FutureBuilder(
+                  future: Provider.of<Products>(context).getProduct(order.productID),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     return productsDetailsBuilder(context, snapshot, order);
-                  }
-              ),
+                  }),
               const SizedBox(
                 width: 10,
               ),
@@ -164,8 +156,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 children: [
                   FutureBuilder(
                       future: Provider.of<UserProvider>(context).getUserFromProductID(order.productID),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                         return userNameBuilder(context, snapshot);
                       }),
                   const Text(
@@ -175,10 +166,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                     ),
                   ),
                   Text(
-                    order.pickupTime.day.toString() +
-                        ". " +
-                        order.pickupTime.month.toString() +
-                        ".",
+                    order.pickupTime.day.toString() + ". " + order.pickupTime.month.toString() + ".",
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -206,13 +194,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                       ),
                     )
                   : const SizedBox.shrink(),
-              SizedBox(
-                  width: Provider.of<Tabs>(context).isFarmer
-                      ? 10
-                      : 0 //isConfirmed ? 0 : 10,
+              SizedBox(width: Provider.of<Tabs>(context).isFarmer ? 10 : 0 //isConfirmed ? 0 : 10,
                   ),
-              (isConfirmed && !Provider.of<Tabs>(context).isFarmer) ||
-                      (!isConfirmed && Provider.of<Tabs>(context).isFarmer)
+              (isConfirmed && !Provider.of<Tabs>(context).isFarmer) || (!isConfirmed && Provider.of<Tabs>(context).isFarmer)
                   ? SizedBox(
                       width: 20,
                       child: IconButton(

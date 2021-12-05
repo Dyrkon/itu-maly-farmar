@@ -8,6 +8,10 @@ import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:maly_farmar/widgets/make_order.dart';
 import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class ProductsDetailScreen extends StatefulWidget {
   const ProductsDetailScreen({Key? key}) : super(key: key);
 
@@ -44,10 +48,8 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                   child: Row(
                     children: [
                       FutureBuilder(
-                        future: Provider.of<UserProvider>(context)
-                            .getUserImage(offer.seller.id),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
+                        future: Provider.of<UserProvider>(context).getUserImage(offer.seller.id),
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.hasData || snapshot.hasError) {
                             return Container(
                               width: MediaQuery.of(context).size.width * 1 / 3.5,
@@ -57,8 +59,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                    snapshot.data ??
-                                        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                                    snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                                   ),
                                 ),
                               ),
@@ -87,19 +88,12 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                               Text(
                                 offer.seller.fullName,
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  color: Colors.white
-                                ),
+                                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                               const Text(
                                 "Misto",
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white
-                                ),
+                                style: const TextStyle(fontSize: 20, color: Colors.white),
                               ),
                             ],
                           ))
@@ -110,23 +104,18 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                   height: 10,
                 ),
                 FutureBuilder(
-                  future:
-                      Provider.of<Products>(context).getProductImage(offer.id),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  future: Provider.of<Products>(context).getProductImage(offer.id),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasData || snapshot.hasError) {
                       return Container(
                         width: MediaQuery.of(context).size.width - 8,
                         height: MediaQuery.of(context).size.width * 1 / 1.5,
                         decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                              right: Radius.circular(10)),
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                           image: DecorationImage(
                             fit: BoxFit.fitWidth,
                             image: NetworkImage(
-                              snapshot.data ??
-                                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                              snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                             ),
                           ),
                         ),
@@ -135,9 +124,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                       return Container(
                         width: MediaQuery.of(context).size.width - 20,
                         decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                              right: Radius.circular(10)),
+                          borderRadius: BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                         ),
                         child: const CircularProgressIndicator(),
                       );
@@ -149,10 +136,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                 ),
                 Text(
                   offer.description,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      locale: Locale('cz'),
-                      overflow: TextOverflow.fade),
+                  style: const TextStyle(fontSize: 18, locale: Locale('cz'), overflow: TextOverflow.fade),
                 ),
                 const SizedBox(
                   height: 10,
@@ -177,19 +161,14 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                           children: [
                             const Text(
                               "dostupné:",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                color: Colors.white
-                              ),
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
                               "${offer.accessibleAmount} ${offer.unit}",
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
                             ),
                           ],
                         ),
@@ -210,16 +189,14 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                           children: [
                             const Text(
                               "cena:",
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
                               "${offer.price} Kč/${offer.unit}",
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
                             ),
                           ],
                         ),
@@ -227,15 +204,11 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 1 / 14,),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 1 / 14,
+                ),
                 ElevatedButton(
-                  onPressed: () => {
-                    print("TEXTtEST"),
-                  showDialog(
-                  barrierColor: Colors.grey.withOpacity(0.9),
-                  context: context,
-                  builder: (BuildContext context) => MakeOrderWidget(offer))
-                  },
+                  onPressed: () => {print("TEXTtEST"), showDialog(barrierColor: Colors.grey.withOpacity(0.9), context: context, builder: (BuildContext context) => MakeOrderWidget(offer))},
                   child: const Text(
                     "Zarezervovat",
                     style: TextStyle(

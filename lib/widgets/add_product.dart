@@ -9,6 +9,10 @@ import 'input_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+//autor: Matěj Mudra + Ondřej Kříž
+//Grafické rozhraní napsal Matěj Mudra
+//Kontrolu produktů napsal Ondřej Kříž
+//
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
 
@@ -93,8 +97,7 @@ class _AddProductState extends State<AddProduct> {
                                   print(snapshot.hasError);
                                   print(snapshot.data);
                                   if (snapshot.hasData &&
-                                      snapshot.data !=
-                                          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
+                                      snapshot.data != "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
@@ -103,8 +106,7 @@ class _AddProductState extends State<AddProduct> {
                                       ),
                                     );
                                   } else if (snapshot.hasError ||
-                                      snapshot.data ==
-                                          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
+                                      snapshot.data == "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1") {
                                     return RawMaterialButton(
                                       splashColor: Palette.farmersGreen,
                                       shape: const RoundedRectangleBorder(
@@ -268,17 +270,8 @@ class _AddProductState extends State<AddProduct> {
                               fontSize: 16.0);
                         } else {
                           print(toOffer);
-                          var newProduct = Product(
-                              productID,
-                              _name.text.trim(),
-                              productID,
-                              dropDownValues[dropdownValue!.toInt()],
-                              int.parse(_amount.text.trim()),
-                              int.parse(_amount.text.trim()),
-                              0,
-                              int.parse(_price.text.trim()),
-                              _description.text.trim(),
-                              toOffer!);
+                          var newProduct = Product(productID, _name.text.trim(), productID, dropDownValues[dropdownValue!.toInt()], int.parse(_amount.text.trim()), int.parse(_amount.text.trim()), 0,
+                              int.parse(_price.text.trim()), _description.text.trim(), toOffer!);
                           newProduct.imagePath = imageUrl;
                           if (await Provider.of<Products>(context, listen: false).pushProduct(newProduct) == false) {
                             Fluttertoast.showToast(

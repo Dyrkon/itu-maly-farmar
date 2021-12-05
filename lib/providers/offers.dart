@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:maly_farmar/models/user.dart';
 
+//autor: Adam Jetmar
+//
+//
+//
 class Offers with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
   int currentOffer = 0;
@@ -18,10 +22,7 @@ class Offers with ChangeNotifier {
   }
 
   Future<void> fetchOffers() async {
-    var productSnapshot = await _fireStoreInstance
-        .collection("products")
-        .where("offered", isEqualTo: true)
-        .get();
+    var productSnapshot = await _fireStoreInstance.collection("products").where("offered", isEqualTo: true).get();
 
     _offers.clear();
 
@@ -35,18 +36,14 @@ class Offers with ChangeNotifier {
             return false;
           }) ==
           -1) {
-        var userSnapshot = await _fireStoreInstance
-            .collection("users")
-            .doc(offer["sellersID"])
-            .get();
+        var userSnapshot = await _fireStoreInstance.collection("users").doc(offer["sellersID"]).get();
         Map<String, dynamic>? user = userSnapshot.data();
 
         if (user == null) {
           return;
         }
 
-        UserProfile fetchedUser =
-            UserProfile(offer["sellersID"], user["email"]);
+        UserProfile fetchedUser = UserProfile(offer["sellersID"], user["email"]);
         fetchedUser.phoneNumber = user["phoneNumber"];
         fetchedUser.fullName = user["fullName"];
         fetchedUser.location = user["location"];

@@ -5,6 +5,10 @@ import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+//autor: Adam Jetmar
+//
+//
+//
 class FarmerWidget extends StatefulWidget {
   final Offer offer;
 
@@ -20,8 +24,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
     var offer = widget.offer;
     var userLocation = Provider.of<UserProvider>(context).user.location;
     var offerLocation = offer.seller.location;
-    int distance =
-        (Geolocator.distanceBetween(userLocation.latitude, userLocation.longitude, offerLocation.latitude, offerLocation.longitude) / 1000).round();
+    int distance = (Geolocator.distanceBetween(userLocation.latitude, userLocation.longitude, offerLocation.latitude, offerLocation.longitude) / 1000).round();
 
     return Container(
         decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
@@ -43,8 +46,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          snapshot.data ??
-                              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                          snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                         ),
                       ),
                     ),

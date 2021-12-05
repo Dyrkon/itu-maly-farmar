@@ -1,5 +1,9 @@
 import 'package:maly_farmar/models/product.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 enum Status {
   confirmedBySeller,
   confirmedByBuyer,
@@ -17,11 +21,11 @@ class Order {
   DateTime pickupTime;
 
   Order(
-      this.orderID,
-      this.productID,
-      this.status,
-      this.orderedAmount,
-      this.orderTime,
-      this.pickupTime,
-      );
+    this.orderID,
+    this.productID,
+    this.status,
+    this.orderedAmount,
+    this.orderTime,
+    this.pickupTime,
+  );
 }

@@ -6,6 +6,10 @@ import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class ProductsDetailScreen extends StatefulWidget {
   const ProductsDetailScreen({Key? key}) : super(key: key);
 
@@ -32,36 +36,29 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Palette.farmersGreen.shade50,
-                      borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: Palette.farmersGreen.shade50, borderRadius: BorderRadius.circular(10)),
                   child: Row(
                     children: [
                       FutureBuilder(
-                        future: Provider.of<UserProvider>(context)
-                            .getUserImage(offer.seller.id),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
+                        future: Provider.of<UserProvider>(context).getUserImage(offer.seller.id),
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.hasData || snapshot.hasError) {
                             return Container(
-                              padding:
-                                  const EdgeInsets.only(left: 0, right: 10),
+                              padding: const EdgeInsets.only(left: 0, right: 10),
                               width: MediaQuery.of(context).size.height / 7,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   fit: BoxFit.fitWidth,
                                   image: NetworkImage(
-                                    snapshot.data ??
-                                        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                                    snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                                   ),
                                 ),
                               ),
                             );
                           } else {
                             return Container(
-                              padding:
-                                  const EdgeInsets.only(left: 0, right: 10),
+                              padding: const EdgeInsets.only(left: 0, right: 10),
                               width: MediaQuery.of(context).size.height / 7,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -86,9 +83,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                                       child: Text(
                                         offer.seller.fullName,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
+                                        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -102,9 +97,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                                     Text(
                                       "Přerov",
                                       textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                     )
                                   ],
                                 ),
@@ -126,22 +119,17 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       FutureBuilder(
-                        future: Provider.of<Products>(context)
-                            .getProductImage(offer.id),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
+                        future: Provider.of<Products>(context).getProductImage(offer.id),
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.hasData || snapshot.hasError) {
                             return Container(
                               width: MediaQuery.of(context).size.width - 20,
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.horizontal(
-                                    left: Radius.circular(10),
-                                    right: Radius.circular(10)),
+                                borderRadius: const BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                                 image: DecorationImage(
                                   fit: BoxFit.fitWidth,
                                   image: NetworkImage(
-                                    snapshot.data ??
-                                        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
+                                    snapshot.data ?? "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1",
                                   ),
                                 ),
                               ),
@@ -150,9 +138,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                             return Container(
                               width: MediaQuery.of(context).size.width - 20,
                               decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(10),
-                                    right: Radius.circular(10)),
+                                borderRadius: BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                               ),
                               child: const CircularProgressIndicator(),
                             );
@@ -191,13 +177,11 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                         children: [
                           const Text(
                             "dostupné:",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             "${offer.accessibleAmount} ${offer.unit}",
-                            style: const TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
@@ -210,13 +194,11 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                         children: [
                           const Text(
                             "cena:",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             "${offer.price} Kč/${offer.unit}",
-                            style: const TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),

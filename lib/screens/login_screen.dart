@@ -7,6 +7,10 @@ import 'package:maly_farmar/icons/custom_icons.dart';
 import 'package:maly_farmar/providers/auth.dart';
 import '../widgets/input_field_widget.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();

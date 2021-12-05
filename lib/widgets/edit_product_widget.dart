@@ -8,6 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class EditProduct extends StatefulWidget {
   Product targetProduct;
   EditProduct(this.targetProduct, {Key? key}) : super(key: key);

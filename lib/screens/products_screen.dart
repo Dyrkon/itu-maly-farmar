@@ -12,6 +12,10 @@ import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({Key? key}) : super(key: key);
 

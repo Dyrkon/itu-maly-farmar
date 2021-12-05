@@ -6,6 +6,10 @@ import 'package:maly_farmar/widgets/edit_product_widget.dart';
 import 'package:maly_farmar/widgets/product_widget.dart';
 import 'package:provider/provider.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class FarmersProductsScreen extends StatefulWidget {
   const FarmersProductsScreen({Key? key}) : super(key: key);
 
@@ -58,11 +62,7 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
                       if (index < productData.products.length) {
                         return RawMaterialButton(
                           onPressed: () {
-                            showDialog(
-                                barrierColor: Colors.grey.withOpacity(0.9),
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    EditProduct(productData.products[index]));
+                            showDialog(barrierColor: Colors.grey.withOpacity(0.9), context: context, builder: (BuildContext context) => EditProduct(productData.products[index]));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -81,10 +81,7 @@ class _FarmersProductsScreenState extends State<FarmersProductsScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showDialog(
-                barrierColor: Colors.grey.withOpacity(0.9),
-                context: context,
-                builder: (BuildContext context) => AddProduct());
+            showDialog(barrierColor: Colors.grey.withOpacity(0.9), context: context, builder: (BuildContext context) => AddProduct());
           },
           child: const Text(
             "+",

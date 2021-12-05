@@ -10,6 +10,10 @@ import 'package:provider/provider.dart';
 import '/models/order.dart';
 import '/colors/colors.dart';
 
+//autor: Adam Jetmar
+//
+//
+//
 class MakeOrderWidget extends StatefulWidget {
   final Offer offer;
 

@@ -1,6 +1,10 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class Tabs with ChangeNotifier {
   int screenIndex = 0;
   bool isFarmer = false;

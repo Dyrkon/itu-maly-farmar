@@ -8,6 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+//autor: Adam Jetmar
+//
+//
+//
 class Products with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
   final _userId;
@@ -120,12 +124,9 @@ class Products with ChangeNotifier {
     print(product.totalAmount);
     print(product.reservedAmount);
 
-    var products = await _fireStoreInstance
-        .collection('products')
-        .doc(product.id)
-        .update({
-      'accessibleAmount' : product.totalAmount - product.reservedAmount,
-      'reservedAmount' : product.reservedAmount,
+    var products = await _fireStoreInstance.collection('products').doc(product.id).update({
+      'accessibleAmount': product.totalAmount - product.reservedAmount,
+      'reservedAmount': product.reservedAmount,
       'totalAmount': product.totalAmount,
       'offered': product.offered == true ? (((product.totalAmount - product.reservedAmount) > 0) ? true : false) : false,
     });
@@ -146,9 +147,7 @@ class Products with ChangeNotifier {
     var imageFile = File(image.path);
 
     try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg")
-          .putFile(imageFile);
+      await firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg").putFile(imageFile);
     } catch (e) {
       return "";
     }
@@ -160,8 +159,7 @@ class Products with ChangeNotifier {
       return "";
     }
 
-    firebase_storage.Reference ref =
-        firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
 
     var url;
 

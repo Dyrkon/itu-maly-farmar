@@ -11,6 +11,10 @@ import 'orders_screen.dart';
 import 'products_screen.dart';
 import '../providers/tabs.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
 
@@ -30,8 +34,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   void _selectPage(int index) {
     setState(() {
-      _selectedPage =
-          Provider.of<Tabs>(context, listen: false).changeIndex(index);
+      _selectedPage = Provider.of<Tabs>(context, listen: false).changeIndex(index);
     });
   }
 
@@ -42,22 +45,19 @@ class _TabsScreenState extends State<TabsScreen> {
         backgroundColor: Colors.white,
         title: const Text(
           "Malý farmář",
-          style: TextStyle(
-              color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(
             CustomIcons.cog,
             color: Colors.black,
           ),
-          onPressed: () =>
-              Provider.of<Tabs>(context, listen: false).changeIndex(2),
+          onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(2),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () =>
-                Provider.of<Tabs>(context, listen: false).changeIndex(3),
+            onPressed: () => Provider.of<Tabs>(context, listen: false).changeIndex(3),
             icon: const Icon(
               CustomIcons.list,
               color: Colors.black,

@@ -2,6 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
 
+//autor: Ondřej Kříž
+//
+//
+//
 class Orders with ChangeNotifier {
   var orderIndex = 0;
   final FirebaseFirestore _fireStoreInstance;
@@ -19,8 +23,7 @@ class Orders with ChangeNotifier {
   List<Order> get activeOrders {
     return [
       ..._orders.where((order) {
-        if (order.status == Status.pending ||
-            order.status == Status.confirmedBySeller) {
+        if (order.status == Status.pending || order.status == Status.confirmedBySeller) {
           return true;
         } else {
           return false;
@@ -32,17 +35,9 @@ class Orders with ChangeNotifier {
   Future<void> fetchFarmersOrders() async {
     _orders.clear();
 
-    await _fireStoreInstance
-        .collection("users")
-        .get()
-        .then((QuerySnapshot querySnapshot) async {
+    await _fireStoreInstance.collection("users").get().then((QuerySnapshot querySnapshot) async {
       for (var element in querySnapshot.docs) {
-        await _fireStoreInstance
-            .collection("users")
-            .doc(element.id)
-            .collection("orders")
-            .get()
-            .then((value) {
+        await _fireStoreInstance.collection("users").doc(element.id).collection("orders").get().then((value) {
           for (var element in value.docs) {
             if (element.exists) {
               Map<String, dynamic> target = element.data();
@@ -65,14 +60,8 @@ class Orders with ChangeNotifier {
       }
     });
 
-
     for (var productID in _exterOrdersIDs) {
-      await _fireStoreInstance
-          .collection("products")
-          .where("id", isEqualTo: productID)
-          .where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2")
-          .get()
-          .then((value) {
+      await _fireStoreInstance.collection("products").where("id", isEqualTo: productID).where("sellersID", isEqualTo: "EpuTOI2JvaNhtPwLsFKmYFjL3Aj2").get().then((value) {
         for (var element in value.docs) {
           if (element.exists) {
             Map<String, dynamic> target = element.data();
@@ -84,21 +73,20 @@ class Orders with ChangeNotifier {
               }
             })) {
               if (_orders.indexWhere((element) {
-                // print("HEJ1"+_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID);
-                // print("HEJ2"+element.orderID);
-                if(_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID == element.orderID) {
-                  print("false");
-                  return false;
-                }
-                else {
-                  print("true");
-                  return true;
-                }
-              }) == -1) {
+                    // print("HEJ1"+_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID);
+                    // print("HEJ2"+element.orderID);
+                    if (_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID == element.orderID) {
+                      print("false");
+                      return false;
+                    } else {
+                      print("true");
+                      return true;
+                    }
+                  }) ==
+                  -1) {
                 _orders.removeWhere((element) => element.orderID == _exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])].orderID);
                 _orders.add(_exterOrders[_exterOrdersIDs.indexWhere((element) => element == target["id"])]);
               }
-
             }
           }
         }
@@ -111,11 +99,7 @@ class Orders with ChangeNotifier {
   Future<void> fetchOrders() async {
     _orders.clear();
 
-    var snapshot = await _fireStoreInstance
-        .collection("users")
-        .doc(userId)
-        .collection("orders")
-        .get();
+    var snapshot = await _fireStoreInstance.collection("users").doc(userId).collection("orders").get();
 
     for (var element in snapshot.docs) {
       Map<String, dynamic> order = element.data();
@@ -145,11 +129,7 @@ class Orders with ChangeNotifier {
   Future<bool> pushOrder(String userId, Order orderToAdd) async {
     bool exitValue = false;
 
-    await _fireStoreInstance
-        .collection("users")
-        .doc(userId)
-        .collection("orders")
-        .add({
+    await _fireStoreInstance.collection("users").doc(userId).collection("orders").add({
       "orderID": orderToAdd.productID,
       "orderTime": orderToAdd.orderTime,
       "orderedAmount": orderToAdd.orderedAmount,
@@ -191,12 +171,7 @@ class Orders with ChangeNotifier {
   Future<void> updateStatus(String id, Status status) async {
     // print(id);
 
-    _fireStoreInstance
-        .collection("users")
-        .doc(userId)
-        .collection("orders")
-        .doc(id)
-        .update({"status": status.index});
+    _fireStoreInstance.collection("users").doc(userId).collection("orders").doc(id).update({"status": status.index});
   }
 
   void confirmOrder(String id) {

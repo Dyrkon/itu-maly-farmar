@@ -9,6 +9,10 @@ import 'package:provider/src/provider.dart';
 import '../widgets/input_field_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
 class SettingsScreen extends StatefulWidget {
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -32,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
-          // TODO tady testuj
+            // TODO tady testuj
             future: _user.getUserDataByID(Provider.of<UserProvider>(context).userID),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
