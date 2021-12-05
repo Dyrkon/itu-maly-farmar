@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:maly_farmar/models/user.dart';
-import '../models/product.dart';
 
 class Offers with ChangeNotifier {
   final FirebaseFirestore _fireStoreInstance;
+  int currentOffer = 0;
 
-
-  Offers(this._fireStoreInstance,);
+  Offers(
+    this._fireStoreInstance,
+  );
 
   List<Offer> _offers = [];
 
@@ -17,41 +18,44 @@ class Offers with ChangeNotifier {
   }
 
   Future<void> fetchOffers() async {
-    var productSnapshot = await _fireStoreInstance.collection("products").get();
+    var productSnapshot = await _fireStoreInstance
+        .collection("products")
+        .where("offered", isEqualTo: true)
+        .get();
 
-    productSnapshot.docs.forEach((element) async {
+    for (var element in productSnapshot.docs) {
       Map<String, dynamic> offer = element.data();
       // print(product);
       if (_offers.indexWhere((element) {
-        if (element.id == offer["id"]) {
-          return true;
-        }
-        return false;
-      }) ==
+            if (element.id == offer["id"]) {
+              return true;
+            }
+            return false;
+          }) ==
           -1) {
-        var userSnapshot = await _fireStoreInstance.collection("users").doc(
-            offer["sellersID"]).get();
+        var userSnapshot = await _fireStoreInstance
+            .collection("users")
+            .doc(offer["sellersID"])
+            .get();
         Map<String, dynamic>? user = userSnapshot.data();
 
-        UserProfile fetchedUser = UserProfile(
-            offer["sellersID"], user!["email"]);
+        UserProfile fetchedUser =
+            UserProfile(offer["sellersID"], user!["email"]);
         fetchedUser.phoneNumber = user["phoneNumber"];
         fetchedUser.fullName = user["fullName"];
         fetchedUser.location = user["location"];
 
-        // print(user);
-
-
         _offers.add(Offer(
-          offer["id"],
-          offer["productName"],
-          fetchedUser,
-          offer["unit"],
-          offer["totalAmount"] - offer["reservedAmount"],
-          offer["price"],
-        ));
+            id: offer["id"],
+            productName: offer["productName"],
+            seller: fetchedUser,
+            unit: offer["unit"],
+            imagePath: offer["imagePath"],
+            description: offer["description"],
+            accessibleAmount: offer["totalAmount"] - offer["reservedAmount"],
+            price: offer["price"]));
       }
-    });
+    }
 
     _offers.forEach((element) {
       print(element.id);
