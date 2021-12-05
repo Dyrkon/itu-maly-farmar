@@ -29,6 +29,7 @@ class _EditProductState extends State<EditProduct> {
     amount ??= product.accessibleAmount;
     String text = amount.toString();
     var size = MediaQuery.of(context).size;
+    bool invalidInput = false;
 
     return SizedBox(
       height: size.height * 0.7,
@@ -79,6 +80,7 @@ class _EditProductState extends State<EditProduct> {
                       onPressed: () {
                         setState(() {
                           amount = (amount! - 1);
+                          _amount.text = amount.toString();
                           text = amount.toString();
                         });
                       },
@@ -204,18 +206,34 @@ class _EditProductState extends State<EditProduct> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            print(_amount.text);
-                            amount = int.parse(_amount.text.trim());
-                            if (amount! < 0 || amount! % 1 != 0) {
-                              Fluttertoast.showToast(
-                                  msg: "Zadejte nezáporné celé číslo.",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            } else {
+                            try {
+                              amount = int.parse(_amount.text.trim());
+                              if (amount! < 0 || amount! % 1 != 0) {
+                                Fluttertoast.showToast(
+                                    msg: "Zadejte nezáporné celé číslo.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              }
+                            } on FormatException {
+                              if (_amount.text.trim() == "") {
+                                invalidInput = false;
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "nastala chyba.",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                invalidInput = true;
+                              }
+                            }
+                            if (!invalidInput) {
                               Provider.of<Products>(context, listen: false).updateProduct(product, amount!, toOffer!);
                               Provider.of<Products>(context, listen: false).fetchProducts();
                               Navigator.of(context).pop();
