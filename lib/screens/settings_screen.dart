@@ -176,7 +176,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                inputField(phoneField, _numberController, false, null, null, false),
+                                inputField(phoneField, _numberController, false, null, null, true),
                                 const SizedBox(
                                   height: 10,
                                 ),

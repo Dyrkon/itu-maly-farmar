@@ -27,11 +27,12 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
 
   Future<bool> _showDatePicker() async {
     _date = await showDatePicker(
-        locale: Localizations.localeOf(context),
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 2),);
+      locale: Localizations.localeOf(context),
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 2),
+    );
 
     if (_date != null) {
       return true;
@@ -50,7 +51,7 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
       child: Container(
         padding: const EdgeInsets.all(8),
         width: size.width,
-        height: size.height * 1 / 2,
+        height: size.height * 1.2 / 3,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -75,7 +76,9 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
                       "Zvolte množství:",
                       style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Text(
                       "Vyberte datum:",
                       style: TextStyle(fontSize: 18),
@@ -86,8 +89,7 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    inputField("Množství", _amountController, false,
-                        size.width * 1 / 3, 30, true),
+                    inputField("Množství", _amountController, false, size.width * 1 / 3, 40, true),
                     const SizedBox(
                       height: 10,
                     ),
@@ -95,87 +97,72 @@ class _MakeOrderWidgetState extends State<MakeOrderWidget> {
                       width: size.width * 1 / 3,
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: ElevatedButton(
-                         onPressed: () async {
+                          onPressed: () async {
                             _dateIsValid = await _showDatePicker();
-                           }
-                         , child: const Text("Datum")),
+                          },
+                          child: const Text("Datum")),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             const Padding(
               padding: EdgeInsets.all(10),
               child: Text(
                 "Vaše rezervace bude předložena prodejci.",
                 textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16
-                ),
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16),
               ),
             ),
-            const SizedBox(height:15),
+            const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                  "Stav své rezervace můžete sledovat v seznamu objednávek.",
+                "Stav své rezervace můžete sledovat v seznamu objednávek.",
                 textAlign: TextAlign.justify,
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                  fontSize: 16
-                ),
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16),
               ),
             ),
             const Expanded(child: SizedBox.shrink()),
             SizedBox(
               width: size.width * 1 / 1.5,
-              child: ElevatedButton(onPressed: () async {
-                if (
-                _dateIsValid &&
-                    int.parse(_amountController.text.trim()) > 0 &&
-                    int.parse(_amountController.text.trim()) <= offer.accessibleAmount) {
-                  var newOrder = Order(
-                      orderTime.toString(),
-                      offer.id,
-                      Status.pending,
-                      int.parse(_amountController.text.trim()),
-                      orderTime,
-                      _date);
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (_dateIsValid && int.parse(_amountController.text.trim()) > 0 && int.parse(_amountController.text.trim()) <= offer.accessibleAmount) {
+                      var newOrder = Order(orderTime.toString(), offer.id, Status.pending, int.parse(_amountController.text.trim()), orderTime, _date);
 
-                  var returnVal = await Provider.of<Orders>(context, listen: false)
-                      .pushOrder(userID, newOrder);
-                  Product updatedProduct = await Provider.of<Products>(context, listen: false).getProduct(offer.id);
-                  updatedProduct.reservedAmount = updatedProduct.reservedAmount + newOrder.orderedAmount;
-                  await Provider.of<Products>(context, listen: false).updateProduct(updatedProduct);
+                      var returnVal = await Provider.of<Orders>(context, listen: false).pushOrder(userID, newOrder);
+                      Product updatedProduct = await Provider.of<Products>(context, listen: false).getProduct(offer.id);
+                      updatedProduct.reservedAmount = updatedProduct.reservedAmount + newOrder.orderedAmount;
+                      await Provider.of<Products>(context, listen: false).updateProduct(updatedProduct);
 
-                  if (returnVal == false) {
-                    Fluttertoast.showToast(
-                        msg: "Vaši objednávku se nepodařilo vytvořit",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-                  else {
-                    Navigator.of(context).pop();
-                  }
-                }
-                else
-                  {
-                    Fluttertoast.showToast(
-                        msg: "Zadejte prosím validní údaje",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-              }, child: const Text("Potvrdit rezervaci")),
+                      if (returnVal == false) {
+                        Fluttertoast.showToast(
+                            msg: "Vaši objednávku se nepodařilo vytvořit",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Zadejte prosím validní údaje",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  },
+                  child: const Text("Potvrdit rezervaci")),
             ),
           ],
         ),
