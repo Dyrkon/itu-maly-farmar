@@ -66,8 +66,8 @@ class _FarmerWidgetState extends State<FarmerWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).size.width * 1 / 3.2,
+                  width: MediaQuery.of(context).size.width
+                      - MediaQuery.of(context).size.width * 1 / 3.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -89,7 +89,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).size.width * 1 / 3.2,
+                      MediaQuery.of(context).size.width * 1 / 3.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

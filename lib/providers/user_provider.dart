@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class UserProvider extends ChangeNotifier {
   UserProfile user;
   FirebaseFirestore _firebaseFirestore;
+  FirebaseAuth authInstance = FirebaseAuth.instance;
   final firebase_storage.FirebaseStorage _storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -19,6 +21,16 @@ class UserProvider extends ChangeNotifier {
       this.user,
       this._firebaseFirestore,
       );
+
+  String get userID {
+    var ret = authInstance.currentUser?.uid;
+    if (ret != null) {
+      return ret;
+    }
+    else {
+      return "";
+    }
+  }
 
   Future<void> fetchUserData(String? userId) async {
     var snapshot = await _firebaseFirestore.collection("users").doc(userId).get();
