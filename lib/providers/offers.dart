@@ -23,6 +23,8 @@ class Offers with ChangeNotifier {
         .where("offered", isEqualTo: true)
         .get();
 
+    _offers.clear();
+
     for (var element in productSnapshot.docs) {
       Map<String, dynamic> offer = element.data();
       // print(product);

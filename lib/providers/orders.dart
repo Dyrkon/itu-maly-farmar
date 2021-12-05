@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
-import 'package:maly_farmar/models/product.dart';
-import '../providers/user_provider.dart';
 
 class Orders with ChangeNotifier {
   var orderIndex = 0;
@@ -17,25 +12,7 @@ class Orders with ChangeNotifier {
     this.userId,
   );
 
-  List<Order> _orders = [
-    /*
-    Order(
-      "0",
-      Product,
-      Status.pending,
-      10,
-      DateTime.now(),
-      DateTime.now(),
-    ),
-    Order(
-      "1",
-      "2",
-      Status.pending,
-      10,
-      DateTime.now(),
-      DateTime.now(),
-    ),*/
-  ];
+  List<Order> _orders = [];
 
   List<Order> get activeOrders {
     return [
@@ -59,7 +36,7 @@ class Orders with ChangeNotifier {
         .collection("orders")
         .get();
 
-    snapshot.docs.forEach((element) async {
+    for (var element in snapshot.docs) {
       Map<String, dynamic> order = element.data();
       if (_orders.indexWhere((element) {
             if (element.orderID == order["orderID"]) {
@@ -78,27 +55,29 @@ class Orders with ChangeNotifier {
           ),
         );
       }
-    });
+    }
 
     notifyListeners();
   }
 
 
-  Future<void> pushOrder(FirebaseAuth authInstance, Order orderToAdd) async {
-    _fireStoreInstance
+  Future<bool> pushOrder(String userId, Order orderToAdd) async {
+    bool exitValue = false;
+
+    await _fireStoreInstance
         .collection("users")
-        .doc(authInstance.currentUser?.uid)
-        .set({
-      "id":
-          "TODO", // vymyslet jak to bude s IDs objednavek. Mame treba unikatni IDs useru
-      "status": orderToAdd.status,
-      "orderedAmount": orderToAdd.orderedAmount,
-      "orderTime": orderToAdd.orderTime.toIso8601String(),
-      "pickupTime": orderToAdd.pickupTime.toIso8601String()
-    }, SetOptions(merge: true) // Objednavku prida nebo updatuje
-            ).then((_) {
-      // print("succes"); // TODO handle error
+        .doc(userId).collection("orders").add({
+      "orderID" : orderToAdd.productID,
+      "orderTime" : orderToAdd.orderTime,
+      "orderedAmount" : orderToAdd.orderedAmount,
+      "pickupTime" : orderToAdd.pickupTime,
+      "productID" : orderToAdd.productID,
+      "status" : orderToAdd.status.index,
+    }).then((value) {
+      exitValue =  true;
     });
+
+    return exitValue;
   }
 
   Order orderWithId(String id) {

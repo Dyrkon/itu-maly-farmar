@@ -42,13 +42,9 @@ class Products with ChangeNotifier {
     for (var element in snapshot.docs) {
       Map<String, dynamic> product = element.data();
       if (_products.indexWhere((element) {
-            // print("ID "+element.id);
             if (element.id == product["id"]) {
-              // print("ID2 "+product["id"]);
-              // print(true);
               return true;
             }
-            // print("ID3 "+product["id"]);
             return false;
           }) ==
           -1) {
@@ -68,8 +64,6 @@ class Products with ChangeNotifier {
         _products.add(newProduct);
       }
     }
-    // sleep(Duration(seconds: 2));
-    // _products.forEach((element) {print("Actual "+element.productName);});
     notifyListeners();
   }
 
@@ -114,7 +108,6 @@ class Products with ChangeNotifier {
   }
 
   Future<bool> pushProduct(Product product) async {
-    // print("In provider" + product.imagePath);
     bool tmp = false;
     var products = await _fireStoreInstance
         .collection('products')
@@ -160,7 +153,6 @@ class Products with ChangeNotifier {
     } catch (e) {
       return "";
     }
-    // print("p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg");
     return "p${productID.replaceAll(" ", "").replaceAll(':', "D")}-product-image.jpg";
   }
 
@@ -176,11 +168,8 @@ class Products with ChangeNotifier {
 
     try {
       url = await ref.getDownloadURL();
-      // print("URLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-      // print(url);
       return url;
     } catch (e) {
-      //print(e);
       return "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MMYJL8WjVmwsUZvNP1pdJgHaHT%26pid%3DApi&f=1";
     }
   }

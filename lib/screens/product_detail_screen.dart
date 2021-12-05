@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/colors/colors.dart';
 import 'package:maly_farmar/models/offer.dart';
+import 'package:maly_farmar/models/product.dart';
 import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
+import 'package:maly_farmar/widgets/make_order.dart';
 import 'package:provider/provider.dart';
 
 class ProductsDetailScreen extends StatefulWidget {
@@ -158,38 +160,68 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        const Text(
-                          "dostupné:",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.farmersGreen[300],
+                          ),
+                          height: MediaQuery.of(context).size.width * 1 / 5,
+                          width: MediaQuery.of(context).size.width * 1 / 3,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "${offer.accessibleAmount} ${offer.unit}",
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w400),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "dostupné:",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                color: Colors.white
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${offer.accessibleAmount} ${offer.unit}",
+                              style: const TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Column(
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        const Text(
-                          "cena:",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.farmersGreen[300],
+                          ),
+                          height: MediaQuery.of(context).size.width * 1 / 5,
+                          width: MediaQuery.of(context).size.width * 1 / 3,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "${offer.price} Kč/${offer.unit}",
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w400),
+                        Column(
+                          children: [
+                            const Text(
+                              "cena:",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${offer.price} Kč/${offer.unit}",
+                              style: const TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -197,7 +229,13 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 1 / 14,),
                 ElevatedButton(
-                  onPressed: () => {},
+                  onPressed: () => {
+                    print("TEXTtEST"),
+                  showDialog(
+                  barrierColor: Colors.grey.withOpacity(0.9),
+                  context: context,
+                  builder: (BuildContext context) => MakeOrderWidget(offer))
+                  },
                   child: const Text(
                     "Zarezervovat",
                     style: TextStyle(
