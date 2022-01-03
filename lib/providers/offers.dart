@@ -63,7 +63,7 @@ class Offers with ChangeNotifier {
     //_offers.forEach((element) {
       //print(element.id);
     //});
-
+    print("hit2");
     sortByDistance();
     notifyListeners();
   }
@@ -121,12 +121,12 @@ class Offers with ChangeNotifier {
   }
 
   void sortByDistance(){
-    print("HEJ");
     if (_offers.any((element) => element.distance == -1)) {return;}
     _offers.sort((a, b) => a.distance.compareTo(b.distance));
     _offers.forEach((element) {
       print(element.distance);
     });
+    notifyListeners();
   }
 
   void setDistance(distance, id) {

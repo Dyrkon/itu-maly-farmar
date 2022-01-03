@@ -31,6 +31,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     var offerData = Provider.of<Offers>(context);
     var _user = Provider.of<UserProvider>(context);
     var geopoint;
+    offerData.sortByDistance();
 
     return SafeArea(
       child: Scaffold(
