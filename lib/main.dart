@@ -30,47 +30,52 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Tabs()),
-        ChangeNotifierProvider.value(value: UserProvider(
-            UserProfile(FirebaseAuth.instance.currentUser?.uid,
-            FirebaseAuth.instance.currentUser?.email),
-            FirebaseFirestore.instance)),
-        ChangeNotifierProvider.value(value: Products(FirebaseFirestore.instance,
-            FirebaseAuth.instance.currentUser?.uid)),
-        ChangeNotifierProvider.value(value: Orders(FirebaseFirestore.instance,
-            FirebaseAuth.instance.currentUser?.uid)),
+        ChangeNotifierProvider.value(
+            value: UserProvider(
+                UserProfile(FirebaseAuth.instance.currentUser?.uid,
+                    FirebaseAuth.instance.currentUser?.email),
+                FirebaseFirestore.instance)),
+        ChangeNotifierProvider.value(
+            value: Products(FirebaseFirestore.instance,
+                FirebaseAuth.instance.currentUser?.uid)),
+        ChangeNotifierProvider.value(
+            value: Orders(FirebaseFirestore.instance,
+                FirebaseAuth.instance.currentUser?.uid)),
         ChangeNotifierProvider.value(value: Offers(FirebaseFirestore.instance)),
         Provider<Auth>(
           create: (_) => Auth(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<Auth>().authStateChanges, initialData: null,
+          create: (context) => context.read<Auth>().authStateChanges,
+          initialData: null,
         ),
       ],
       child: MaterialApp(
-          theme: ThemeData(
-            buttonTheme: const ButtonThemeData(
-              buttonColor: Colors.black,
-            ),
-            fontFamily: "Roboto",
-            canvasColor: Colors.white,
-            primarySwatch: Palette.farmersGreen,
-            errorColor: Colors.red,
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline1: const TextStyle(
-                    fontSize: 30,
-                  ),
-                  button: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          buttonTheme: const ButtonThemeData(
+            buttonColor: Colors.black,
           ),
-          home: const AuthenticationWrapper(),
-          // home: TabsScreen(),
-          routes: {
-            LandingPage.routeName: (ctx) => const LandingPage(),
-            ProductsDetailScreen.routeName: (ctx) => ProductsDetailScreen(),
-          },
+          fontFamily: "Roboto",
+          canvasColor: Colors.white,
+          primarySwatch: Palette.farmersGreen,
+          errorColor: Colors.red,
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline1: const TextStyle(
+                  fontSize: 30,
+                ),
+                button: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
         ),
+        home: const AuthenticationWrapper(),
+        // home: TabsScreen(),
+        routes: {
+          LandingPage.routeName: (ctx) => const LandingPage(),
+          ProductsDetailScreen.routeName: (ctx) => ProductsDetailScreen(),
+        },
+      ),
     );
   }
 }

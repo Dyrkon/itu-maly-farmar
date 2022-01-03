@@ -5,6 +5,7 @@ import 'package:maly_farmar/models/user.dart';
 //
 //
 class Offer {
+  int distance = -1;
   String id;
   String productName;
   UserProfile seller;

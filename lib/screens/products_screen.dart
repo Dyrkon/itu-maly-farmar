@@ -139,7 +139,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                       backgroundColor: Colors.red,
                                       textColor: Colors.white,
                                       fontSize: 16.0);
-
+                                      print(geopoint.latitude);
+                                      print(geopoint.longitude);
                                   _user.user.location = geopoint;
                                   //Provider.of<UserProvider>(context, listen: false).updateUserData(Provider.of<UserProvider>(context).userID, _user.user);
                                   Fluttertoast.showToast(

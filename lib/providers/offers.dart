@@ -24,7 +24,7 @@ class Offers with ChangeNotifier {
   Future<void> fetchOffers() async {
     var productSnapshot = await _fireStoreInstance.collection("products").where("offered", isEqualTo: true).get();
 
-    _offers.clear();
+    // _offers.clear();
 
     for (var element in productSnapshot.docs) {
       Map<String, dynamic> offer = element.data();
@@ -60,9 +60,11 @@ class Offers with ChangeNotifier {
       }
     }
 
-    _offers.forEach((element) {
-      print(element.id);
-    });
+    //_offers.forEach((element) {
+      //print(element.id);
+    //});
+
+    sortByDistance();
     notifyListeners();
   }
 
@@ -111,10 +113,23 @@ class Offers with ChangeNotifier {
             price: offer["price"]));
       }
     }
-
+    sortByDistance();
     _offers.forEach((element) {
-      print(element.id);
+      print(element.distance);
     });
     notifyListeners();
+  }
+
+  void sortByDistance(){
+    print("HEJ");
+    if (_offers.any((element) => element.distance == -1)) {return;}
+    _offers.sort((a, b) => a.distance.compareTo(b.distance));
+    _offers.forEach((element) {
+      print(element.distance);
+    });
+  }
+
+  void setDistance(distance, id) {
+    _offers.firstWhere((element) => element.id == id).distance = distance;
   }
 }

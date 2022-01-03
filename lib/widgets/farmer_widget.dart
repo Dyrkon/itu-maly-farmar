@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:maly_farmar/models/offer.dart';
+import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class _FarmerWidgetState extends State<FarmerWidget> {
     var userLocation = Provider.of<UserProvider>(context).user.location;
     var offerLocation = offer.seller.location;
     int distance = (Geolocator.distanceBetween(userLocation.latitude, userLocation.longitude, offerLocation.latitude, offerLocation.longitude) / 1000).round();
+    Provider.of<Offers>(context).setDistance(distance, offer.id);
 
     return Container(
         decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
