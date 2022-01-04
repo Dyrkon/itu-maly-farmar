@@ -16,6 +16,11 @@ import './providers/auth.dart';
 import 'package:maly_farmar/providers/offers.dart';
 import './screens/product_detail_screen.dart';
 
+//autor: Matěj Mudra
+//
+//
+//
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -47,6 +52,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
           theme: ThemeData(
             buttonTheme: const ButtonThemeData(
               buttonColor: Colors.black,
