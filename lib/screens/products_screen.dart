@@ -12,7 +12,7 @@ import 'package:maly_farmar/providers/offers.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-//autor: Matěj Mudra
+//autor: Adam Jetmar
 //
 //
 //

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/order.dart';
 
-//autor: Ondřej Kříž
+//autor: Matěj Mudra
 //
 //
 //

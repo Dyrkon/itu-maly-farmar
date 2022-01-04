@@ -9,7 +9,7 @@ import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../colors/colors.dart';
 
-//autor: Adam Jetmar
+//autor: Matěj Mudra
 //
 //
 //

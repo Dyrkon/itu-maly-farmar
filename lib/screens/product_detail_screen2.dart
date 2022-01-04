@@ -6,7 +6,7 @@ import 'package:maly_farmar/providers/products.dart';
 import 'package:maly_farmar/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-//autor: Matěj Mudra
+//autor: Adam Jetmar
 //
 //
 //

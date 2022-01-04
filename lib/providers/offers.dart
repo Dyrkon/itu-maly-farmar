@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:maly_farmar/models/offer.dart';
 import 'package:maly_farmar/models/user.dart';
 
-//autor: Adam Jetmar
+//autor: Matěj Mudra
 //
 //
 //

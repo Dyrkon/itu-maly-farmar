@@ -8,7 +8,7 @@ import 'package:maly_farmar/models/user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-//autor: Ondřej Kříž
+//autor: Matěj Mudra
 //
 //
 //

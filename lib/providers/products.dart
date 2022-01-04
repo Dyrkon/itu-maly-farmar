@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-//autor: Adam Jetmar
+//autor: Matěj Mudra
 //
 //
 //
